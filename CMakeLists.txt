@@ -1,15 +1,28 @@
-﻿# CMakeList.txt : CMake project for Stick It To 'Em, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.10)
 
-project ("Stick It To 'Em")
+project (Game VERSION 1.0)
 
-# Add source to this project's executable.
-add_executable (CMakeTarget "Stick It To 'Em.cpp" "Stick It To 'Em.h")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
-endif()
 
-# TODO: Add tests and install targets if needed.
+#add_subdirectory(MathFunctions)
+#list(APPEND EXTRA_LIBS MathFunctions)
+#list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
+
+add_executable (Game "src/Engine/Main.cpp" "bin/includes/glad/glad.h")
+
+target_include_directories(Game PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/bin/includes")
+
+add_library(GLFW STATIC IMPORTED GLOBAL)
+set_property(TARGET GLFW PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/bin/GLFW/lib/glfw3.lib")
+
+add_library(GLAD "${PROJECT_SOURCE_DIR}/bin/GLAD/src/glad.c")
+target_include_directories(GLAD PUBLIC "{PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/bin/includes")
+
+target_link_libraries(Game PUBLIC GLFW)
+target_link_libraries(Game PUBLIC GLAD)
+
+target_include_directories(Game PUBLIC "{PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/bin/glm")
+
+

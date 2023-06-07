@@ -13,3 +13,4 @@ _deps
 #extra stuff I needed to include
 .vs/
 out/
+build/
