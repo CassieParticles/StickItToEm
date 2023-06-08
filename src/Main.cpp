@@ -7,6 +7,7 @@
 #include <stb_image.h>
 
 #include "Engine/Timer.h"
+#include "Engine/Input.h"
 
 int initWindow(GLFWwindow** window)
 {
@@ -45,24 +46,24 @@ int main()
 {	
 	//Create the window
 	GLFWwindow* window{};
-	Timer renderTimer{ 60 };
-	
-
 	int err = initWindow(&window);
 	if (err != 0) { return err; }
 
+	Timer renderTimer{ 60 };
+	Input input{ window };
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
 		renderTimer.Update();
 		if (renderTimer.getUpdate())
 		{
-			std::cout << renderTimer.getDeltaTime() << '\n';
+			input.update();
+			if (input.getKeyDown(GLFW_KEY_ESCAPE))
+			{
+				glfwSetWindowShouldClose(window, true);
+			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		{
-			glfwSetWindowShouldClose(window, true);
-		}
+		
 	}
 
 	return 0;
