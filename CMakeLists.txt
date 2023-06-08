@@ -10,7 +10,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #list(APPEND EXTRA_LIBS MathFunctions)
 #list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
 
-add_executable (Game "src/Engine/Main.cpp" "bin/includes/glad/glad.h")
+#Add all source files
+list(APPEND ALLSOURCES "src/Main.cpp")
+list(APPEND ALLSOURCES "src/Engine/BaseLevel.cpp" "src/Engine/BaseLevel.h")
+list(APPEND ALLSOURCES "src/Engine/Program.cpp" "src/Engine/Program.h")
+list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
+
+add_executable (Game ${ALLSOURCES})
 
 target_include_directories(Game PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/bin/includes")
 
