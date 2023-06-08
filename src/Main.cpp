@@ -9,6 +9,8 @@
 #include "Engine/Timer.h"
 #include "Engine/Input.h"
 
+#include "Game/Game.h"
+
 int initWindow(GLFWwindow** window)
 {
 	glfwInit();
@@ -41,7 +43,6 @@ int initWindow(GLFWwindow** window)
 	return 0;
 }
 
-
 int main()
 {	
 	//Create the window
@@ -49,21 +50,33 @@ int main()
 	int err = initWindow(&window);
 	if (err != 0) { return err; }
 
+	Timer updateTimer{ 60 };
 	Timer renderTimer{ 60 };
 	Input input{ window };
 
+	Game gameLevel{window,&input,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
+
+	gameLevel.openLevel();	//Open the game level
+
 	while (!glfwWindowShouldClose(window))
 	{
+		updateTimer.Update();
 		renderTimer.Update();
+		
+
+		if (updateTimer.getUpdate())	//Update the game
+		{
+			gameLevel.handleInput(&updateTimer);
+			gameLevel.update(&updateTimer);
+		}
 		if (renderTimer.getUpdate())
 		{
-			input.update();
-			if (input.getKeyDown(GLFW_KEY_ESCAPE))
-			{
-				glfwSetWindowShouldClose(window, true);
-			}
+			gameLevel.render(&renderTimer);
 		}
-		
+		if (input.getKeyDown(GLFW_KEY_ESCAPE))
+		{
+			glfwSetWindowShouldClose(window, true);
+		}
 	}
 
 	return 0;

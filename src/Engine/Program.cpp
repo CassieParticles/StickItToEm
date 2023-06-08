@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 
-Program::Program(const std::string* shaderPaths, int* shaderTypes, int shaderCount):shaderCount{shaderCount}
+Program::Program(const std::string* shaderPaths, int* shaderTypes, int shaderCount)
 {
 	init(shaderPaths,shaderTypes,shaderCount);
 }
@@ -48,6 +48,8 @@ void Program::init(const std::string* shaderPaths, int* shaderTypes, int shaderC
 	{
 		shaderIDs[i] = generateShader(shaderPaths[i], shaderTypes[i]);
 	}
+
+	this->shaderCount = shaderCount;
 
 	linkShaders();	//Link the shaders to the program object 
 }
