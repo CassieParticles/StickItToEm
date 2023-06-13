@@ -15,7 +15,6 @@ list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
-list(APPEND ALLSOURCES "src/Game/TerrainManager.cpp" "src/Game/TerrainManager.h")
 
 add_executable (Game ${ALLSOURCES})
 
@@ -40,7 +39,7 @@ target_link_libraries(Game PUBLIC GLAD)
 #Copy the shaders into the output directory
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/src/Shaders")
 
-add_custom_target(copyShaders ALL COMMAND  COMMAND ${CMAKE_COMMAND} -E copy_directory 
+add_custom_target(copyShaders ALL COMMAND ${CMAKE_COMMAND} -E copy_directory 
 "${CMAKE_SOURCE_DIR}/src/Shaders" "${CMAKE_BINARY_DIR}/src/Shaders" COMMENT
 "Copy shaders to output file" VERBATIM)
 
