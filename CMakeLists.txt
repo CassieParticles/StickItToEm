@@ -15,6 +15,7 @@ list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
+list(APPEND ALLSOURCES "src/Game/TerrainManager.cpp" "src/Game/TerrainManager.h")
 
 add_executable (Game ${ALLSOURCES})
 
