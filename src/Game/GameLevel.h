@@ -3,11 +3,11 @@
 
 class Program;
 
-class Game :public BaseLevel
+class GameLevel :public BaseLevel
 {
 public:
-	Game(GLFWwindow* window,Input* input, glm::vec4 bgColour);
-	~Game();
+	GameLevel(GLFWwindow* window,Input* input, glm::vec4 bgColour);
+	~GameLevel();
 
 	void openLevel() override;
 	void closeLevel() override;

@@ -13,7 +13,7 @@
 #include "../Engine/Input.h"
 #include "../Engine/Program.h"
 
-Game::Game(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour)
+GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour)
 {
 	program = new Program{ "src/Shaders/testShader/vertex.glsl","src/Shaders/testShader/fragment.glsl"};	//Create test program
 
@@ -27,7 +27,7 @@ Game::Game(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(windo
 	glEnableVertexAttribArray(0);
 }
 
-Game::~Game()
+GameLevel::~GameLevel()
 {
 	delete program;
 
@@ -35,17 +35,17 @@ Game::~Game()
 	glDeleteVertexArrays(1, &vaoID);
 }
 
-void Game::openLevel()
+void GameLevel::openLevel()
 {
 	BaseLevel::openLevel();	//Call the base function used in opening level before doing other fancy stuff
 }
 
-void Game::closeLevel()
+void GameLevel::closeLevel()
 {
 
 }
 
-void Game::handleInput(Timer* updateTimer)
+void GameLevel::handleInput(Timer* updateTimer)
 {
 	input->update();
 	if(input->getKeyPressed(GLFW_KEY_W))
@@ -54,12 +54,12 @@ void Game::handleInput(Timer* updateTimer)
 	}
 }
 
-void Game::update(Timer* updateTimer)
+void GameLevel::update(Timer* updateTimer)
 {
 
 }
 
-void Game::render(Timer* frameTimer)
+void GameLevel::render(Timer* frameTimer)
 {
 	beginDraw();
 	//Draw stuff

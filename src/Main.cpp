@@ -9,7 +9,7 @@
 #include "Engine/Timer.h"
 #include "Engine/Input.h"
 
-#include "Game/Game.h"
+#include "Game/GameLevel.h"
 
 int initWindow(GLFWwindow** window)
 {
@@ -54,7 +54,7 @@ int main()
 	Timer renderTimer{ 60 };
 	Input input{ window };
 
-	Game gameLevel{window,&input,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
+	GameLevel gameLevel{window,&input,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
 
 	gameLevel.openLevel();	//Open the game level
 

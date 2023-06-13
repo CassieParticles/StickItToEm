@@ -14,7 +14,7 @@ list(APPEND ALLSOURCES "src/Engine/Program.cpp" "src/Engine/Program.h")
 list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 
-list(APPEND ALLSOURCES "src/Game/Game.cpp" "src/Game/Game.h")
+list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
 
 add_executable (Game ${ALLSOURCES})
 
