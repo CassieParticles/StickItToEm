@@ -1,6 +1,6 @@
 #include <glm.hpp>
 
-
+class Program;
 
 struct line
 {
@@ -20,8 +20,14 @@ class TerrainManager
 public:
 	TerrainManager(glm::ivec2 arenaSize);	//Take in the size of the arena
 	~TerrainManager();
+
+	void uploadStage(float* stage);
+
+	void generateTerrain();
+
+	void render();
 protected:
-	glm::ivec2 arenaSize;
+	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 
 	float* scalarData;
 	int scalarDataSize;
@@ -33,4 +39,9 @@ protected:
 
 	unsigned int lineVAO;		//Buffers for line mesh
 	unsigned int lineVBO;
+
+	Program* triangleProgram;
+	Program* lineProgram;
+
+	float getPoint(glm::ivec2 pos);
 };

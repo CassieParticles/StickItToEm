@@ -2,6 +2,7 @@
 #include "../Engine/BaseLevel.h"
 
 class Program;
+class TerrainManager;
 
 class GameLevel :public BaseLevel
 {
@@ -16,16 +17,13 @@ public:
 	void update(Timer* updateTimer) override;
 	void render(Timer* frameTimer) override;
 protected:
-	//Temporary values, to test if this works
-	unsigned int vaoID;
-	unsigned int vboID;
-
-	Program* program;
-
-	glm::vec2 vertexPos[3] =
+	float scalarField[20]	//5x4 grid of points, makes a 6x5 grid of squares (including ones on edge)
 	{
-		{ 0.0f, 0.4f},
-		{ 0.5f,-0.5f},
-		{-0.5f,-0.5f}
+		-1.f,-1.f, 1.f,-1.f,-1.f,
+		-1.f,-1.f, 1.f,-.3f,-1.f,
+		-1.f,-1.f, 1.f,-1.f,-1.f,
+		 1.f, .4f, 1.f, 1.f, .7f,
 	};
+
+	TerrainManager* terrainManager;
 };

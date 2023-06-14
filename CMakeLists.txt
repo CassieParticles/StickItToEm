@@ -13,6 +13,7 @@ list(APPEND ALLSOURCES "src/Engine/BaseLevel.cpp" "src/Engine/BaseLevel.h")
 list(APPEND ALLSOURCES "src/Engine/Program.cpp" "src/Engine/Program.h")
 list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
+list(APPEND ALLSOURCES "src/Engine/MathsFunctions.cpp" "src/Engine/MathsFunctions.h")
 
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
 list(APPEND ALLSOURCES "src/Game/TerrainManager.cpp" "src/Game/TerrainManager.h")
