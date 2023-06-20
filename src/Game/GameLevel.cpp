@@ -17,9 +17,9 @@
 
 GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour)
 {
-	terrainManager = new TerrainManager({ 6,5 });	//Create the terrain manager
+	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
-	terrainManager->uploadStage(scalarField);
+	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 }
 
 GameLevel::~GameLevel()
