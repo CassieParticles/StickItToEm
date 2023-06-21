@@ -23,7 +23,8 @@ public:
 
 	void uploadStage(float* stage);
 
-	void generateTerrain();
+	void generateTerrain();										//Generate full terrain
+	void generateTerrain(int x, int y, int width, int height);	//Generate terrain of an area, width and height are in squares
 
 	void render();
 protected:
