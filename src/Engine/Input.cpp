@@ -67,14 +67,14 @@ void Input::update()
 	mousePosition = { x,y };
 }
 
-bool Input::getKeyDown(int key)
+bool Input::getKeyDown(int key)//Gets if the key is down
 {
 	return keyStatesCurrent[key];	//Get the relevent key
 }
 
-bool Input::getKeyPressed(int key)
+bool Input::getKeyPressed(int key)//Gets if the key is down AND was not down last update
 {
-	return keyStatesCurrent[key] && !keyStatesPrev[key];	//Gets if the key is down AND was not down last update
+	return keyStatesCurrent[key] && !keyStatesPrev[key];	
 }
 
 bool Input::getKeyReleased(int key)

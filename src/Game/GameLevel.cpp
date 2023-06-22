@@ -20,6 +20,9 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
+
+
+	//terrainManager->modifyTerrainCircle({ 40,30 }, 15, -4);
 }
 
 GameLevel::~GameLevel()
@@ -43,6 +46,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 	if(input->getKeyPressed(GLFW_KEY_W))
 	{
 		std::cout << "Key W pressed\n";
+		terrainManager->modifyTerrainCircle({ 40,25 }, 5, -4);
 	}
 }
 

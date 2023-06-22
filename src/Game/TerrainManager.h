@@ -23,8 +23,7 @@ public:
 
 	void uploadStage(float* stage);
 
-	void generateTerrain();										//Generate full terrain
-	void generateTerrain(int x, int y, int width, int height);	//Generate terrain of an area, width and height are in squares
+	void modifyTerrainCircle(glm::vec2 centre, float radius, float value);	//Adds value to each point within the circle, scaled based on distance
 
 	void render();
 protected:
@@ -45,4 +44,10 @@ protected:
 	Program* lineProgram;
 
 	float getPoint(glm::ivec2 pos);
+
+	void setPoint(glm::ivec2 pos, float val);
+	void addPoint(glm::ivec2 pos, float val);
+
+	void generateTerrain();		//Generate full terrain
+	void generateTerrain(int x, int y, int width, int height);	//Generate terrain of an area, width and height are in squares
 };

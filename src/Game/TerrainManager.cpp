@@ -58,168 +58,27 @@ void TerrainManager::uploadStage(float* stage)
 	generateTerrain(-1,-1,60,35);
 }
 
-void TerrainManager::generateTerrain()
+void TerrainManager::modifyTerrainCircle(glm::vec2 centre, float radius, float value)
 {
-	/*
-	* Get the relavent values at each corner of the square
-	* Use these to get the index of that configuration,
-	* Use vertices and index tables to get which vertices should be calculated using lerp
-	* Iterate through indices to construct triangles
-	* Separate index table for which vertices should be assembled into lines
-	*/
+	glm::ivec2 tl = glm::ivec2{ floor(centre.x - radius),floor(centre.y - radius) };	//Get the bounds of the area affected
+	glm::ivec2 br = glm::ivec2{ ceil(centre.x + radius),ceil(centre.y + radius) };
 
-	/*	Corner order, and bit value
-	*	3---2	8---4
-	*	|	|	|	|
-	*	|	|	|	|
-	*	0---1	1---2
-	*
-	*	Edge bit value (7 MSB)
-	*
-	*	7-6-5
-	*	|   |
-	*	0	4
-	*   |   |
-	*	1-2-3
-	*/
+	float invRSqr = 1 / (radius * radius);	//Pre-calculate the inverse of the radius square
 
-	constexpr char vertexTable[16]{	//Which vertices are used in the mesh
-	0b00000000,	//0
-	0b00000111,
-	0b00011100,
-	0b00011011,
-	0b01110000,
-	0b01110111,	//5
-	0b01101100,
-	0b01101011,
-	0b11000001,
-	0b11000110,
-	0b11011101,	//10
-	0b11011010,
-	0b10110001,
-	0b10110110,
-	0b10101101,
-	0b10101010	//15
-	};
-
-	//How the vertices are assembled in clockwise order, starting at the MSB, upto 4 triangles, 8 means no more triangles
-	constexpr char triangleIndexTable[16][13]{
-		{8,8,8,8,8,8,8,8,8,8,8,8,8},//0
-		{2,1,0,8,8,8,8,8,8,8,8,8,8},
-		{4,3,2,8,8,8,8,8,8,8,8,8,8},
-		{4,3,0,3,1,0,8,8,8,8,8,8,8},
-		{6,5,4,8,8,8,8,8,8,8,8,8,8},
-		{6,5,4,6,4,2,6,2,0,2,1,0,8},//5
-		{6,5,3,6,3,2,8,8,8,8,8,8,8},
-		{6,5,3,6,3,0,3,1,0,8,8,8,8},
-		{7,6,0,8,8,8,8,8,8,8,8,8,8},
-		{7,6,2,7,2,1,8,8,8,8,8,8,8},
-		{7,6,0,6,4,2,6,2,0,4,3,2,8},//10
-		{7,6,1,6,4,1,4,3,1,8,8,8,8},
-		{7,5,4,7,4,0,8,8,8,8,8,8,8},
-		{7,5,4,7,4,2,7,2,1,8,8,8,8},
-		{7,5,0,5,2,0,5,3,2,8,8,8,8},
-		{7,5,3,7,3,1,8,8,8,8,8,8,8}	//15
-	};
-
-	//How the lines are assembled, in order so that for vector B-A, "left" of that direction is air and "right" is the solid terrain
-	constexpr char lineIndexTable[16][5]{
-		{8,8,8,8,8},//0
-		{0,2,8,8,8},
-		{2,4,8,8,8},
-		{0,4,8,8,8},
-		{4,6,8,8,8},
-		{0,6,4,2,8},//5
-		{2,6,8,8,8},
-		{0,6,8,8,8},
-		{6,0,8,8,8},
-		{6,2,8,8,8},
-		{6,4,2,0,8},//10
-		{6,4,8,8,8},
-		{4,0,8,8,8},
-		{4,2,8,8,8},
-		{2,0,8,8,8},
-		{8,8,8,8,8}	//15
-	};
-
-	triangle* triangleArray = new triangle[4 * arenaSize.x * arenaSize.y];	//Create a temporary array for the triangles created
-	
-	int squareIndex = 0;	//Which square is currently being generated
-	for (int y = -1; y < arenaSize.y-1; y++)
+	for (int y = tl.y; y < br.y; y++)	//Iterate through each point of the area
 	{
-		for (int x = -1; x < arenaSize.x-1; x++)
+		for (int x = tl.x; x < br.x; x++)
 		{
-			float cornerValues[4]	//Get the floating point values within each corner
-			{
-				getPoint({x  ,y+1}),	//(0,1) BL
-				getPoint({x+1,y+1}),	//(1,1) BR
-				getPoint({x+1,y  }),	//(1,0) TR
-				getPoint({x  ,y  }),	//(0,0) TL
-			};
-
-			int index{};	//Get the index of the correct configuration of triangles and lines
-			for (int i = 3; i >= 0; i--)
-			{
-				index = (index << 1) | cornerValues[i] > 0;
-			}
-
-			glm::vec2 corners[4]	//Get the co-ordinates of each corner (offset by 1 so the actual positions start at 0)
-			{
-				{x+1,y+2},
-				{x+2,y+2},
-				{x+2,y+1},
-				{x+1,y+1},
-			};
-
-			const char vertexMask = vertexTable[index];	//Get which vertices are used in the final output
-			const char* triangleIndices = triangleIndexTable[index];	//Get the assembly order of the vertices when making triangles and lines
-			const char* lineIndices = lineIndexTable[index];
-
-			glm::vec2 vertices[8]{};	//Get the vertices, only fills in the ones that are used
+			float sqrDistFromCentre = (x - centre.x) * (x - centre.x) + (y - centre.y) * (y - centre.y);	//Get the square distance
 			
-			if (vertexMask & 0b00000001) { vertices[0] = MathsFunctions::getMidPtY(corners[3], corners[0], cornerValues[3], cornerValues[0]); }
-			if (vertexMask & 0b00000010) { vertices[1] = corners[0]; }
-			if (vertexMask & 0b00000100) { vertices[2] = { MathsFunctions::getMidPtX(corners[0],corners[1],cornerValues[0],cornerValues[1]) }; }
-			if (vertexMask & 0b00001000) { vertices[3] = corners[1]; }
-			if (vertexMask & 0b00010000) { vertices[4] = { MathsFunctions::getMidPtY(corners[1],corners[2],cornerValues[1],cornerValues[2]) }; }
-			if (vertexMask & 0b00100000) { vertices[5] = corners[2]; }
-			if (vertexMask & 0b01000000) { vertices[6] = { MathsFunctions::getMidPtX(corners[2],corners[3],cornerValues[2],cornerValues[3]) }; }
-			if (vertexMask & 0b10000000) { vertices[7] = corners[3]; }
+			float scalar = std::max(0.f,1 - (sqrDistFromCentre)*invRSqr);	//Get the fraction of the value added to the point
 
-			for (int i = 0; triangleIndices[i*3] != 8; i++)	//Assemble the triangles
-			{
-				triangle t{};
-				t.A = vertices[triangleIndices[i*3 + 0]];	//Get each vertex of the triangle
-				t.B = vertices[triangleIndices[i*3 + 1]];
-				t.C = vertices[triangleIndices[i*3 + 2]];
-				triangleArray[squareIndex * 4 + i] = t;		//Add the triangle to the array
-			}
-
-			for (int i = 0; i < 2; i++)	//Assemble the lines, lines need to be overwritten, so can't stop early
-			{
-				line l{};
-				if (lineIndices[i * 2] == 8) { l = {}; }	//If there is no line, make it {0,0} to {0,0}
-				else
-				{
-					l.A = vertices[lineIndices[i * 2 + 0]];	//If there is a line, assemble the line
-					l.B = vertices[lineIndices[i * 2 + 1]];
-				}
-				lineArray[squareIndex * 2 + i] = l;
-			}
-
-			squareIndex++;
+			addPoint({ x,y }, scalar * value);
+			//setPoint({ x,y }, -1.f);
 		}
 	}
-	//Put the triangle array in the vertex buffer
-	glBindBuffer(GL_ARRAY_BUFFER, triangleVBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(triangle) * 4 * arenaSize.x * arenaSize.y, triangleArray);
 
-	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line) * 2 * arenaSize.x * arenaSize.y, lineArray);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	delete[] triangleArray;
+	generateTerrain(tl.x, tl.y, br.x - tl.x, br.y - tl.y);	//Regenerate terrain in area
 }
 
 void TerrainManager::generateTerrain(int left, int top, int width, int height)
@@ -345,12 +204,24 @@ void TerrainManager::generateTerrain(int left, int top, int width, int height)
 			if (vertexMask & 0b01000000) { vertices[6] = { MathsFunctions::getMidPtX(corners[2],corners[3],cornerValues[2],cornerValues[3]) }; }
 			if (vertexMask & 0b10000000) { vertices[7] = corners[3]; }
 
-			for (int i = 0; triangleIndices[i * 3] != 8; i++)	//Assemble the triangles
+			//for (int i = 0; triangleIndices[i * 3] != 8; i++)	//Assemble the triangles
+			//{
+			//	triangle t{};
+			//	t.A = vertices[triangleIndices[i * 3 + 0]];	//Get each vertex of the triangle
+			//	t.B = vertices[triangleIndices[i * 3 + 1]];
+			//	t.C = vertices[triangleIndices[i * 3 + 2]];
+			//	triangleArray[squareIndex * 4 + i] = t;		//Add the triangle to the array
+			//}
+
+			for (int i = 0; i < 4; i++)
 			{
 				triangle t{};
-				t.A = vertices[triangleIndices[i * 3 + 0]];	//Get each vertex of the triangle
-				t.B = vertices[triangleIndices[i * 3 + 1]];
-				t.C = vertices[triangleIndices[i * 3 + 2]];
+				if (triangleIndices[i * 3] != 8)
+				{
+					t.A = vertices[triangleIndices[i * 3 + 0]];	//Get each vertex of the triangle
+					t.B = vertices[triangleIndices[i * 3 + 1]];
+					t.C = vertices[triangleIndices[i * 3 + 2]];
+				}
 				triangleArray[squareIndex * 4 + i] = t;		//Add the triangle to the array
 			}
 
@@ -383,7 +254,7 @@ void TerrainManager::generateTerrain(int left, int top, int width, int height)
 
 	for (int y = 0; y < height; y++)	//Iterate through each row, put the data for that row into the buffer, then move the pointer
 	{
-		int indexOffset= ((y * arenaSize.x) + left + 1) * 4;
+		int indexOffset= (((y+top+1) * arenaSize.x) + left + 1) * 4;
 		glBufferSubData(GL_ARRAY_BUFFER, indexOffset*sizeof(triangle), sizeof(triangle) * 4 * width, trianglePtr);
 		trianglePtr += width * 4;
 	}
@@ -393,7 +264,7 @@ void TerrainManager::generateTerrain(int left, int top, int width, int height)
 
 	for (int y = 0; y < height; y++)
 	{
-		int indexOffset = ((y * arenaSize.x) + left + 1) * 2;
+		int indexOffset = (((y+top+1) * arenaSize.x) + left + 1) * 2;
 		glBufferSubData(GL_ARRAY_BUFFER, indexOffset * sizeof(line), sizeof(line) * 2 * width, linePtr);
 
 		std::copy(linePtr, linePtr + 2 * width, lineArray + indexOffset);
@@ -413,6 +284,26 @@ float TerrainManager::getPoint(glm::ivec2 pos)
 	}
 	int index = pos.y * (arenaSize.x - 1) + pos.x;
 	return scalarData[index];
+}
+
+void TerrainManager::setPoint(glm::ivec2 pos, float val)
+{
+	val = std::min(std::max(-1.f, val), 1.f);	//Clamp val between +1 and -1
+
+	if (pos.x < 0 || pos.x > arenaSize.x - 1) { return; }	//If point is outside of bounds, return
+	if (pos.y < 0 || pos.y < arenaSize.y - 1) { return; }
+
+	scalarData[pos.y * (arenaSize.x - 1) + pos.x] = val;
+}
+
+void TerrainManager::addPoint(glm::ivec2 pos, float val)
+{
+	if (pos.x < 0 || pos.x > arenaSize.x - 1) { return; }	//If point is outside of bounds, return
+	if (pos.y < 0 || pos.y > arenaSize.y - 1) { return; }
+
+	scalarData[pos.y * (arenaSize.x - 1) + pos.x] += val;	//Add the new val
+
+	scalarData[pos.y * (arenaSize.x - 1) + pos.x] = std::min(std::max(-1.f, scalarData[pos.y * (arenaSize.x - 1) + pos.x]), 1.f);
 }
 
 void TerrainManager::render()
