@@ -55,7 +55,7 @@ void TerrainManager::uploadStage(float* stage)
 {
 	std::copy(stage, stage + scalarDataSize, scalarData);
 
-	generateTerrain(-1,-1,arenaSize.x,arenaSize.y);
+	generateTerrain(-1,-1,60,35);
 }
 
 void TerrainManager::generateTerrain()
@@ -224,6 +224,22 @@ void TerrainManager::generateTerrain()
 
 void TerrainManager::generateTerrain(int left, int top, int width, int height)
 {
+	left = std::min(std::max(-1, left), arenaSize.x - 1);	//Clamp left and top to be within bounds of terrain
+	top = std::min(std::max(-1, top), arenaSize.y - 1);
+
+	width = std::max(1, width);	//Made sure width and height are above 0
+	height = std::max(1, height);
+
+	if (left + width > arenaSize.x - 1)	//Ensure width and height don't put the bounds past the range of terrain
+	{
+		width = arenaSize.x - 1 - left;
+	}
+
+	if (top + height > arenaSize.y - 1)
+	{
+		height = arenaSize.y - 1 - top;
+	}
+
 	constexpr char vertexTable[16]{	//Which vertices are used in the mesh
 0b00000000,	//0
 0b00000111,
