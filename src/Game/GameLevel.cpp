@@ -13,26 +13,21 @@
 #include "../Engine/Input.h"
 #include "../Engine/Program.h"
 
+#include "TerrainManager.h"
+
 GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour)
 {
-	program = new Program{ "src/Shaders/testShader/vertex.glsl","src/Shaders/testShader/fragment.glsl"};	//Create test program
+	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
-	glGenVertexArrays(1, &vaoID);	//Create test mesh
-	glGenBuffers(1, &vboID);//
+	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
-	glBindVertexArray(vaoID);
-	glBindBuffer(GL_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-	glEnableVertexAttribArray(0);
+
+	//terrainManager->modifyTerrainCircle({ 40,30 }, 15, -4);
 }
 
 GameLevel::~GameLevel()
 {
-	delete program;
-
-	glDeleteBuffers(1, &vboID);
-	glDeleteVertexArrays(1, &vaoID);
+	delete terrainManager;
 }
 
 void GameLevel::openLevel()
@@ -51,6 +46,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 	if(input->getKeyPressed(GLFW_KEY_W))
 	{
 		std::cout << "Key W pressed\n";
+		terrainManager->modifyTerrainCircle({ 40,25 }, 5, -4);
 	}
 }
 
@@ -63,11 +59,7 @@ void GameLevel::render(Timer* frameTimer)
 {
 	beginDraw();
 	//Draw stuff
-	program->use();
-	program->setVec3("colour", { 1.f,0.f,0.f });
-
-	glBindVertexArray(vaoID);
-	glDrawArrays(GL_TRIANGLES, 0,3);
+	terrainManager->render();
 	
 	
 	endDraw();
