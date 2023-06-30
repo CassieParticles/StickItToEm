@@ -1,9 +1,10 @@
 #include "Collision.h"
 #include "../Game/TerrainManager.h"
+#include "../Game/Player.h"
 
 namespace Collision
 {
-	bool checkLineLine(line* lineA, line* lineB, glm::vec2* point)
+	bool checkLineLine(line* lineA, line* lineB, glm::vec2* collidingPoint)
 	{
 		glm::vec2 dA = lineA->B - lineA->A;	//Get the vector from point A to B on each line
 		glm::vec2 dB = lineB->B - lineB->A;
@@ -21,9 +22,49 @@ namespace Collision
 
 		bool collide = t1 > 0 && t1 < 1 && t2>0 && t2 < 1;
 
-		if (point != nullptr && collide)
+		if (collidingPoint != nullptr && collide)
 		{
-			*point = lineA->A + dA * t1;
+			*collidingPoint = lineA->A + dA * t1;
+		}
+
+		return collide;
+	}
+	bool checkLineRect(rect* r, line* l, line* collidingLine)
+	{
+		float cosAngle = cos(r->angle);	//Get cosine and sin of rotated angle
+		float sinAngle = sin(r->angle);
+		glm::mat2x2 rotMatrix{cosAngle, -sinAngle, sinAngle, cosAngle};	//Rotate the corners
+
+		glm::vec2 tl = r->tlCorner;
+		glm::vec2 tr = r->tlCorner + rotMatrix * glm::vec2{r->size.x, 0};
+		glm::vec2 bl = r->tlCorner + rotMatrix * glm::vec2{0, r->size.y};
+		glm::vec2 br = r->tlCorner + rotMatrix * r->size;
+		
+		line edges[4] = {  
+			{tl,tr},
+			{tr,br},
+			{br,bl},
+			{bl,tl}
+		};
+
+		bool collide{};
+		bool gotFirstCollisionPoint{};	
+		bool gotSecondCollisionPoint{};
+
+		for (int i = 0; i < 4; i++)
+		{
+			glm::vec2* point;
+			if (!collidingLine) { point == nullptr; }
+			else if (gotFirstCollisionPoint) { point = &(collidingLine->B); }
+			else if (gotSecondCollisionPoint) { point = nullptr; }
+			else { point = &(collidingLine->A); }
+
+			bool currentLineCollide = checkLineLine(edges + i, l, point);
+
+			gotSecondCollisionPoint = (gotFirstCollisionPoint && currentLineCollide || gotSecondCollisionPoint);
+			gotFirstCollisionPoint = currentLineCollide || gotFirstCollisionPoint;
+
+			collide = collide || currentLineCollide;
 		}
 
 		return collide;

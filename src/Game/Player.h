@@ -14,8 +14,10 @@ struct controls
 
 struct rect
 {
-	glm::ivec2 tlCorner;
-	glm::ivec2 brCorner;
+	glm::vec2 tlCorner;
+	glm::vec2 size;
+
+	float angle;	//Radians
 };
 
 class Program;
@@ -37,9 +39,12 @@ public:
 
 	glm::vec2 getVelocity() { return velocity; }
 	float getMass() { return mass; }
+	rect getCollisionRect();
 
 	void addForce(glm::vec2 force);
 	void addForce(float x, float y) { addForce(glm::vec2{x, y}); }
+
+
 protected:
 	Input* input;
 

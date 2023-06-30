@@ -88,6 +88,15 @@ void Player::render()
 	glBindVertexArray(0);
 }
 
+rect Player::getCollisionRect()
+{
+	rect r{};
+	r.tlCorner = position;
+	r.size = playerSize;
+	r.angle = 0;
+	return r;
+}
+
 void Player::addForce(glm::vec2 force)
 {
 	sumForce += force;
