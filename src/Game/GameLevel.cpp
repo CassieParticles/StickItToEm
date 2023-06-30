@@ -5,10 +5,6 @@
 #include <glfw3.h>
 #include <iostream>
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
 #include "../Engine/Timer.h"
 #include "../Engine/Input.h"
 #include "../Engine/Program.h"
@@ -21,8 +17,13 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
+	glGenBuffers(1, &terrainUBO);
 
 	//terrainManager->modifyTerrainCircle({ 40,30 }, 15, -4);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, terrainUBO);
 }
 
 GameLevel::~GameLevel()

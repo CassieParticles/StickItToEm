@@ -18,7 +18,7 @@ int initWindow(GLFWwindow** window)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	*window = glfwCreateWindow(800, 800, "Stick it to 'em", NULL, NULL);
+	*window = glfwCreateWindow(1200, 700, "Stick it to 'em", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create a window" << std::endl;
@@ -63,7 +63,6 @@ int main()
 		updateTimer.Update();
 		renderTimer.Update();
 		
-
 		if (updateTimer.getUpdate())	//Update the game
 		{
 			gameLevel.handleInput(&updateTimer);
