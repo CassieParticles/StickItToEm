@@ -3,11 +3,11 @@
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glfw3.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+
 
 #include "Engine/Timer.h"
 #include "Engine/Input.h"
+#include "Engine/TextureManager.h"
 
 #include "Game/GameLevel.h"
 
@@ -77,6 +77,8 @@ int main()
 			glfwSetWindowShouldClose(window, true);
 		}
 	}
+
+	TextureManager::cleanup();
 
 	return 0;
 }
