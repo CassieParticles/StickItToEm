@@ -55,7 +55,7 @@ void TerrainManager::uploadStage(float* stage)
 {
 	std::copy(stage, stage + scalarDataSize, scalarData);
 
-	generateTerrain(-1,-1,65,35);
+	generateTerrain(-1,-1,60,35);
 }
 
 void TerrainManager::modifyTerrainCircle(glm::vec2 centre, float radius, float value)
@@ -290,10 +290,10 @@ void TerrainManager::setPoint(glm::ivec2 pos, float val)
 
 void TerrainManager::addPoint(glm::ivec2 pos, float val)
 {
-	if (pos.x < 0 || pos.x > arenaSize.x - 1) { return; }	//If point is outside of bounds, return
-	if (pos.y < 0 || pos.y > arenaSize.y - 1) { return; }
+	if (pos.x < 0 || pos.x > arenaSize.x - 2) { return; }	//If point is outside of bounds, return
+	if (pos.y < 0 || pos.y > arenaSize.y - 2) { return; }
 
-	int index = (arenaSize.y - 2 - pos.y) * (arenaSize.x - 1) + pos.x;	//Get the index of the point being added to
+	int index = (arenaSize.y - pos.y - 2) * (arenaSize.x - 1) + pos.x;	//Get the index of the point being added to
 
 	float newVal = scalarData[index] + val;	//Get the value, clamp it, then set it
 	newVal = std::min(std::max(-1.f, newVal), 1.f);
