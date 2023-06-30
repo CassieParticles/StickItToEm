@@ -29,6 +29,9 @@ public:
 	void render();	//Draw the terrain to the screen
 
 	glm::ivec2 getArenaSize() { return arenaSize; }
+
+	void getLines(glm::ivec2 tl, line* lines);					//Get the lines in one square and in an area	
+	void getLines(glm::ivec2 tl, glm::ivec2 area, line* lines);
 protected:
 	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 

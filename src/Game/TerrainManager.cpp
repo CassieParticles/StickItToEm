@@ -300,6 +300,33 @@ void TerrainManager::addPoint(glm::ivec2 pos, float val)
 	scalarData[index] = newVal;
 }
 
+void TerrainManager::getLines(glm::ivec2 tl, line* lines)
+{
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x-1 || tl.y>arenaSize.y-1) { return; }
+	int squareIndex = (arenaSize.y - tl.y - 1) * (arenaSize.x) + tl.x;	//Gets which square to access (not the index in the array)
+	lines = new line[2];
+	lines[0] = lineArray[squareIndex * 2 + 0];
+	lines[1] = lineArray[squareIndex * 2 + 1];
+}
+
+void TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, line* lines)
+{
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x - 1 || tl.y>arenaSize.y - 1) { return; }
+	if (tl.x+area.x<0 || tl.y+area.y<0 || tl.x+area.x>arenaSize.x - 1 || tl.y+area.y>arenaSize.y - 1) { return; }
+
+
+	int initialIndex = (arenaSize.y - tl.y - 1) * arenaSize.x + tl.x;	//As y index is iterated through, the index will decrease
+	lines = new line[area.x * area.y * 2];
+	line* linePtr = lines;
+	for (int i = 0; i < area.y; i++)
+	{
+		std::copy(lineArray + initialIndex * 2, lineArray + (initialIndex + area.x)*2, linePtr);
+
+		linePtr += area.x*2;
+		initialIndex -= area.x;
+	}
+}
+
 void TerrainManager::render()
 {
 	//Render the triangles in the terrain
