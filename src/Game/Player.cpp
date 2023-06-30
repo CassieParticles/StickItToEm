@@ -49,19 +49,19 @@ void Player::handleInput(float deltaTime)
 {
 	if (input->getKeyDown(GLFW_KEY_A))
 	{
-		addForce({ -50,0 });
+		addForce({ -5*getMass(),0});
 	}
 	if (input->getKeyDown(GLFW_KEY_D))
 	{
-		addForce({ 50,0 });
+		addForce({ 5 * getMass(),0 });
 	}
 	if (input->getKeyDown(GLFW_KEY_W))
 	{
-		addForce({ 0,50 });
+		addForce({ 0,5 * getMass() });
 	}
 	if (input->getKeyDown(GLFW_KEY_S))
 	{
-		addForce({ 0, -50 });
+		addForce({ 0, -5 * getMass() });
 	}
 }
 

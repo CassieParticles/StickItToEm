@@ -43,9 +43,13 @@ void GameLevel::closeLevel()
 void GameLevel::handleInput(Timer* updateTimer)
 {
 	input->update();
-	if(input->getKeyPressed(GLFW_KEY_T))
+	if(input->getKeyDown(GLFW_KEY_T))
 	{
-		terrainManager->modifyTerrainCircle(player.getPosition(), 5, -4);
+		terrainManager->modifyTerrainCircle(player.getPosition(), 5, -0.2);
+	}
+	if (input->getKeyDown(GLFW_KEY_Y))
+	{
+		terrainManager->modifyTerrainCircle(player.getPosition(), 5, 0.2);
 	}
 	player.handleInput(updateTimer->getDeltaTime());
 }
