@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.10)
 
 project (Game VERSION 1.0)
 
@@ -15,6 +15,7 @@ list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 list(APPEND ALLSOURCES "src/Engine/MathsFunctions.cpp" "src/Engine/MathsFunctions.h")
 list(APPEND ALLSOURCES "src/Engine/Collision.cpp" "src/Engine/Collision.h")
+list(APPEND ALLSOURCES "src/Engine/TextureManager.cpp" "src/Engine/TextureManager.h")
 
 #Add all game source files
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
