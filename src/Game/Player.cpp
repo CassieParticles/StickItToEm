@@ -1,10 +1,12 @@
 #include "Player.h"
 
 #include <glad/glad.h>
+#include <glfw3.h>
 
 #include "../Engine/Program.h"
+#include "../Engine/Input.h"
 
-Player::Player(glm::ivec2 gridSize, glm::vec2 position, float mass) :position{position},mass{mass}
+Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass) :input{ input },position { position }, mass{ mass }
 {
 	constexpr glm::vec2 vertexPos[6]{
 		glm::vec2{0,0},
@@ -45,7 +47,22 @@ Player::~Player()
 
 void Player::handleInput(float deltaTime)
 {
-	if()
+	if (input->getKeyDown(GLFW_KEY_A))
+	{
+		addForce({ -50,0 });
+	}
+	if (input->getKeyDown(GLFW_KEY_D))
+	{
+		addForce({ 50,0 });
+	}
+	if (input->getKeyDown(GLFW_KEY_W))
+	{
+		addForce({ 0,50 });
+	}
+	if (input->getKeyDown(GLFW_KEY_S))
+	{
+		addForce({ 0, -50 });
+	}
 }
 
 void Player::update(float deltaTime)

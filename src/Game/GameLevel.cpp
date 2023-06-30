@@ -12,7 +12,7 @@
 #include "TerrainManager.h"
 #include "Player.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{glm::ivec2{60,35},{ 10,20 },50}
+GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{input,glm::ivec2{60,35},{ 10,20 },50}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
@@ -43,10 +43,9 @@ void GameLevel::closeLevel()
 void GameLevel::handleInput(Timer* updateTimer)
 {
 	input->update();
-	if(input->getKeyPressed(GLFW_KEY_W))
+	if(input->getKeyPressed(GLFW_KEY_T))
 	{
-		std::cout << "Key W pressed\n";
-		terrainManager->modifyTerrainCircle({ 40,25 }, 5, -4);
+		terrainManager->modifyTerrainCircle(player.getPosition(), 5, -4);
 	}
 	player.handleInput(updateTimer->getDeltaTime());
 }
