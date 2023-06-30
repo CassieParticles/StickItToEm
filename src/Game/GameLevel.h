@@ -1,8 +1,10 @@
 #pragma once
 #include "../Engine/BaseLevel.h"
+#include "Player.h"
 
 class Program;
 class TerrainManager;
+
 
 class GameLevel :public BaseLevel
 {
@@ -56,5 +58,7 @@ protected:
 	};
 
 	TerrainManager* terrainManager;
+	Player player;
+
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };

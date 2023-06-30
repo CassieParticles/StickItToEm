@@ -10,8 +10,9 @@
 #include "../Engine/Program.h"
 
 #include "TerrainManager.h"
+#include "Player.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour)
+GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{glm::ivec2{60,35}}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
@@ -19,7 +20,7 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 
 	glGenBuffers(1, &terrainUBO);
 
-	//terrainManager->modifyTerrainCircle({ 40,30 }, 15, -4);
+	player.position = { 10,20 };
 
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
@@ -53,7 +54,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 
 void GameLevel::update(Timer* updateTimer)
 {
-
+	player.update(updateTimer->getDeltaTime());
 }
 
 void GameLevel::render(Timer* frameTimer)
@@ -62,6 +63,7 @@ void GameLevel::render(Timer* frameTimer)
 	//Draw stuff
 	terrainManager->render();
 	
+	player.render();
 	
 	endDraw();
 }
