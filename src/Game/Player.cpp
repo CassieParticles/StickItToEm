@@ -4,7 +4,7 @@
 
 #include "../Engine/Program.h"
 
-Player::Player(glm::ivec2 gridSize) :position{}
+Player::Player(glm::ivec2 gridSize, glm::vec2 position, float mass) :position{position},mass{mass}
 {
 	constexpr glm::vec2 vertexPos[6]{
 		glm::vec2{0,0},
@@ -13,12 +13,6 @@ Player::Player(glm::ivec2 gridSize) :position{}
 		glm::vec2{0,0},
 		glm::vec2{0,1},
 		glm::vec2{1,1}
-	};
-
-	constexpr int indices[6]
-	{
-		0,2,1,
-		0,3,2
 	};
 
 	glGenVertexArrays(1, &vaoID);
@@ -30,7 +24,6 @@ Player::Player(glm::ivec2 gridSize) :position{}
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -52,11 +45,18 @@ Player::~Player()
 
 void Player::handleInput(float deltaTime)
 {
+	if()
 }
 
 void Player::update(float deltaTime)
 {
-	position.x += deltaTime;
+
+
+	//Update velocity and position
+	//F=ma, a=F/m
+	velocity += deltaTime * sumForce / mass;
+	sumForce = {};
+	position += deltaTime * velocity;
 }
 
 void Player::render()
@@ -69,4 +69,9 @@ void Player::render()
 	glDrawArrays(GL_TRIANGLES,0,6);
 
 	glBindVertexArray(0);
+}
+
+void Player::addForce(glm::vec2 force)
+{
+	sumForce += force;
 }

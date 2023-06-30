@@ -12,15 +12,13 @@
 #include "TerrainManager.h"
 #include "Player.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{glm::ivec2{60,35}}
+GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{glm::ivec2{60,35},{ 10,20 },50}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
 	glGenBuffers(1, &terrainUBO);
-
-	player.position = { 10,20 };
 
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
@@ -50,6 +48,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 		std::cout << "Key W pressed\n";
 		terrainManager->modifyTerrainCircle({ 40,25 }, 5, -4);
 	}
+	player.handleInput(updateTimer->getDeltaTime());
 }
 
 void GameLevel::update(Timer* updateTimer)
