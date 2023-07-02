@@ -53,11 +53,23 @@ namespace Collision
 
 		for (int i = 0; i < 4; i++)
 		{
-			glm::vec2* point;
-			if (!collidingLine) { point == nullptr; }
-			else if (gotFirstCollisionPoint) { point = &(collidingLine->B); }
-			else if (gotSecondCollisionPoint) { point = nullptr; }
-			else { point = &(collidingLine->A); }
+			glm::vec2* point{nullptr};
+			if (collidingLine==nullptr) 
+			{ 
+				point == nullptr; 
+			}
+			else if (gotFirstCollisionPoint) 
+			{ 
+				point = &(collidingLine->B); 
+			}
+			else if (gotSecondCollisionPoint) 
+			{ 
+				point = nullptr; 
+			}
+			else 
+			{ 
+				point = &(collidingLine->A); 
+			}
 
 			bool currentLineCollide = checkLineLine(edges + i, l, point);
 
@@ -68,5 +80,26 @@ namespace Collision
 		}
 
 		return collide;
+	}
+	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line* linesColliding, int* collisions)
+	{
+		int lineCount;
+		line* lines = terrainManager->getLines(r->tlCorner, glm::ivec2(ceil(r->size.x + 1), ceil(r->size.y + 1)), &lineCount);
+
+		for (int i = 0; i < lineCount; i++)
+		{
+			line currentLine = lines[i];
+			if (currentLine.A != glm::vec2{0, 0} || currentLine.B != glm::vec2{0, 0})
+			{
+				if (checkLineRect(r, &currentLine, nullptr))
+				{
+					delete[] lines;
+					return true;
+				}
+			}
+		}
+
+		delete[] lines;
+		return false;
 	}
 }

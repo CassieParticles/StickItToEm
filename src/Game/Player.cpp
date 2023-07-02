@@ -76,26 +76,14 @@ void Player::handleInput(float deltaTime)
 void Player::update(float deltaTime)
 {
 	//Get the lines the player may be intersecting with
-	int lineCount{};
-	line* lines = terrainManager->getLines(position, glm::ivec2{ceil(playerSize.x+1), ceil(playerSize.y+1)}, &lineCount);
-
 	rect playerCollisionRect = getCollisionRect();
+	int collisionCount;
 
-	static int count{};
-
-	for (int i = 0; i < lineCount; i++)
+	if (Collision::checkRectTerrain(&playerCollisionRect, terrainManager, nullptr, &collisionCount))
 	{
-		line currentLine = lines[i];
-		if (currentLine.A != glm::vec2{0, 0}||currentLine.B != glm::vec2{0, 0})
-		{
-			
-			line collidingLine;
-			if (Collision::checkLineRect(&playerCollisionRect, &currentLine, &collidingLine))
-			{
-				std::cout << "Colliding"<<count++<<'\n';
-			}
-		}
+		std::cout << "Collision\n";
 	}
+
 
 	//Update velocity and position
 	//F=ma, a=F/m
@@ -103,7 +91,7 @@ void Player::update(float deltaTime)
 	sumForce = {};
 	position += deltaTime * velocity;
 
-	delete[] lines;	//Delete the lines to prevent memory leak
+	//delete[] lines;	//Delete the lines to prevent memory leak
 }
 
 void Player::render()
