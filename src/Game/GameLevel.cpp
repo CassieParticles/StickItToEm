@@ -18,6 +18,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
+	player.setTerrainManager(terrainManager);
+
 	glGenBuffers(1, &terrainUBO);
 
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);

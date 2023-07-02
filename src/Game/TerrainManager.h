@@ -30,8 +30,8 @@ public:
 
 	glm::ivec2 getArenaSize() { return arenaSize; }
 
-	void getLines(glm::ivec2 tl, line* lines);					//Get the lines in one square and in an area	
-	void getLines(glm::ivec2 tl, glm::ivec2 area, line* lines);
+	line* getLines(glm::ivec2 tl, int* lineCount);					//Get the lines in one square and in an area	
+	line* getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount);
 protected:
 	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 

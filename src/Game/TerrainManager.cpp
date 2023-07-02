@@ -300,31 +300,44 @@ void TerrainManager::addPoint(glm::ivec2 pos, float val)
 	scalarData[index] = newVal;
 }
 
-void TerrainManager::getLines(glm::ivec2 tl, line* lines)
+line* TerrainManager::getLines(glm::ivec2 tl, int* lineCount)
 {
-	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x-1 || tl.y>arenaSize.y-1) { return; }
-	int squareIndex = (arenaSize.y - tl.y - 1) * (arenaSize.x) + tl.x;	//Gets which square to access (not the index in the array)
+	line* lines;
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x-1 || tl.y>arenaSize.y-1) { return nullptr; }
+	int squareIndex = (tl.y) * (arenaSize.x) + tl.x;	//Gets which square to access (not the index in the array)
 	lines = new line[2];
 	lines[0] = lineArray[squareIndex * 2 + 0];
 	lines[1] = lineArray[squareIndex * 2 + 1];
+
+	*lineCount = 2;
+	return lines;
 }
 
-void TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, line* lines)
+line* TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount)
 {
-	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x - 1 || tl.y>arenaSize.y - 1) { return; }
-	if (tl.x+area.x<0 || tl.y+area.y<0 || tl.x+area.x>arenaSize.x - 1 || tl.y+area.y>arenaSize.y - 1) { return; }
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x - 1 || tl.y>arenaSize.y - 1) { return nullptr; }
+	if (tl.x+area.x<0 || tl.y+area.y<0 || tl.x+area.x>arenaSize.x - 1 || tl.y+area.y>arenaSize.y - 1) { return nullptr; }
 
+	*lineCount = area.x * area.y * 2;	//Calculate number of lines gotten (includes non-lines)
+	line* lines=new line[area.x * area.y * 2];
 
-	int initialIndex = (arenaSize.y - tl.y - 1) * arenaSize.x + tl.x;	//As y index is iterated through, the index will decrease
-	lines = new line[area.x * area.y * 2];
-	line* linePtr = lines;
-	for (int i = 0; i < area.y; i++)
+	int squareRowIndex = (tl.y) * arenaSize.x + tl.x;	//As y index is iterated through, the index will decrease
+	
+	for (int y = 0; y < area.y; y++)
 	{
-		std::copy(lineArray + initialIndex * 2, lineArray + (initialIndex + area.x)*2, linePtr);
+		int squareIndex = squareRowIndex;
+		for (int x = 0; x < area.x; x++)
+		{
+			lines[(y*area.x+x)*2+0] = lineArray[squareIndex * 2 + 0];	//Copy data over
+			lines[(y*area.x+x)*2+1] = lineArray[squareIndex * 2 + 1];
+			squareIndex++;
+		}
 
-		linePtr += area.x*2;
-		initialIndex -= area.x;
+
+		squareRowIndex += arenaSize.x;	//Increase squareIndex by one row
 	}
+	
+	return lines;
 }
 
 void TerrainManager::render()

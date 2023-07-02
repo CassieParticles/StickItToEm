@@ -22,12 +22,15 @@ struct rect
 
 class Program;
 class Input;
+class TerrainManager;
 
 class Player
 {
 public:
 	Player(Input* input,glm::ivec2 gridSize,glm::vec2 position, float mass);
 	~Player();
+
+	void setTerrainManager(TerrainManager* terrainManager) { this->terrainManager = terrainManager; }
 
 	void handleInput(float deltaTime);
 
@@ -47,6 +50,7 @@ public:
 
 protected:
 	Input* input;
+	TerrainManager* terrainManager;
 
 	glm::vec2 playerSize{1.6f, 3.2f};	//Size of the player (in squares)
 
