@@ -58,6 +58,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 
 void GameLevel::update(Timer* updateTimer)
 {
+	player.collisionResolution(updateTimer->getDeltaTime());
 	player.update(updateTimer->getDeltaTime());
 }
 

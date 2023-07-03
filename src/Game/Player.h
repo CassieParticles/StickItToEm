@@ -34,6 +34,8 @@ public:
 
 	void handleInput(float deltaTime);
 
+	void collisionResolution(float deltaTime);
+
 	void update(float deltaTime);
 
 	void render();
@@ -64,4 +66,6 @@ protected:
 	unsigned int vertVBO;
 
 	Program* playerProgram;
+
+	static constexpr glm::vec2 gravForce{0, -9.8f};
 };

@@ -11,5 +11,7 @@ namespace Collision
 {
 	bool checkLineLine(line* lineA, line* lineB, glm::vec2* collidingPoint);	
 	bool checkLineRect(rect* r, line* l, line* collidingLine);
-	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line* linesColliding, int* collisions);
+	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line** linesColliding, int* collisions);
+
+	bool checkPointRect(rect* r, glm::vec2* point);
 }

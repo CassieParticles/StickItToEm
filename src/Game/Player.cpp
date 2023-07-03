@@ -73,16 +73,29 @@ void Player::handleInput(float deltaTime)
 	}
 }
 
+void Player::collisionResolution(float deltaTime)
+{
+	rect playerCollisionRect = getCollisionRect();
+
+	line* collidingLines;	//Values to be returned from collision calculation
+	int collisionCount;
+
+	bool collision;
+
+	//Get if a collision occurs and if so, get the lines the player collides with
+	collision = Collision::checkRectTerrain(&playerCollisionRect, terrainManager, &collidingLines, &collisionCount);
+
+	for (int i = 0; i < collisionCount; i++)
+	{
+		
+	}
+
+}
+
 void Player::update(float deltaTime)
 {
 	//Get the lines the player may be intersecting with
-	rect playerCollisionRect = getCollisionRect();
-	int collisionCount;
 
-	if (Collision::checkRectTerrain(&playerCollisionRect, terrainManager, nullptr, &collisionCount))
-	{
-		std::cout << "Collision\n";
-	}
 
 
 	//Update velocity and position
@@ -91,7 +104,8 @@ void Player::update(float deltaTime)
 	sumForce = {};
 	position += deltaTime * velocity;
 
-	//delete[] lines;	//Delete the lines to prevent memory leak
+
+	addForce(gravForce*mass);	//Add gravity for next frame, applied here so it's before collision resolution is done
 }
 
 void Player::render()

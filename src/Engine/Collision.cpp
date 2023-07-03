@@ -2,6 +2,9 @@
 #include "../Game/TerrainManager.h"
 #include "../Game/Player.h"
 
+#include <vector>
+#include <algorithm>
+
 namespace Collision
 {
 	bool checkLineLine(line* lineA, line* lineB, glm::vec2* collidingPoint)
@@ -29,6 +32,7 @@ namespace Collision
 
 		return collide;
 	}
+
 	bool checkLineRect(rect* r, line* l, line* collidingLine)
 	{
 		float cosAngle = cos(r->angle);	//Get cosine and sin of rotated angle
@@ -48,58 +52,104 @@ namespace Collision
 		};
 
 		bool collide{};
+
 		bool gotFirstCollisionPoint{};	
 		bool gotSecondCollisionPoint{};
 
-		for (int i = 0; i < 4; i++)
+		if (checkPointRect(r, &l->A))	//Check to see if either end of the line is in the rect
 		{
-			glm::vec2* point{nullptr};
-			if (collidingLine==nullptr) 
-			{ 
-				point == nullptr; 
+			gotFirstCollisionPoint = true;
+			collide = true;
+			if (collidingLine != nullptr) { collidingLine->A = l->A; }
+		}
+
+		if (checkPointRect(r, &l->B))
+		{
+			gotSecondCollisionPoint = true;
+			collide = true;
+			if (collidingLine != nullptr) { collidingLine->B = l->B; }
+		}
+
+		for (int i = 0; i < 4; i++)	//Collision is checked by creating 4 lines to represent the sides of the rect, and checking each of these
+		{
+			glm::vec2* point{nullptr};		
+			if (collidingLine == nullptr)
+			{
+				point = nullptr;
 			}
-			else if (gotFirstCollisionPoint) 
-			{ 
-				point = &(collidingLine->B); 
+			else if (!gotFirstCollisionPoint)	//If the first point isn't gotten yet
+			{
+				point = &collidingLine->A;
 			}
-			else if (gotSecondCollisionPoint) 
-			{ 
-				point = nullptr; 
+			else if (!gotSecondCollisionPoint)	//If the first point is gotten, but the second one isn't
+			{
+				point = &collidingLine->B;
 			}
-			else 
-			{ 
-				point = &(collidingLine->A); 
+			else								//If both points are gotten
+			{
+				break;
 			}
 
 			bool currentLineCollide = checkLineLine(edges + i, l, point);
 
-			gotSecondCollisionPoint = (gotFirstCollisionPoint && currentLineCollide || gotSecondCollisionPoint);
+			//Boolean logic to if the first and second vertices are gotten
+			gotSecondCollisionPoint = currentLineCollide && gotFirstCollisionPoint || gotSecondCollisionPoint;
 			gotFirstCollisionPoint = currentLineCollide || gotFirstCollisionPoint;
+			
 
 			collide = collide || currentLineCollide;
 		}
 
 		return collide;
 	}
-	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line* linesColliding, int* collisions)
+
+	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line** linesColliding, int* collisions)
 	{
+		std::vector<line> collidingLines{};
+
+		//Get the lines to be checked
 		int lineCount;
 		line* lines = terrainManager->getLines(r->tlCorner, glm::ivec2(ceil(r->size.x + 1), ceil(r->size.y + 1)), &lineCount);
 
-		for (int i = 0; i < lineCount; i++)
+		bool collide{};
+
+		for (int i = 0; i < lineCount; i++)	//Iterate through each line
 		{
-			line currentLine = lines[i];
-			if (currentLine.A != glm::vec2{0, 0} || currentLine.B != glm::vec2{0, 0})
+			line currentLine = lines[i];	
+
+			if (currentLine.A == glm::vec2{0, 0} && currentLine.B == glm::vec2{0, 0}) { continue; }//Skip lines that are empty
+
+			line l;
+			if (checkLineRect(r, &currentLine, &l))	//Check if the line is collding with the rect
 			{
-				if (checkLineRect(r, &currentLine, nullptr))
-				{
-					delete[] lines;
-					return true;
-				}
+				//If pointer isn't null, then data is wanted back, put colliding line into std::vector
+				if (linesColliding != nullptr) { collidingLines.push_back(l); }
+				collide = true;
 			}
 		}
+		delete[] lines;	//Free memory
 
-		delete[] lines;
-		return false;
+		if (linesColliding != nullptr)
+		{
+			line* collidingLineArr = new line[collidingLines.size()];	//Copy colliding line array into memory on heap, so it's preserved out of scope
+			std::copy(collidingLines.data(), collidingLines.data() + collidingLines.size(), collidingLineArr);
+
+			*linesColliding = collidingLineArr;
+			*collisions = collidingLines.size();
+		}
+
+		return collide;
+	}
+	bool checkPointRect(rect* r, glm::vec2* point)
+	{
+		float cosAngle = cos(r->angle);	//Get cosine and sin of rotated angle
+		float sinAngle = sin(r->angle);
+		glm::mat2x2 rotMatrix{cosAngle, -sinAngle, sinAngle, cosAngle};	//Rotate the corners
+		glm::mat2x2 invRotMatrix = glm::inverse(rotMatrix);
+
+		glm::vec2 translatedPoint = *point - r->tlCorner;
+		glm::vec2 rotatedPoint = invRotMatrix * translatedPoint;
+		
+		return rotatedPoint.x > 0 && rotatedPoint.x < r->size.x && rotatedPoint.y > 0 && rotatedPoint.y < r->size.y;
 	}
 }
