@@ -56,4 +56,5 @@ protected:
 	};
 
 	TerrainManager* terrainManager;
+	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };

@@ -5,9 +5,8 @@ project (Game VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-#Add all source files
+#Add main source file
 list(APPEND ALLSOURCES "src/Main.cpp")
-
 
 #Add all engine source files
 list(APPEND ALLSOURCES "src/Engine/BaseLevel.cpp" "src/Engine/BaseLevel.h")
@@ -15,7 +14,9 @@ list(APPEND ALLSOURCES "src/Engine/Program.cpp" "src/Engine/Program.h")
 list(APPEND ALLSOURCES "src/Engine/Timer.cpp" "src/Engine/Timer.h")
 list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 list(APPEND ALLSOURCES "src/Engine/MathsFunctions.cpp" "src/Engine/MathsFunctions.h")
+list(APPEND ALLSOURCES "src/Engine/TextureManager.cpp" "src/Engine/TextureManager.h")
 
+#Add all game source files
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
 list(APPEND ALLSOURCES "src/Game/TerrainManager.cpp" "src/Game/TerrainManager.h")
 

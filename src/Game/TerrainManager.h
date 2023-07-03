@@ -27,6 +27,8 @@ public:
 	void modifyTerrainCircle(glm::vec2 centre, float radius, float value);	//Adds value to each point within the circle, scaled based on distance
 
 	void render();	//Draw the terrain to the screen
+
+	glm::ivec2 getArenaSize() { return arenaSize; }
 protected:
 	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 

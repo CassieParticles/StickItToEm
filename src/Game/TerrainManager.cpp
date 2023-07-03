@@ -305,7 +305,6 @@ void TerrainManager::render()
 	//Render the triangles in the terrain
 	triangleProgram->use();	
 
-	triangleProgram->setVec2("gridSize", arenaSize);
 	triangleProgram->setVec3("colour", glm::vec3{ 0,0,0 });
 
 	glBindVertexArray(triangleVAO);
@@ -313,7 +312,6 @@ void TerrainManager::render()
 	
 	//Render the lines in the terrain
 	lineProgram->use();
-	lineProgram->setVec2("gridSize", arenaSize);
 	lineProgram->setVec3("colour", glm::vec3{ 1,0,0 });
 
 	glBindVertexArray(lineVAO);
