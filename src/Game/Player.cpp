@@ -53,23 +53,50 @@ void Player::handleInput(float deltaTime)
 {
 	if (input->getKeyDown(GLFW_KEY_A))
 	{
-		addForce({ -15*getMass(),0});
+		if (grounded)
+		{
+			if (glm::dot(forward, -velocity) < playerRunMaxSpeed)
+			{
+				addForce(-forward * playerRunForce * mass);
+			}
+		}
+		else
+		{
+			if (glm::dot(forward, -velocity) < playerAirMaxSpeed)
+			{
+				addForce(-forward * playerAirForce * mass);
+			}
+		}
 	}
 	if (input->getKeyDown(GLFW_KEY_D))
 	{
-		addForce({ 15 * getMass(),0 });
+		if (grounded)
+		{
+			if (glm::dot(forward, velocity) < playerRunMaxSpeed)
+			{
+				addForce(forward * playerRunForce * mass);
+			}
+		}
+		else
+		{
+			if (glm::dot(forward, velocity) < playerAirMaxSpeed)
+			{
+				addForce(forward * playerAirForce * mass);
+			}
+		}
 	}
-	if (input->getKeyDown(GLFW_KEY_W))
+	if (input->getKeyPressed(GLFW_KEY_W))
 	{
-		addForce({ 0,15 * getMass() });
-	}
-	if (input->getKeyDown(GLFW_KEY_S))
-	{
-		addForce({ 0, -15 * getMass() });
+		if (grounded)
+		{
+			addForce(glm::vec2{ -forward.y,forward.x } * playerJumpForce * mass / deltaTime);
+			grounded = false;
+		}
 	}
 	if (input->getKeyDown(GLFW_KEY_BACKSPACE))
 	{
 		velocity = {};
+		position = {30,20};
 	}
 }
 
@@ -89,6 +116,8 @@ void Player::collisionResolution(float deltaTime)
 	offset collisions with multiple different lines in the same time*/
 	
 	float lineCountOffset = 1.f / collisionCount;	
+	grounded = false;
+	forward = { 1,0 };
 
 	for (int i = 0; i < collisionCount; i++)
 	{
@@ -104,6 +133,25 @@ void Player::collisionResolution(float deltaTime)
 		//Get the velocity in the components parallel and perpendicular to the line being resolved
 		glm::vec2 velParr = glm::dot(linDirNorm, velocity) * linDirNorm;
 		glm::vec2 velPerp = velocity - velParr;
+
+		float lineSteepness = abs(glm::dot({ 0,1 }, linDirNorm));	//Get the steepness of the line
+
+		if(lineSteepness<steepnessMax)
+		{ 
+			//Additional check is needed to make sure the line is below the player
+			glm::vec2 playerCentre = position+playerSize/2.f;
+			glm::vec2 dirToLine = glm::normalize(currentLine.A - playerCentre);
+			if (glm::dot(dirToLine, { 0,1 }) < 0)
+			{
+				grounded = true;
+				std::cout << "Player is grounded\n";
+				if (abs(linDirNorm.y) > forward.y)
+				{
+					forward = linDirNorm;
+					if (forward.x < 0) { forward *= -1; }
+				}
+			}
+		}
 
 		//Impulse from collision
 		if (glm::dot(linNormal, velPerp) < 0)	//If dot product is less then 0, then velocity must be going into the terrain

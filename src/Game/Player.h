@@ -61,12 +61,27 @@ protected:
 	float mass{};
 	glm::vec2 sumForce{};
 
+	bool grounded;	//If the player is on the ground
+	glm::vec2 forward{};
+
 	//Information needed to render player, shared across all instances
 	unsigned int vaoID;			
 	unsigned int vertVBO;
 
 	Program* playerProgram;
 
-	static constexpr glm::vec2 gravForce{0, -9.8f};
+	//Constants involved in player
+	static constexpr glm::vec2 gravForce{0, -19.6f};	
+	static constexpr float terminalVelocity{ 20.f };
+
 	static constexpr float frictionCoeffecient{ 0.4f };
+	static constexpr float steepnessMax = .5f;
+	static constexpr float playerJumpForce = { 25.f };	//Divided by deltatime so it's as if it's applied over 1 second
+
+	static constexpr float playerRunForce{ 25.f };
+	static constexpr float playerRunMaxSpeed{ 25.f };
+
+	static constexpr float playerAirForce{ 12.f };
+	static constexpr float playerAirMaxSpeed{ 15.f };
+
 };
