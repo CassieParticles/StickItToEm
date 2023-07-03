@@ -53,19 +53,19 @@ void Player::handleInput(float deltaTime)
 {
 	if (input->getKeyDown(GLFW_KEY_A))
 	{
-		addForce({ -5*getMass(),0});
+		addForce({ -15*getMass(),0});
 	}
 	if (input->getKeyDown(GLFW_KEY_D))
 	{
-		addForce({ 5 * getMass(),0 });
+		addForce({ 15 * getMass(),0 });
 	}
 	if (input->getKeyDown(GLFW_KEY_W))
 	{
-		addForce({ 0,5 * getMass() });
+		addForce({ 0,15 * getMass() });
 	}
 	if (input->getKeyDown(GLFW_KEY_S))
 	{
-		addForce({ 0, -5 * getMass() });
+		addForce({ 0, -15 * getMass() });
 	}
 	if (input->getKeyDown(GLFW_KEY_BACKSPACE))
 	{
@@ -111,7 +111,26 @@ void Player::collisionResolution(float deltaTime)
 			addForce(-velPerp * mass * lineCountOffset / deltaTime);
 		}
 
-		
+		//Normal contact
+		if (glm::dot(linNormal, forcePerp) < 0)	//Same as velocity
+		{
+			addForce(-forcePerp);
+
+			//Friction applied based on normal contact force
+			glm::vec2 frictionForce = glm::vec2{ forcePerp.y,-forcePerp.x } * frictionCoeffecient;	//Maximum friction applied
+			if (glm::dot(frictionForce, velParr) < 0) { frictionForce *= -1; }	//Invert friction force if it's the wrong direction
+
+			glm::vec2 minForce = -velParr * mass / deltaTime;	//The minimum force needed to completely stop the player
+
+			if (abs(minForce.x) < abs(frictionForce.x))	//If the minimum force needed is smaller then the maxmimum, apply min
+			{
+				addForce(minForce);	//Should stop player movement
+			}
+			else		//Else, apply the maximum
+			{
+				addForce(-frictionForce);	//Shouldn't stop the player movement
+			}
+		}
 	}
 	delete[] collidingLines;
 }

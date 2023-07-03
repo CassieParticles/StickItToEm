@@ -68,4 +68,5 @@ protected:
 	Program* playerProgram;
 
 	static constexpr glm::vec2 gravForce{0, -9.8f};
+	static constexpr float frictionCoeffecient{ 0.4f };
 };
