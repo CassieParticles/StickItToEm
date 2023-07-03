@@ -85,11 +85,35 @@ void Player::collisionResolution(float deltaTime)
 	//Get if a collision occurs and if so, get the lines the player collides with
 	collision = Collision::checkRectTerrain(&playerCollisionRect, terrainManager, &collidingLines, &collisionCount);
 
+	/*Since forces aren't resolved till after all collisions are accounted for, some times collisions need this to 
+	offset collisions with multiple different lines in the same time*/
+	
+	float lineCountOffset = 1.f / collisionCount;	
+
 	for (int i = 0; i < collisionCount; i++)
 	{
+		line currentLine = collidingLines[i];	//Get information on the current line being resolved
+		glm::vec2 linDir = currentLine.B - currentLine.A;
+		glm::vec2 linDirNorm = glm::normalize(linDir);
+		glm::vec2 linNormal = { linDirNorm.y,-linDirNorm.x };	//Points out of the terrain
+
+		//Get the force in the components parallel and perpendicular to the line being resolved
+		glm::vec2 forceParr = glm::dot(linDirNorm, sumForce) * linDirNorm;	
+		glm::vec2 forcePerp = sumForce - forceParr;
+
+		//Get the velocity in the components parallel and perpendicular to the line being resolved
+		glm::vec2 velParr = glm::dot(linDirNorm, velocity) * linDirNorm;
+		glm::vec2 velPerp = velocity - velParr;
+
+		//Impulse from collision
+		if (glm::dot(linNormal, velPerp) < 0)	//If dot product is less then 0, then velocity must be going into the terrain
+		{
+			addForce(-velPerp * mass * lineCountOffset / deltaTime);
+		}
+
 		
 	}
-
+	delete[] collidingLines;
 }
 
 void Player::update(float deltaTime)
