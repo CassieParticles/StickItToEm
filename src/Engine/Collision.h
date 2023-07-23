@@ -5,6 +5,7 @@ struct line;
 struct rect;
 
 class TerrainManager;
+class Player;
 
 //Collisions return a boolean of if a collision occured, pointers used to return any other needed info
 namespace Collision
@@ -14,4 +15,8 @@ namespace Collision
 	bool checkRectTerrain(rect* r, TerrainManager* terrainManager, line** linesColliding, int* collisions);
 
 	bool checkPointRect(rect* r, glm::vec2* point);
+
+
+
+	void resolvePlayerLine(Player* player, line* l, float deltaTime);
 }

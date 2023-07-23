@@ -1,6 +1,6 @@
 #pragma once
 #include <glm.hpp>
-
+#include "../Engine/Collision.h"
 
 struct controls
 {
@@ -49,6 +49,7 @@ public:
 	void addForce(glm::vec2 force);
 	void addForce(float x, float y) { addForce(glm::vec2{x, y}); }
 
+	friend void Collision::resolvePlayerLine(Player* player, line* l, float deltaTime);
 
 protected:
 	Input* input;

@@ -23,7 +23,7 @@ namespace Collision
 		float t1 = (dB.x * (lineA->A.y - lineB->A.y) - dB.y * (lineA->A.x - lineB->A.x)) * invDenom;
 		float t2 = (dA.x * (lineA->A.y - lineB->A.y) - dA.y * (lineA->A.x - lineB->A.x)) * invDenom;
 
-		bool collide = t1 > 0 && t1 < 1 && t2>0 && t2 < 1;
+		bool collide = t1 >= 0 && t1 <= 1 && t2>=0 && t2 <= 1;
 
 		if (collidingPoint != nullptr && collide)
 		{
@@ -140,6 +140,7 @@ namespace Collision
 
 		return collide;
 	}
+
 	bool checkPointRect(rect* r, glm::vec2* point)
 	{
 		float cosAngle = cos(r->angle);	//Get cosine and sin of rotated angle
@@ -151,5 +152,62 @@ namespace Collision
 		glm::vec2 rotatedPoint = invRotMatrix * translatedPoint;
 		
 		return rotatedPoint.x > 0 && rotatedPoint.x < r->size.x && rotatedPoint.y > 0 && rotatedPoint.y < r->size.y;
+	}
+
+
+	void resolvePlayerLine(Player* player, line* l, float deltaTime)
+	{
+		glm::vec2 lineDelta = l->B - l->A;					//Get the line's direction and normal
+		glm::vec2 lineDir = glm::normalize(lineDelta);
+		glm::vec2 lineNormal = { lineDir.y,-lineDir.x };
+
+		glm::vec2 forceParr = glm::dot(lineDir, player->sumForce) * lineDir;	//Get the parallel and perpendicular components of force and velocity to the line
+		glm::vec2 forcePerp = player->sumForce - forceParr;
+
+		glm::vec2 velocityParr = glm::dot(lineDir, player->velocity) * lineDir;
+		glm::vec2 velocityPerp = player->velocity - velocityParr;
+
+		//Add check if player should be grounded
+		float lineSteepness = abs(glm::dot({ 0,1 }, lineDir));
+		if (lineSteepness < player->steepnessMax)
+		{
+			glm::vec2 playerCentre=player->position + player->playerSize / 2.f;
+			glm::vec2 dirToLine = glm::normalize(l->A - playerCentre);
+
+			if (glm::dot(dirToLine, { 0,1 }) < 0)
+			{
+				player->grounded = true;
+				if (abs(lineDir.y) > player->forward.y)
+				{
+					player->forward = lineDir;
+					if (player->forward.x < 0) { player->forward *= -1; }
+				}
+			}
+		}
+
+		//Change velocity to stop player moving into the terrain
+		if (glm::dot(lineNormal, velocityPerp) < 0)
+		{
+			player->velocity -= velocityPerp;
+		}
+
+		if (glm::dot(lineNormal, forcePerp) < 0)
+		{
+			player->addForce(-forcePerp);
+
+			glm::vec2 maxFrictionForce = glm::vec2{ forcePerp.y,-forcePerp.x } * player->frictionCoeffecient;
+			if (glm::dot(maxFrictionForce, velocityParr) < 0) { maxFrictionForce *= -1; }
+
+			glm::vec2 minForce = -velocityParr * player->mass / deltaTime;
+
+			if (abs(minForce.x) < abs(maxFrictionForce.x))
+			{
+				player->addForce(minForce);
+			}
+			else
+			{
+				player->addForce(-maxFrictionForce);
+			}
+		}
 	}
 }

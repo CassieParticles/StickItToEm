@@ -122,63 +122,8 @@ void Player::collisionResolution(float deltaTime)
 	for (int i = 0; i < collisionCount; i++)
 	{
 		line currentLine = collidingLines[i];	//Get information on the current line being resolved
-		glm::vec2 linDir = currentLine.B - currentLine.A;
-		glm::vec2 linDirNorm = glm::normalize(linDir);
-		glm::vec2 linNormal = { linDirNorm.y,-linDirNorm.x };	//Points out of the terrain
 
-		//Get the force in the components parallel and perpendicular to the line being resolved
-		glm::vec2 forceParr = glm::dot(linDirNorm, sumForce) * linDirNorm;	
-		glm::vec2 forcePerp = sumForce - forceParr;
-
-		//Get the velocity in the components parallel and perpendicular to the line being resolved
-		glm::vec2 velParr = glm::dot(linDirNorm, velocity) * linDirNorm;
-		glm::vec2 velPerp = velocity - velParr;
-
-		float lineSteepness = abs(glm::dot({ 0,1 }, linDirNorm));	//Get the steepness of the line
-
-		if(lineSteepness<steepnessMax)
-		{ 
-			//Additional check is needed to make sure the line is below the player
-			glm::vec2 playerCentre = position+playerSize/2.f;
-			glm::vec2 dirToLine = glm::normalize(currentLine.A - playerCentre);
-			if (glm::dot(dirToLine, { 0,1 }) < 0)
-			{
-				grounded = true;
-				std::cout << "Player is grounded\n";
-				if (abs(linDirNorm.y) > forward.y)
-				{
-					forward = linDirNorm;
-					if (forward.x < 0) { forward *= -1; }
-				}
-			}
-		}
-
-		//Impulse from collision
-		if (glm::dot(linNormal, velPerp) < 0)	//If dot product is less then 0, then velocity must be going into the terrain
-		{
-			addForce(-velPerp * mass * lineCountOffset / deltaTime);
-		}
-
-		//Normal contact
-		if (glm::dot(linNormal, forcePerp) < 0)	//Same as velocity
-		{
-			addForce(-forcePerp);
-
-			//Friction applied based on normal contact force
-			glm::vec2 frictionForce = glm::vec2{ forcePerp.y,-forcePerp.x } * frictionCoeffecient;	//Maximum friction applied
-			if (glm::dot(frictionForce, velParr) < 0) { frictionForce *= -1; }	//Invert friction force if it's the wrong direction
-
-			glm::vec2 minForce = -velParr * mass / deltaTime;	//The minimum force needed to completely stop the player
-
-			if (abs(minForce.x) < abs(frictionForce.x))	//If the minimum force needed is smaller then the maxmimum, apply min
-			{
-				addForce(minForce);	//Should stop player movement
-			}
-			else		//Else, apply the maximum
-			{
-				addForce(-frictionForce);	//Shouldn't stop the player movement
-			}
-		}
+		Collision::resolvePlayerLine(this, collidingLines+i, deltaTime);	//Resolve the collision between the player and that line
 	}
 	delete[] collidingLines;
 }
