@@ -1,9 +1,13 @@
 #include "Collision.h"
+
+#include "MathsFunctions.h"
+
 #include "../Game/TerrainManager.h"
 #include "../Game/Player.h"
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 namespace Collision
 {
@@ -100,6 +104,19 @@ namespace Collision
 			collide = collide || currentLineCollide;
 		}
 
+		if(collidingLine==nullptr)
+		{
+			return collide;
+		}
+
+		if (MathsFunctions::getDistSqr(collidingLine->A, l->A) > MathsFunctions::getDistSqr(collidingLine->B, l->A))
+		{
+			//Line is wrong way round, swap it
+			glm::vec2 temp = collidingLine->A;
+			collidingLine->A = collidingLine->B;
+			collidingLine->B = temp;
+		}
+
 		return collide;
 	}
 
@@ -169,12 +186,15 @@ namespace Collision
 
 		//Add check if player should be grounded
 		float lineSteepness = abs(glm::dot({ 0,1 }, lineDir));
+
+		glm::vec2 playerCentre = player->position + player->playerSize / 2.f;	//Get if the line is above or below the player
+		glm::vec2 dirToLine = glm::normalize(l->A - playerCentre);
+
+		float dotToLine = glm::dot(dirToLine, { 0,1 });
+
 		if (lineSteepness < player->steepnessMax)
 		{
-			glm::vec2 playerCentre=player->position + player->playerSize / 2.f;
-			glm::vec2 dirToLine = glm::normalize(l->A - playerCentre);
-
-			if (glm::dot(dirToLine, { 0,1 }) < 0)
+			if (dotToLine < 0)
 			{
 				player->grounded = true;
 				if (abs(lineDir.y) > player->forward.y)

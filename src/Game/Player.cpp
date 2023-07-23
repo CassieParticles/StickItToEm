@@ -93,6 +93,7 @@ void Player::handleInput(float deltaTime)
 			grounded = false;
 		}
 	}
+
 	if (input->getKeyDown(GLFW_KEY_BACKSPACE))
 	{
 		velocity = {};
@@ -121,10 +122,17 @@ void Player::collisionResolution(float deltaTime)
 
 	for (int i = 0; i < collisionCount; i++)
 	{
-		line currentLine = collidingLines[i];	//Get information on the current line being resolved
-
 		Collision::resolvePlayerLine(this, collidingLines+i, deltaTime);	//Resolve the collision between the player and that line
+
+		for (int j = 0; j < i; j++)	//Resolve all previous lines
+		{
+			Collision::resolvePlayerLine(this, collidingLines + j, deltaTime);
+		}
+
 	}
+
+
+
 	delete[] collidingLines;
 }
 
