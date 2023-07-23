@@ -44,7 +44,7 @@ int initWindow(GLFWwindow** window)
 }
 
 int main()
-{	
+{
 	//Create the window
 	GLFWwindow* window{};
 	int err = initWindow(&window);

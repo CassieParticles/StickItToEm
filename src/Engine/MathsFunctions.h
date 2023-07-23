@@ -7,4 +7,6 @@ public:
 
 	static glm::vec2 getMidPtX(glm::vec2 A, glm::vec2 B, float a, float b);
 	static glm::vec2 getMidPtY(glm::vec2 A, glm::vec2 B, float a, float b);
+
+	static float getDistSqr(glm::vec2 A, glm::vec2 B);
 };
