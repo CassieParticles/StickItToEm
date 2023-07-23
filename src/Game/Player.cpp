@@ -89,7 +89,7 @@ void Player::handleInput(float deltaTime)
 	{
 		if (grounded)
 		{
-			addForce(glm::vec2{ -forward.y,forward.x } * playerJumpForce * mass / deltaTime);
+			addForce(glm::vec2{ 0,1 } * playerJumpForce * mass / deltaTime);
 			grounded = false;
 		}
 	}
