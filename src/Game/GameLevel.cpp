@@ -48,11 +48,11 @@ void GameLevel::handleInput(Timer* updateTimer)
 	input->update();
 	if(input->getKeyDown(GLFW_KEY_T))
 	{
-		terrainManager->modifyTerrainCircle(player.getPosition(), 5, -0.2);
+		terrainManager->modifyTerrainCircle(input->getMousePositionNormalised() * glm::vec2(terrainManager->getArenaSize()), 5, -0.2);
 	}
 	if (input->getKeyDown(GLFW_KEY_Y))
 	{
-		terrainManager->modifyTerrainCircle(player.getPosition(), 5, 0.2);
+		terrainManager->modifyTerrainCircle(input->getMousePositionNormalised() * glm::vec2(terrainManager->getArenaSize()), 5, 0.2);
 	}
 
 	player.handleInput(updateTimer->getDeltaTime());

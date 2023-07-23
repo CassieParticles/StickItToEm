@@ -5,6 +5,7 @@
 
 #include "../Engine/MathsFunctions.h"
 #include "../Engine/Program.h"
+#include "../Engine/TextureManager.h"
 
 TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 {
@@ -34,6 +35,9 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 
 	triangleProgram = new Program("src/Shaders/terrain/triangles/vertex.glsl","src/Shaders/terrain/triangles/fragment.glsl");
 	lineProgram = new Program("src/Shaders/terrain/lines/vertex.glsl", "src/Shaders/terrain/lines/fragment.glsl");
+
+	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
+	bgTexture2 = TextureManager::getTexturePtr("assets/cat.png");
 }
 
 TerrainManager::~TerrainManager()
@@ -356,6 +360,10 @@ void TerrainManager::render()
 	triangleProgram->use();	
 
 	triangleProgram->setVec3("colour", glm::vec3{ 0,0,0 });
+	triangleProgram->setInt("bgTexture", 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, bgTexture2);
 
 	glBindVertexArray(triangleVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * arenaSize.x * arenaSize.y);

@@ -96,3 +96,10 @@ bool Input::getMouseReleased(int mb)
 {
 	return !mouseStatesCurrent[mb] && mouseStatesPrev[mb];
 }
+
+glm::vec2 Input::getMousePositionNormalised()
+{
+	int x, y;
+	glfwGetWindowSize(window, &x, &y);
+	return mousePosition / glm::vec2{x,y};
+}

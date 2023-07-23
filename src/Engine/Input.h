@@ -19,7 +19,8 @@ public:
 	bool getMousePressed(int mb);	//Get if a mouse button was pressed this frame
 	bool getMouseReleased(int mb);	//Get if a mouse button was released this frame
 
-	glm::vec2 getMousePosition() { return mousePosition; }	//Get the position of the cursor
+	glm::vec2 getMousePosition() { return mousePosition; }	//Get the position of the cursor in pixels
+	glm::vec2 getMousePositionNormalised();
 
 protected:
 	GLFWwindow* window;

@@ -52,5 +52,14 @@ add_custom_target(copyShaders ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
 
 add_dependencies(Game copyShaders)
 
+#Copy the assets into the output directory
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/assets")
+
+add_custom_target(copyAssets ALL COMMAND ${CMAKE_COMMAND} -E copy_directory 
+"${CMAKE_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets" COMMENT
+"Copy assets to output file" VERBATIM)
+
+add_dependencies(Game copyAssets)
+
 
 

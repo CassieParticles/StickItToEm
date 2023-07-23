@@ -38,7 +38,7 @@ unsigned int TextureManager::addTexture(std::string filePath)
 		glGenTextures(1, &newTexture);	//Create the new texture
 		glBindTexture(GL_TEXTURE_2D, newTexture);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);	//Add the image data to the texture
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB + channels - 3, width, height, 0, GL_RGB + channels - 3, GL_UNSIGNED_BYTE, data);	//Add the image data to the texture
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 	}
