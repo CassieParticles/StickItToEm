@@ -25,6 +25,7 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, terrainUBO);
+
 }
 
 GameLevel::~GameLevel()
@@ -53,6 +54,7 @@ void GameLevel::handleInput(Timer* updateTimer)
 	{
 		terrainManager->modifyTerrainCircle(player.getPosition(), 5, 0.2);
 	}
+
 	player.handleInput(updateTimer->getDeltaTime());
 }
 

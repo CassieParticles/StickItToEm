@@ -315,8 +315,11 @@ line* TerrainManager::getLines(glm::ivec2 tl, int* lineCount)
 
 line* TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount)
 {
-	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x - 1 || tl.y>arenaSize.y - 1) { *lineCount = 0; return nullptr; }
-	if (tl.x+area.x<0 || tl.y+area.y<0 || tl.x+area.x>arenaSize.x - 1 || tl.y+area.y>arenaSize.y - 1) { *lineCount=0; return nullptr; }
+	tl.x = std::clamp(tl.x, 0, arenaSize.x); //Make sure co-ords are positive but less then the arenaSize
+	tl.y = std::clamp(tl.y, 0, arenaSize.y);
+
+	area.x = std::clamp(area.x, 0, arenaSize.x - tl.x);		//Ensure area is positive
+	area.y = std::clamp(area.y, 0, arenaSize.y - tl.y);
 
 	*lineCount = area.x * area.y * 2;	//Calculate number of lines gotten (includes non-lines)
 	line* lines=new line[area.x * area.y * 2];
@@ -338,6 +341,13 @@ line* TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount)
 	}
 	
 	return lines;
+}
+
+void TerrainManager::displayLines()	//Debug function
+{
+	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line) * arenaSize.x * arenaSize.y * 2, lineArray);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void TerrainManager::render()
