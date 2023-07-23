@@ -55,7 +55,7 @@ void TerrainManager::uploadStage(float* stage)
 {
 	std::copy(stage, stage + scalarDataSize, scalarData);
 
-	generateTerrain(-1,-1,65,35);
+	generateTerrain(-1,-1,60,35);
 }
 
 void TerrainManager::modifyTerrainCircle(glm::vec2 centre, float radius, float value)
@@ -274,7 +274,7 @@ float TerrainManager::getPoint(glm::ivec2 pos)
 		return -1;
 	}
 
-	int index = pos.y * (arenaSize.x - 1) + pos.x;
+	int index = (arenaSize.y-2-pos.y) * (arenaSize.x - 1) + pos.x;
 	return scalarData[index];
 }
 
@@ -285,19 +285,59 @@ void TerrainManager::setPoint(glm::ivec2 pos, float val)
 	if (pos.x < 0 || pos.x > arenaSize.x - 1) { return; }	//If point is outside of bounds, return
 	if (pos.y < 0 || pos.y < arenaSize.y - 1) { return; }
 
-	scalarData[pos.y * (arenaSize.x - 1) + pos.x] = val;
+	scalarData[(arenaSize.y - 2 - pos.y) * (arenaSize.x - 1) + pos.x] = val;
 }
 
 void TerrainManager::addPoint(glm::ivec2 pos, float val)
 {
-	if (pos.x < 0 || pos.x > arenaSize.x - 1) { return; }	//If point is outside of bounds, return
-	if (pos.y < 0 || pos.y > arenaSize.y - 1) { return; }
+	if (pos.x < 0 || pos.x > arenaSize.x - 2) { return; }	//If point is outside of bounds, return
+	if (pos.y < 0 || pos.y > arenaSize.y - 2) { return; }
 
-	int index = pos.y * (arenaSize.x - 1) + pos.x;	//Get the index of the point being added to
+	int index = (arenaSize.y - pos.y - 2) * (arenaSize.x - 1) + pos.x;	//Get the index of the point being added to
 
 	float newVal = scalarData[index] + val;	//Get the value, clamp it, then set it
 	newVal = std::min(std::max(-1.f, newVal), 1.f);
 	scalarData[index] = newVal;
+}
+
+line* TerrainManager::getLines(glm::ivec2 tl, int* lineCount)
+{
+	line* lines;
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x-1 || tl.y>arenaSize.y-1) { return nullptr; }
+	int squareIndex = (tl.y) * (arenaSize.x) + tl.x;	//Gets which square to access (not the index in the array)
+	lines = new line[2];
+	lines[0] = lineArray[squareIndex * 2 + 0];
+	lines[1] = lineArray[squareIndex * 2 + 1];
+
+	*lineCount = 2;
+	return lines;
+}
+
+line* TerrainManager::getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount)
+{
+	if (tl.x<0 || tl.y<0 || tl.x>arenaSize.x - 1 || tl.y>arenaSize.y - 1) { *lineCount = 0; return nullptr; }
+	if (tl.x+area.x<0 || tl.y+area.y<0 || tl.x+area.x>arenaSize.x - 1 || tl.y+area.y>arenaSize.y - 1) { *lineCount=0; return nullptr; }
+
+	*lineCount = area.x * area.y * 2;	//Calculate number of lines gotten (includes non-lines)
+	line* lines=new line[area.x * area.y * 2];
+
+	int squareRowIndex = (tl.y) * arenaSize.x + tl.x;	//As y index is iterated through, the index will decrease
+	
+	for (int y = 0; y < area.y; y++)
+	{
+		int squareIndex = squareRowIndex;
+		for (int x = 0; x < area.x; x++)
+		{
+			lines[(y*area.x+x)*2+0] = lineArray[squareIndex * 2 + 0];	//Copy data over
+			lines[(y*area.x+x)*2+1] = lineArray[squareIndex * 2 + 1];
+			squareIndex++;
+		}
+
+
+		squareRowIndex += arenaSize.x;	//Increase squareIndex by one row
+	}
+	
+	return lines;
 }
 
 void TerrainManager::render()
