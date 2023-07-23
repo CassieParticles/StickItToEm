@@ -1,12 +1,12 @@
+#pragma once
 #include <glm.hpp>
 
-class MathsFunctions
+namespace MathsFunctions
 {
-public:
-	static float normalise(float a, float b, float f);
+	 inline float normalise(float a, float b, float f){ return (f - a) / (b - a); }
 
-	static glm::vec2 getMidPtX(glm::vec2 A, glm::vec2 B, float a, float b);
-	static glm::vec2 getMidPtY(glm::vec2 A, glm::vec2 B, float a, float b);
+	 inline glm::vec2 getMidPtX(glm::vec2 A, glm::vec2 B, float a, float b){ return glm::vec2(A.x + normalise(a, b, 0) * (B.x - A.x), A.y); }
+	 inline glm::vec2 getMidPtY(glm::vec2 A, glm::vec2 B, float a, float b){ return glm::vec2(A.x, A.y + normalise(a, b, 0) * (B.y - A.y)); }
 
-	static float getDistSqr(glm::vec2 A, glm::vec2 B);
+	 inline float getDistSqr(glm::vec2 A, glm::vec2 B){ return (B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y); }
 };
