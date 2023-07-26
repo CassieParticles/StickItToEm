@@ -21,12 +21,12 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 		glm::vec2{1,1}
 	};
 
-	glGenVertexArrays(1, &vaoID);
+	glGenVertexArrays(1, &vaoID);	//Generate and bind vertex array
 	glBindVertexArray(vaoID);
 
-	glGenBuffers(1, &vertVBO);
+	glGenBuffers(1, &vertVBO);		//Generate vertex buffer
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);	//Bind and fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
@@ -36,7 +36,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 	glBindVertexArray(0);
 	
 
-	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };
+	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };	//Create program to render player
 }
 
 Player::~Player()

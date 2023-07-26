@@ -43,7 +43,6 @@ protected:
 	line* lineArray;	//2 lines max per square in arena
 
 	unsigned int bgTexture;
-	unsigned int bgTexture2;
 
 	unsigned int triangleVAO;	//Buffers for triangle mesh
 	unsigned int triangleVBO;

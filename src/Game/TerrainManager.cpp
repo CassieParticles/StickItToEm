@@ -36,8 +36,7 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	triangleProgram = new Program("src/Shaders/terrain/triangles/vertex.glsl","src/Shaders/terrain/triangles/fragment.glsl");
 	lineProgram = new Program("src/Shaders/terrain/lines/vertex.glsl", "src/Shaders/terrain/lines/fragment.glsl");
 
-	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
-	bgTexture2 = TextureManager::getTexturePtr("assets/cat.png");
+	bgTexture = TextureManager::getTexturePtr("assets/playerAnimation/FistWalking.png");
 }
 
 TerrainManager::~TerrainManager()
@@ -273,7 +272,7 @@ void TerrainManager::generateTerrain(int left, int top, int width, int height)
 
 float TerrainManager::getPoint(glm::ivec2 pos)
 {
-	if (pos.x < 0 || pos.y < 0 || pos.x >= arenaSize.x-1 || pos.y >=arenaSize.y-1)	//If value is outside the bounds of the 
+	if (pos.x < 0 || pos.y < 0 || pos.x >= arenaSize.x-1 || pos.y >=arenaSize.y-1)	//If value is outside the bounds of the arena, return
 	{
 		return -1;
 	}
@@ -363,7 +362,7 @@ void TerrainManager::render()
 	triangleProgram->setInt("bgTexture", 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, bgTexture2);
+	glBindTexture(GL_TEXTURE_2D, bgTexture);
 
 	glBindVertexArray(triangleVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * arenaSize.x * arenaSize.y);

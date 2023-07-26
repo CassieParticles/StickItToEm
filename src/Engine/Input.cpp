@@ -97,7 +97,7 @@ bool Input::getMouseReleased(int mb)
 	return !mouseStatesCurrent[mb] && mouseStatesPrev[mb];
 }
 
-glm::vec2 Input::getMousePositionNormalised()
+glm::vec2 Input::getMousePositionNormalised()	//Get the mouse position on the screen scaled between 0 and 1
 {
 	int x, y;
 	glfwGetWindowSize(window, &x, &y);
