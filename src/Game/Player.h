@@ -23,6 +23,7 @@ struct rect
 class Program;
 class Input;
 class TerrainManager;
+class Animation;
 
 class Player
 {
@@ -68,8 +69,11 @@ protected:
 	//Information needed to render player, shared across all instances
 	unsigned int vaoID;			
 	unsigned int vertVBO;
+	unsigned int cornerIndexVBO;
 
 	Program* playerProgram;
+
+	Animation* playerWalkAnim;
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	
