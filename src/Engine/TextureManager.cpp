@@ -6,9 +6,9 @@
 #include <iostream>
 
 std::vector<std::string> TextureManager::paths{};
-std::vector<unsigned int> TextureManager::textures{};
+std::vector<texture> TextureManager::textures{};
 
-unsigned int TextureManager::getTexturePtr(std::string filePath)
+texture TextureManager::getTexturePtr(std::string filePath)
 {
 	for (int i = 0; i < paths.size(); i++)	//See if texture has already been loaded
 	{
@@ -23,20 +23,23 @@ unsigned int TextureManager::getTexturePtr(std::string filePath)
 
 void TextureManager::cleanup()
 {
-	glDeleteTextures(textures.size(), textures.data());	//Since std::vector contains an array of the unsigned ints, you can free them all in one
+	for (int i = 0; i < textures.size(); i++)
+	{
+		glDeleteTextures(1, &textures.at(i).textureID);
+	}
 }
 
-unsigned int TextureManager::addTexture(std::string filePath)
+texture TextureManager::addTexture(std::string filePath)
 {
-	unsigned int newTexture;
+	unsigned int newTextureID;
 	
 
 	int width, height, channels;
 	unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
 	if (data)
 	{
-		glGenTextures(1, &newTexture);	//Create the new texture
-		glBindTexture(GL_TEXTURE_2D, newTexture);
+		glGenTextures(1, &newTextureID);	//Create the new texture
+		glBindTexture(GL_TEXTURE_2D, newTextureID);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB + channels - 3, width, height, 0, GL_RGB + channels - 3, GL_UNSIGNED_BYTE, data);	//Add the image data to the texture
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -46,6 +49,8 @@ unsigned int TextureManager::addTexture(std::string filePath)
 	{
 		std::cout << "Error in loading texture located at " << filePath << " maybe the file path is wrong?\n";
 	}
+
+	texture newTexture = { newTextureID,width,height,channels };
 
 	paths.push_back(filePath);
 	textures.push_back(newTexture);

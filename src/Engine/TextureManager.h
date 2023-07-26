@@ -2,10 +2,18 @@
 #include <vector>
 #include <string>
 
+struct texture
+{
+	unsigned int textureID;
+	int width;
+	int height;
+	int channels;
+};
+
 class TextureManager
 {
 public:
-	static unsigned int getTexturePtr(std::string filePath);	//Checks if texture has been loaded before
+	static texture getTexturePtr(std::string filePath);	//Checks if texture has been loaded before
 
 
 	static void cleanup();
@@ -14,7 +22,7 @@ protected:
 	~TextureManager() {}
 
 	static std::vector<std::string> paths;
-	static std::vector<unsigned int> textures;
+	static std::vector<texture> textures;
 
-	static unsigned int addTexture(std::string filePath);
+	static texture addTexture(std::string filePath);
 };
