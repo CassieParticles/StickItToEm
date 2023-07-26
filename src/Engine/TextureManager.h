@@ -13,7 +13,7 @@ struct texture
 class TextureManager
 {
 public:
-	static texture getTexturePtr(std::string filePath);	//Checks if texture has been loaded before
+	static texture* getTexturePtr(std::string filePath);	//Checks if texture has been loaded before
 
 
 	static void cleanup();
@@ -24,5 +24,5 @@ protected:
 	static std::vector<std::string> paths;
 	static std::vector<texture> textures;
 
-	static texture addTexture(std::string filePath);
+	static texture* addTexture(std::string filePath);
 };

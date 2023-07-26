@@ -2,6 +2,8 @@
 
 class Program;
 
+struct texture;
+
 struct line
 {
 	glm::vec2 A;
@@ -42,7 +44,7 @@ protected:
 
 	line* lineArray;	//2 lines max per square in arena
 
-	unsigned int bgTexture;
+	texture* bgTexture;
 
 	unsigned int triangleVAO;	//Buffers for triangle mesh
 	unsigned int triangleVBO;

@@ -362,7 +362,7 @@ void TerrainManager::render()
 	triangleProgram->setInt("bgTexture", 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, bgTexture);
+	glBindTexture(GL_TEXTURE_2D, bgTexture->textureID);
 
 	glBindVertexArray(triangleVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * arenaSize.x * arenaSize.y);

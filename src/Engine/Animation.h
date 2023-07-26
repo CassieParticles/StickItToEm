@@ -4,6 +4,8 @@
 #include <glm.hpp>
 #include <vector>
 
+struct texture;
+
 struct frame
 {
 	glm::vec2 tl;
@@ -26,7 +28,7 @@ protected:
 	float sumTime{};
 
 
-	unsigned int spriteSheet;
+	texture* spriteSheet;
 
 	std::vector<frame> frames;
 	int frameCount;
