@@ -120,6 +120,11 @@ void Player::handleInput(float deltaTime)
 		velocity = {};
 		position = {30,20};
 	}
+
+	if (input->getKeyPressed(GLFW_KEY_F))
+	{
+		playerWalkAnim->flipAnim();
+	}
 }
 
 void Player::collisionResolution(float deltaTime)

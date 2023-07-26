@@ -8,13 +8,13 @@
 std::vector<std::string> TextureManager::paths{};
 std::vector<texture> TextureManager::textures{};
 
-texture* TextureManager::getTexturePtr(std::string filePath)
+texture TextureManager::getTexturePtr(std::string filePath)
 {
 	for (int i = 0; i < paths.size(); i++)	//See if texture has already been loaded
 	{
 		if (filePath == paths.at(i))
 		{
-			return &textures.at(i);
+			return textures.at(i);
 		}
 	}
 	//Texture hasn't been loaded before, generate a new one
@@ -29,7 +29,7 @@ void TextureManager::cleanup()
 	}
 }
 
-texture* TextureManager::addTexture(std::string filePath)
+texture TextureManager::addTexture(std::string filePath)
 {
 	unsigned int newTextureID;
 	
@@ -48,7 +48,7 @@ texture* TextureManager::addTexture(std::string filePath)
 	else
 	{
 		std::cout << "Error in loading texture located at " << filePath << " maybe the file path is wrong?\n";
-		return nullptr;
+		return {};
 	}
 
 	texture newTexture = { newTextureID,width,height,channels };
@@ -56,5 +56,5 @@ texture* TextureManager::addTexture(std::string filePath)
 	paths.push_back(filePath);
 	textures.push_back(newTexture);
 
-	return &textures.at(textures.size()-1);
+	return textures.at(textures.size()-1);
 }

@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include <vector>
 
-struct texture;
+#include "TextureManager.h"
 
 class Program;
 
@@ -28,14 +28,20 @@ public:
 
 	void setCurrentFrame();	//Gets the current frame of animation, packed into a 4x2 matrix so it can be passed in as a matrix
 
+	bool getFlipped() { return flipped; }
+	void setFlipped(bool flipped) { this->flipped = flipped; }
+	void flipAnim() { flipped = 1 - flipped; }
+
 protected:
+	int flipped{};
+
 	float sumTime{};
 
 	float frameTime{1};
 
 	Program* animationProgram;
 
-	texture* spriteSheet;
+	texture spriteSheet;
 
 	std::vector<frame> frames;
 	int frameCount;

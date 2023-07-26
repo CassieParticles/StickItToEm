@@ -2,7 +2,6 @@
 
 #include <glad/glad.h>
 
-#include "TextureManager.h"
 #include "Program.h"
 
 Animation::Animation(const std::string& spriteSheetPath, int frameCount,Program* animationProgram):frameCount{frameCount},animationProgram{animationProgram}
@@ -49,11 +48,11 @@ void Animation::setCurrentFrame()
 	animationProgram->setVec2("texCoords[2]", f.bl);
 	animationProgram->setVec2("texCoords[3]", f.br);
 
-	if (spriteSheet != nullptr)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, spriteSheet->textureID);
-	}
+	animationProgram->setInt("animationFlipped", flipped);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, spriteSheet.textureID);
+	
 
 
 
