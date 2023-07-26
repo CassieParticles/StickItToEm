@@ -1,7 +1,7 @@
 #version 330 core
 
 layout(location=0) in vec2 vertexPosition;
-layout(location=1) in float cornerIndex;
+layout(location=1) in int cornerIndex;
 
 layout(std140) uniform terrainData
 {
@@ -25,5 +25,5 @@ void main()
 
 	gl_Position=vec4(screenPos,0,1);
 
-	textCoord=texCoords[int(cornerIndex)];
+	textCoord=texCoords[cornerIndex];
 }

@@ -22,7 +22,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 		glm::vec2{1,1}
 	};
 
-	constexpr float cornerIndex[6]{	//Which 
+	constexpr int cornerIndex[6]{	//Which 
 		2,
 		1,
 		3,
@@ -43,7 +43,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 	glGenBuffers(1, &cornerIndexVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, cornerIndexVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cornerIndex), cornerIndex, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(int), 0);
+	glVertexAttribIPointer(1, 1, GL_INT, sizeof(int), 0);
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
