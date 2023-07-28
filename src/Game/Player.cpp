@@ -263,16 +263,16 @@ void Player::changeAnimation(playerAnimations newAnimation)
 	switch (newAnimation)
 	{
 	case idle:
-		currentAnimation = playerIdleAnim
+		currentAnimation = playerIdleAnim;
 		break;
 	case walk:
-		currentAnimation = playerWalkAnim
+		currentAnimation = playerWalkAnim;
 		break;
 	case jump:
-		currentAnimation = playerJumpAnim
+		currentAnimation = playerJumpAnim;
 		break;
 	case fall:
-		currentAnimation = playerFallAnim
+		currentAnimation = playerFallAnim;
 		break;
 	}
 }
