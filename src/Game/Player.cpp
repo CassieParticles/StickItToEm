@@ -4,10 +4,12 @@
 #include <glfw3.h>
 #include <iostream>
 
-#include "../Engine/Program.h"
-#include "../Engine/Input.h"
-#include "../Engine/Collision.h"
-#include "../Engine/Animation.h"
+#include <Engine/Program.h>
+#include <Engine/Input.h>
+#include <Engine/Collision.h>
+#include <Engine/Animation.h>
+
+#include "../EngineAdditions/PlayerCollision.h"
 
 #include "TerrainManager.h"
 
