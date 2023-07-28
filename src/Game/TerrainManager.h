@@ -1,4 +1,5 @@
 #include <glm.hpp>
+#include "../Engine/TextureManager.h"
 
 class Program;
 
@@ -42,8 +43,7 @@ protected:
 
 	line* lineArray;	//2 lines max per square in arena
 
-	unsigned int bgTexture;
-	unsigned int bgTexture2;
+	texture bgTexture;
 
 	unsigned int triangleVAO;	//Buffers for triangle mesh
 	unsigned int triangleVBO;

@@ -14,6 +14,7 @@ void main()
 {
 	arenaPos=position;
 	texCoord=vec2(position.x/gridSize.x,position.y/gridSize.y);
+	texCoord.y=1-texCoord.y;
 
 	vec2 gridSizeFloat=vec2(gridSize);
 	vec2 cellSize=2/vec2(gridSize);	//Inverse of grid size, doubled because positions go between -1 to 1, so range of 2

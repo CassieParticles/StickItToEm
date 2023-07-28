@@ -16,6 +16,7 @@ list(APPEND ALLSOURCES "src/Engine/Input.cpp" "src/Engine/Input.h")
 list(APPEND ALLSOURCES "src/Engine/MathsFunctions.cpp" "src/Engine/MathsFunctions.h")
 list(APPEND ALLSOURCES "src/Engine/Collision.cpp" "src/Engine/Collision.h")
 list(APPEND ALLSOURCES "src/Engine/TextureManager.cpp" "src/Engine/TextureManager.h")
+list(APPEND ALLSOURCES "src/Engine/Animation.cpp" "src/Engine/Animation.h")
 
 #Add all game source files
 list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")

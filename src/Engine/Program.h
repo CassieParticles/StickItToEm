@@ -25,6 +25,8 @@ public:
 	void setVec3(const char* name, glm::vec3 value);
 	void setVec4(const char* name, glm::vec4 value);
 	void setMat4(const char* name, glm::mat4 value);
+
+	unsigned int getProgramID() { return programID; }
 private:
 	unsigned int programID;	//ID of this specific program
 

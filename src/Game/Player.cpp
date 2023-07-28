@@ -7,6 +7,7 @@
 #include "../Engine/Program.h"
 #include "../Engine/Input.h"
 #include "../Engine/Collision.h"
+#include "../Engine/Animation.h"
 
 #include "TerrainManager.h"
 
@@ -21,32 +22,52 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 		glm::vec2{1,1}
 	};
 
-	glGenVertexArrays(1, &vaoID);
+	constexpr int cornerIndex[6]{	//Which 
+		2,
+		1,
+		3,
+		2,
+		0,
+		1
+	};
+
+	glGenVertexArrays(1, &vaoID);	//Generate and bind vertex array
 	glBindVertexArray(vaoID);
 
-	glGenBuffers(1, &vertVBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);
+	glGenBuffers(1, &vertVBO);		//Generate vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);	//Bind and fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), 0);
 	glEnableVertexAttribArray(0);
+
+	glGenBuffers(1, &cornerIndexVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cornerIndexVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cornerIndex), cornerIndex, GL_STATIC_DRAW);
+	glVertexAttribIPointer(1, 1, GL_INT, sizeof(int), 0);
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
 	
 
-	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };
+	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };	//Create program to render player
+
+	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram);
+
+	playerWalkAnim->setFrameTime(0.1f);
 }
 
 Player::~Player()
 {
 	glDeleteBuffers(1, &vertVBO);
+	glDeleteBuffers(1, &cornerIndexVBO);
 	glDeleteVertexArrays(1, &vaoID);
 	vaoID = 0;
 	
 
 	delete playerProgram;
+	delete playerWalkAnim;
 }
 
 void Player::handleInput(float deltaTime)
@@ -99,6 +120,11 @@ void Player::handleInput(float deltaTime)
 		velocity = {};
 		position = {30,20};
 	}
+
+	if (input->getKeyPressed(GLFW_KEY_F))
+	{
+		playerWalkAnim->flipAnim();
+	}
 }
 
 void Player::collisionResolution(float deltaTime)
@@ -138,8 +164,7 @@ void Player::collisionResolution(float deltaTime)
 
 void Player::update(float deltaTime)
 {
-	//Get the lines the player may be intersecting with
-
+	playerWalkAnim->update(deltaTime);
 
 
 	//Update velocity and position
@@ -157,6 +182,8 @@ void Player::render()
 	playerProgram->use();	//Use shader, and set uniforms
 	playerProgram->setVec2("position",position);
 	playerProgram->setVec2("size", playerSize);
+
+	playerWalkAnim->setCurrentFrame();
 
 	glBindVertexArray(vaoID);	//Use player vertex array
 	glDrawArrays(GL_TRIANGLES,0,6);
