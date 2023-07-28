@@ -57,7 +57,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 
 	playerIdleAnim = new Animation("assets/playerAnimation/FistStanding.png", 1, playerProgram, true);	//Initialise all the player animations
 	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram,true);
-	playerJumpAnim = new Animation("assets/playerAnimation/FistJump.png", 7, playerProgram, true);
+	playerJumpAnim = new Animation("assets/playerAnimation/FistJump.png", 7, playerProgram, false);
 	playerFallAnim = new Animation("assets/playerAnimation/FistFalling.png", 1, playerProgram, true);
 
 	playerIdleAnim->setFrameTime(0.1f);
@@ -65,7 +65,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 	playerJumpAnim->setFrameTime(0.1f);
 	playerFallAnim->setFrameTime(0.1f);
 
-	currentAnimation = playerFallAnim;
+	currentAnimation = playerIdleAnim;
 }
 
 Player::~Player()
@@ -126,7 +126,7 @@ void Player::handleInput(float deltaTime)
 		{
 			addForce(glm::vec2{ 0,1 } * playerJumpForce * mass / deltaTime);
 			grounded = false;
-
+			changeAnimation(jump);
 		}
 	}
 
@@ -188,6 +188,42 @@ void Player::update(float deltaTime)
 	sumForce = {};
 	position += deltaTime * velocity;
 
+	//If player jump animation has finished, switch to fall, where it is judged whether or not it should be changed
+	if (currentAnimation == playerJumpAnim && playerJumpAnim->getFinished())
+	{
+		changeAnimation(fall);
+	}
+
+	else if (currentAnimation == playerFallAnim && grounded)
+	{
+		changeAnimation(idle);
+	}
+
+	if (grounded && abs(velocity.x) > 0.05f && currentAnimation != playerWalkAnim && currentAnimation != playerJumpAnim)
+	{
+		changeAnimation(walk);
+	}
+	
+	if (grounded && abs(velocity.x) < 0.05f && currentAnimation != playerIdleAnim && currentAnimation != playerJumpAnim)
+	{
+		changeAnimation(idle);
+	}
+
+	if (!grounded && currentAnimation != playerJumpAnim && currentAnimation !=playerFallAnim)
+	{
+		changeAnimation(fall);
+	}
+
+	if (velocity.x < -0.05f)
+	{
+		flipped = true;
+	}
+	else if (velocity.x > 0.05f)
+	{
+		flipped = false;
+	}
+
+	currentAnimation->setFlipped(flipped);
 
 	addForce(gravForce*mass);	//Add gravity for next frame, applied here so it's before collision resolution is done
 }
@@ -218,4 +254,25 @@ rect Player::getCollisionRect()
 void Player::addForce(glm::vec2 force)
 {
 	sumForce += force;
+}
+
+void Player::changeAnimation(playerAnimations newAnimation)
+{
+	currentAnimation->reset();
+	
+	switch (newAnimation)
+	{
+	case idle:
+		currentAnimation = playerIdleAnim
+		break;
+	case walk:
+		currentAnimation = playerWalkAnim
+		break;
+	case jump:
+		currentAnimation = playerJumpAnim
+		break;
+	case fall:
+		currentAnimation = playerFallAnim
+		break;
+	}
 }
