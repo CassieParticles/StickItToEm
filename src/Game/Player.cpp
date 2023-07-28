@@ -55,7 +55,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 
 	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };	//Create program to render player
 
-	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram);
+	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram,true);
 
 	playerWalkAnim->setFrameTime(0.1f);
 }
