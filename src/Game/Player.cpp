@@ -55,9 +55,17 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 
 	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl" };	//Create program to render player
 
+	playerIdleAnim = new Animation("assets/playerAnimation/FistStanding.png", 1, playerProgram, true);	//Initialise all the player animations
 	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram,true);
+	playerJumpAnim = new Animation("assets/playerAnimation/FistJump.png", 7, playerProgram, true);
+	playerFallAnim = new Animation("assets/playerAnimation/FistFalling.png", 1, playerProgram, true);
 
+	playerIdleAnim->setFrameTime(0.1f);
 	playerWalkAnim->setFrameTime(0.1f);
+	playerJumpAnim->setFrameTime(0.1f);
+	playerFallAnim->setFrameTime(0.1f);
+
+	currentAnimation = playerFallAnim;
 }
 
 Player::~Player()
@@ -69,7 +77,11 @@ Player::~Player()
 	
 
 	delete playerProgram;
+
+	delete playerIdleAnim;
 	delete playerWalkAnim;
+	delete playerJumpAnim;
+	delete playerFallAnim;
 }
 
 void Player::handleInput(float deltaTime)
@@ -114,6 +126,7 @@ void Player::handleInput(float deltaTime)
 		{
 			addForce(glm::vec2{ 0,1 } * playerJumpForce * mass / deltaTime);
 			grounded = false;
+
 		}
 	}
 
@@ -125,7 +138,7 @@ void Player::handleInput(float deltaTime)
 
 	if (input->getKeyPressed(GLFW_KEY_F))
 	{
-		playerWalkAnim->flipAnim();
+		currentAnimation->flipAnim();
 	}
 }
 
@@ -166,7 +179,7 @@ void Player::collisionResolution(float deltaTime)
 
 void Player::update(float deltaTime)
 {
-	playerWalkAnim->update(deltaTime);
+	currentAnimation->update(deltaTime);
 
 
 	//Update velocity and position
@@ -185,7 +198,7 @@ void Player::render()
 	playerProgram->setVec2("position",position);
 	playerProgram->setVec2("size", playerSize);
 
-	playerWalkAnim->setCurrentFrame();
+	currentAnimation->setCurrentFrame();
 
 	glBindVertexArray(vaoID);	//Use player vertex array
 	glDrawArrays(GL_TRIANGLES,0,6);

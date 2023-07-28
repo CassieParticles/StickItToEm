@@ -68,7 +68,12 @@ protected:
 
 	Program* playerProgram;
 
+	Animation* currentAnimation;	//Points to whichever animation is currently being used
+
+	Animation* playerIdleAnim;
 	Animation* playerWalkAnim;
+	Animation* playerJumpAnim;
+	Animation* playerFallAnim;
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	
