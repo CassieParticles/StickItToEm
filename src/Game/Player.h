@@ -23,6 +23,15 @@ class Animation;
 class Player
 {
 public:
+
+	enum playerAnimations
+	{
+		idle,
+		walk,
+		jump,
+		fall
+	};
+
 	Player(Input* input,glm::ivec2 gridSize,glm::vec2 position, float mass);
 	~Player();
 
@@ -47,6 +56,8 @@ public:
 
 	friend void Collision::resolvePlayerLine(Player* player, line* l, float deltaTime);
 
+	void changeAnimation(playerAnimations newAnimation);
+
 protected:
 	Input* input;
 	TerrainManager* terrainManager;
@@ -68,7 +79,14 @@ protected:
 
 	Program* playerProgram;
 
+	Animation* currentAnimation;	//Points to whichever animation is currently being used
+
+	Animation* playerIdleAnim;
 	Animation* playerWalkAnim;
+	Animation* playerJumpAnim;
+	Animation* playerFallAnim;
+
+	bool flipped{};		//If the player is facing left or right
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	
