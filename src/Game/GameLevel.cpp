@@ -5,9 +5,9 @@
 #include <glfw3.h>
 #include <iostream>
 
-#include "../Engine/Timer.h"
-#include "../Engine/Input.h"
-#include "../Engine/Program.h"
+#include <Engine/Timer.h>
+#include <Engine/Input.h>
+#include <Engine/Program.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
