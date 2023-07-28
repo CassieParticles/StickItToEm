@@ -3,8 +3,9 @@
 #include <glad/glad.h>
 #include <algorithm>
 
-#include "../Engine/MathsFunctions.h"
-#include "../Engine/Program.h"
+#include <Engine/MathsFunctions.h>
+#include <Engine/Program.h>
+#include <Engine/Collision.h>
 
 TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 {

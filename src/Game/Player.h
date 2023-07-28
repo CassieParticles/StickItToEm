@@ -1,6 +1,8 @@
 #pragma once
 #include <glm.hpp>
-#include "../Engine/Collision.h"
+
+#include <Engine/Collision.h>
+#include "../EngineAdditions/PlayerCollision.h"
 
 struct controls
 {
@@ -12,13 +14,6 @@ struct controls
 	int aimDown;
 };
 
-struct rect
-{
-	glm::vec2 tlCorner;
-	glm::vec2 size;
-
-	float angle;	//Radians
-};
 
 class Program;
 class Input;

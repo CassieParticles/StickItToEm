@@ -1,0 +1,3 @@
+[submodule "GEGL2D"]
+	path = GEGL2D
+	url = https://github.com/JosephParticles/GEGL2D.git

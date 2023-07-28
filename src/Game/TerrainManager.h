@@ -1,13 +1,8 @@
 #include <glm.hpp>
-#include "../Engine/TextureManager.h"
+#include <Engine/TextureManager.h>
+
 
 class Program;
-
-struct line
-{
-	glm::vec2 A;
-	glm::vec2 B;
-};
 
 struct triangle
 {
@@ -15,6 +10,8 @@ struct triangle
 	glm::vec2 B;
 	glm::vec2 C;
 };
+
+struct line;
 
 class TerrainManager
 {
