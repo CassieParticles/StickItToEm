@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine/BaseLevel.h>
+#include <Engine/GUI/GUIColourRect.h>
 #include "Player.h"
 
 class Program;
@@ -59,6 +60,8 @@ protected:
 
 	TerrainManager* terrainManager;
 	Player player;
+
+	GUIColourRect* testRect;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };
