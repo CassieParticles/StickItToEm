@@ -26,9 +26,7 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, terrainUBO);
 
-	GLFWwindow* w = nullptr;
-
-	testRect = new GUIColourRect( glm::vec2{128.f,128.f},glm::vec2{128.f,128.f},nullptr, glm::vec3{1.f, 0.f, 0.f});
+	testRect = new GUIColourRect( glm::vec2{128.f,128.f},glm::vec2{0,0}, glm::vec2{128.f, 128.f}, window, glm::vec3{1.f, 0.f, 0.f});
 }
 
 GameLevel::~GameLevel()
@@ -75,9 +73,9 @@ void GameLevel::render(Timer* frameTimer)
 	//Draw stuff
 	terrainManager->render();
 
-	testRect->render();
-	
 	player.render();
+	
+	testRect->render();
 	
 	endDraw();
 }
