@@ -36,6 +36,9 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	triangleProgram = new Program("src/Shaders/terrain/triangles/vertex.glsl","src/Shaders/terrain/triangles/fragment.glsl",Program::filePath);
 	lineProgram = new Program("src/Shaders/terrain/lines/vertex.glsl", "src/Shaders/terrain/lines/fragment.glsl",Program::filePath);
 
+	triangleProgram->setUniformBufferBlockBinding("terrainData", 1);
+	lineProgram->setUniformBufferBlockBinding("terrainData", 1);
+
 	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
 }
 

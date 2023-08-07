@@ -6,11 +6,10 @@
 class Program;
 class TerrainManager;
 
-
 class GameLevel :public BaseLevel
 {
 public:
-	GameLevel(GLFWwindow* window,Input* input, glm::vec4 bgColour);
+	GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager, glm::vec4 bgColour);
 	~GameLevel();
 
 	void openLevel() override;
@@ -60,8 +59,6 @@ protected:
 
 	TerrainManager* terrainManager;
 	Player player;
-
-	GUITextureRect* testRect;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };

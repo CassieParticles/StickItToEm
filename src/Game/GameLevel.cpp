@@ -8,11 +8,12 @@
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
 #include <Engine/Program.h>
+#include <Engine/GUI/GUIManager.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseLevel(window,input,bgColour),player{input,glm::ivec2{60,35},{ 10,20 },50}
+GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player{input,glm::ivec2{60,35},{ 10,20 },50}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
@@ -24,16 +25,16 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,  glm::vec4 bgColour):BaseL
 
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, 0, terrainUBO);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	testRect = new GUITextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, window, "assets/cat.png", glm::vec3{1, 0, 1});
+	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
+	guiManager->createColourRect({ 0,0 }, { 512,512 }, { 256,256 }, { 1,0,0 });
 }
 
 GameLevel::~GameLevel()
 {
 	delete terrainManager;
 
-	delete testRect;
 }
 
 void GameLevel::openLevel()
@@ -74,8 +75,8 @@ void GameLevel::render(Timer* frameTimer)
 	terrainManager->render();
 
 	player.render();
-	
-	testRect->render();
+
+	guiManager->render();
 	
 	endDraw();
 }

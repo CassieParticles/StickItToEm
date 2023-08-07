@@ -55,6 +55,8 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 
 	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl", Program::filePath};	//Create program to render player
 
+	playerProgram->setUniformBufferBlockBinding("terrainData", 1);
+
 	playerIdleAnim = new Animation("assets/playerAnimation/FistStanding.png", 1, playerProgram, true);	//Initialise all the player animations
 	playerWalkAnim = new Animation("assets/playerAnimation/FistWalking.png", 7, playerProgram,true);
 	playerJumpAnim = new Animation("assets/playerAnimation/FistJump.png", 7, playerProgram, false);
