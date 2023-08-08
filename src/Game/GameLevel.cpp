@@ -27,8 +27,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
 	guiManager->createColourRect({ 0,0 }, { 512,512 }, { 256,256 }, { 1,0,0 });
+	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
 }
 
 GameLevel::~GameLevel()

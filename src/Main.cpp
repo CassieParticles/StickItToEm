@@ -1,9 +1,9 @@
 #include <iostream>
+#include <functional>
 
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glfw3.h>
-
 
 #include "Engine/Timer.h"
 #include "Engine/Input.h"
