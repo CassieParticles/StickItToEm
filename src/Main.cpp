@@ -55,7 +55,7 @@ int main()
 	Timer renderTimer{ 60 };
 	Input input{ window };
 
-	GUIManager guiManager{window};
+	GUIManager guiManager{window,&input};
 
 	GameLevel gameLevel{window,&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
 

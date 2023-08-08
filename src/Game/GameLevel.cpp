@@ -29,6 +29,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 	guiManager->createColourRect({ 0,0 }, { 512,512 }, { 256,256 }, { 1,0,0 });
 	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
+
+	guiManager->createButton({ 64,64 }, { 128,128 }, { 128,128 }, { 1,0,1 }, [&]()->void {std::cout << "Burger\n"; });
 }
 
 GameLevel::~GameLevel()
@@ -66,6 +68,8 @@ void GameLevel::update(Timer* updateTimer)
 {
 	player.collisionResolution(updateTimer->getDeltaTime());
 	player.update(updateTimer->getDeltaTime());
+
+	guiManager->update();
 }
 
 void GameLevel::render(Timer* frameTimer)
