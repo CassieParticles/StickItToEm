@@ -31,6 +31,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
 
 	guiManager->createButton({ 64,64 }, { 128,128 }, { 128,128 }, { 1,0,1 }, [&]()->void {std::cout << "Burger\n"; });
+
+	guiManager->createFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", 48, nullptr, 0);
 }
 
 GameLevel::~GameLevel()
