@@ -3,6 +3,8 @@
 #include <Engine/GUI/GUITextureRect.h>
 #include "Player.h"
 
+class GUIText;
+class GUIToggleButton;
 class Program;
 class TerrainManager;
 
@@ -59,6 +61,9 @@ protected:
 
 	TerrainManager* terrainManager;
 	Player player;
+
+	GUIText* text;
+	GUIToggleButton* toggleButton;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };

@@ -11,6 +11,7 @@
 #include <Engine/GUI/GUIManager.h>
 #include <Engine/GUI/Font.h>
 #include <Engine/GUI/GUIText.h>
+#include <Engine/GUI/GUIToggleButton.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
@@ -34,9 +35,12 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 	guiManager->createButton({ 64,64 }, { 128,128 }, { 128,128 }, { 1,0,1 }, [&]()->void {std::cout << "Burger\n"; });
 
-	Font* font= guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ,.", 65);
+	Font* font= guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ,.;:()!?+-*/=");
 
-	GUIText* text = guiManager->createText({ 32,32 }, { 0,0 }, { 1,1 }, "Hello, World", 12, font);
+	 text = guiManager->createText({ 32,32 }, { 0,0 }, { 0.5,0.5 }, "The quick bronw fox jumped oer the lazy dog", font,{1,0,1});
+
+
+	toggleButton = guiManager->createToggleButton({ 64,-320 }, { 0,1024 }, { 256,256 }, "assets/toggleButton/image0.png", "assets/toggleButton/image1.jpg");
 }
 
 GameLevel::~GameLevel()
@@ -76,6 +80,15 @@ void GameLevel::update(Timer* updateTimer)
 	player.update(updateTimer->getDeltaTime());
 
 	guiManager->update();
+
+	if(toggleButton->getActive())
+	{
+		text->generateNewString("Active!");
+	}
+	else
+	{
+		text->generateNewString("Inactive!");
+	}
 }
 
 void GameLevel::render(Timer* frameTimer)
