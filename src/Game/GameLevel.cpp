@@ -41,6 +41,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 
 	toggleButton = guiManager->createToggleButton({ 64,-320 }, { 0,1024 }, { 256,256 }, "assets/toggleButton/image0.png", "assets/toggleButton/image1.jpg");
+
+	textBox = guiManager->createTextBox({ 64,-64 }, { 512,512 }, { 256,64 }, font, { 0.2,0.2,0.2 }, { 0.6,0.6,0.6 }, "qwertyuiopasdfghjklzxcvbnm");
 }
 
 GameLevel::~GameLevel()

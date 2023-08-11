@@ -5,6 +5,8 @@
 
 class GUIText;
 class GUIToggleButton;
+class GUITextBox;
+
 class Program;
 class TerrainManager;
 
@@ -64,6 +66,7 @@ protected:
 
 	GUIText* text;
 	GUIToggleButton* toggleButton;
+	GUITextBox* textBox;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };
