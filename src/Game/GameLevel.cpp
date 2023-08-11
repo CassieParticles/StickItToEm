@@ -9,6 +9,8 @@
 #include <Engine/Input.h>
 #include <Engine/Program.h>
 #include <Engine/GUI/GUIManager.h>
+#include <Engine/GUI/Font.h>
+#include <Engine/GUI/GUIText.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
@@ -32,7 +34,9 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 	guiManager->createButton({ 64,64 }, { 128,128 }, { 128,128 }, { 1,0,1 }, [&]()->void {std::cout << "Burger\n"; });
 
-	guiManager->createFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", 48, nullptr, 0);
+	Font* font= guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ,.", 65);
+
+	GUIText* text = guiManager->createText({ 32,32 }, { 0,0 }, { 1,1 }, "Hello, World", 12, font);
 }
 
 GameLevel::~GameLevel()
