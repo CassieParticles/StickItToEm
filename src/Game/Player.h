@@ -4,15 +4,7 @@
 #include <Engine/Collision.h>
 #include "../EngineAdditions/PlayerCollision.h"
 
-struct controls
-{
-	int moveLeft;
-	int moveRight;
-	int jump;
-	int shoot;
-	int aimUp;
-	int aimDown;
-};
+
 
 
 class Program;
@@ -32,7 +24,17 @@ public:
 		fall
 	};
 
-	Player(Input* input,glm::ivec2 gridSize,glm::vec2 position, float mass);
+	struct controls
+	{
+		int moveLeft;
+		int moveRight;
+		int jump;
+		int shoot;
+		int aimUp;
+		int aimDown;
+	};
+
+	Player(Input* input,glm::vec2 position, float mass,glm::vec3 colour);
 	~Player();
 
 	void setTerrainManager(TerrainManager* terrainManager) { this->terrainManager = terrainManager; }
@@ -44,6 +46,8 @@ public:
 	void update(float deltaTime);
 
 	void render();
+
+	void setInputs(controls c) { con = c; }
 
 	glm::vec2 getPosition() { return position; }
 
@@ -69,13 +73,17 @@ protected:
 	float mass{};
 	glm::vec2 sumForce{};
 
+	glm::vec3 colour;
+
 	bool grounded;	//If the player is on the ground
 	glm::vec2 forward{};
 
-	//Information needed to render player, shared across all instances
-	unsigned int vaoID;			
-	unsigned int vertVBO;
-	unsigned int cornerIndexVBO;
+	controls con{};	//Stored controls
+
+	//Information needed to render player
+	unsigned int vaoID;
+
+	unsigned int vertexBuffers[3];
 
 	Program* playerProgram;
 

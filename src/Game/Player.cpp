@@ -13,47 +13,52 @@
 
 #include "TerrainManager.h"
 
-Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass) :input{ input },position { position }, mass{ mass }
+Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour}
 {
-	constexpr glm::vec2 vertexPos[6]{
+	constexpr glm::vec2 vertexPos[4]{
 		glm::vec2{0,0},
 		glm::vec2{1,1},
 		glm::vec2{1,0},
-		glm::vec2{0,0},
 		glm::vec2{0,1},
-		glm::vec2{1,1}
 	};
 
-	constexpr int cornerIndex[6]{	//Which 
+	constexpr int indices[6]
+	{
+		0,1,2,0,3,1
+	};
+
+	constexpr int cornerIndex[4]{	//Which corner each vertex is
 		2,
 		1,
 		3,
-		2,
 		0,
-		1
 	};
 
 	glGenVertexArrays(1, &vaoID);	//Generate and bind vertex array
 	glBindVertexArray(vaoID);
 
-	glGenBuffers(1, &vertVBO);		//Generate vertex buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertVBO);	//Bind and fill vertex buffer
+	glGenBuffers(3, vertexBuffers);		//Generate vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[0]);	//Bind and fill vertex buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), 0);
 	glEnableVertexAttribArray(0);
 
-	glGenBuffers(1, &cornerIndexVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, cornerIndexVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffers[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cornerIndex), cornerIndex, GL_STATIC_DRAW);
 	glVertexAttribIPointer(1, 1, GL_INT, sizeof(int), 0);
 	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffers[2]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindVertexArray(0);
 	
 
-	playerProgram = new Program{ "src/Shaders/Player/vertex.glsl","src/Shaders/Player/fragment.glsl", Program::filePath};	//Create program to render player
+	playerProgram = new Program{ "src/Shaders/Player/player.vert","src/Shaders/Player/player.frag", Program::filePath};	//Create program to render player
 
 	playerProgram->setUniformBufferBlockBinding("terrainData", 1);
 
@@ -72,8 +77,7 @@ Player::Player(Input* input, glm::ivec2 gridSize, glm::vec2 position, float mass
 
 Player::~Player()
 {
-	glDeleteBuffers(1, &vertVBO);
-	glDeleteBuffers(1, &cornerIndexVBO);
+	glDeleteBuffers(3, vertexBuffers);
 	glDeleteVertexArrays(1, &vaoID);
 	vaoID = 0;
 	
@@ -88,7 +92,7 @@ Player::~Player()
 
 void Player::handleInput(float deltaTime)
 {
-	if (input->getKeyDown(GLFW_KEY_A))
+	if (input->getKeyDown(con.moveLeft))
 	{
 		if (grounded)
 		{
@@ -105,7 +109,7 @@ void Player::handleInput(float deltaTime)
 			}
 		}
 	}
-	if (input->getKeyDown(GLFW_KEY_D))
+	if (input->getKeyDown(con.moveRight))
 	{
 		if (grounded)
 		{
@@ -122,7 +126,7 @@ void Player::handleInput(float deltaTime)
 			}
 		}
 	}
-	if (input->getKeyPressed(GLFW_KEY_W))
+	if (input->getKeyPressed(con.jump))
 	{
 		if (grounded)
 		{
@@ -138,10 +142,6 @@ void Player::handleInput(float deltaTime)
 		position = {30,20};
 	}
 
-	if (input->getKeyPressed(GLFW_KEY_F))
-	{
-		currentAnimation->flipAnim();
-	}
 }
 
 void Player::collisionResolution(float deltaTime)
@@ -235,13 +235,16 @@ void Player::render()
 	playerProgram->use();	//Use shader, and set uniforms
 	playerProgram->setVec2("position",position);
 	playerProgram->setVec2("size", playerSize);
+	playerProgram->setVec3("colour", colour);
 
 	currentAnimation->setCurrentFrame();
 
 	glBindVertexArray(vaoID);	//Use player vertex array
-	glDrawArrays(GL_TRIANGLES,0,6);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexBuffers[2]);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 rect Player::getCollisionRect()

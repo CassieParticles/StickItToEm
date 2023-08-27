@@ -1,11 +1,7 @@
 #pragma once
 #include <Engine/BaseLevel.h>
-#include <Engine/GUI/GUITextureRect.h>
-#include "Player.h"
 
-class GUIText;
-class GUIToggleButton;
-class GUITextBox;
+#include "Player.h"
 
 class Program;
 class TerrainManager;
@@ -62,11 +58,8 @@ protected:
 	};
 
 	TerrainManager* terrainManager;
-	Player player;
-
-	GUIText* text;
-	GUIToggleButton* toggleButton;
-	GUITextBox* textBox;
+	Player player1;
+	Player player2;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };
