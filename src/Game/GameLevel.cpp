@@ -13,6 +13,7 @@
 
 #include "TerrainManager.h"
 #include "Player.h"
+#include "Weapon.h"
 
 GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player1{input,{ 10,20 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
@@ -31,12 +32,15 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	glBindBuffer(GL_UNIFORM_BUFFER, terrainUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
+
+	weapon = new Weapon({ 10,15 }, Weapon::rocketLauncher);
 }
 
 GameLevel::~GameLevel()
 {
 	delete terrainManager;
 
+	delete weapon;
 }
 
 void GameLevel::openLevel()
@@ -86,6 +90,8 @@ void GameLevel::render(Timer* frameTimer)
 
 	player1.render();
 	player2.render();
+
+	weapon->render();
 
 	guiManager->render();
 	

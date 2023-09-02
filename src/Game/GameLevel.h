@@ -5,6 +5,7 @@
 
 class Program;
 class TerrainManager;
+class Weapon;
 
 class GameLevel :public BaseLevel
 {
@@ -60,6 +61,8 @@ protected:
 	TerrainManager* terrainManager;
 	Player player1;
 	Player player2;
+
+	Weapon* weapon;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 };
