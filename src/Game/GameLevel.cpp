@@ -33,7 +33,7 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	weapon = new Weapon({ 10,15 }, Weapon::rocketLauncher);
+	weapon = new Weapon({ 10,25 }, Weapon::rocketLauncher,terrainManager);
 }
 
 GameLevel::~GameLevel()
@@ -78,6 +78,8 @@ void GameLevel::update(Timer* updateTimer)
 
 	player1.update(updateTimer->getDeltaTime());
 	player2.update(updateTimer->getDeltaTime());
+
+	weapon->update(updateTimer->getDeltaTime());
 
 	guiManager->update();
 }

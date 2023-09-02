@@ -8,8 +8,9 @@
 #include "Engine/Animation.h"
 
 #include "Player.h"
+#include "TerrainManager.h"
 
-Weapon::Weapon(glm::vec2 position, WeaponType type) :position{ position },type{type}
+Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager) :position{ position },type{type},terrain(terrainManager)
 {
 	constexpr glm::vec2 vertexPos[4]{
 	glm::vec2{0,0},
@@ -77,8 +78,35 @@ Weapon::~Weapon()
 	
 }
 
+rect Weapon::getCollisionRect()
+{
+	rect r{};
+	r.tlCorner = position;
+	r.size = size;
+	r.angle = 0;
+	return r;
+}
+
 void Weapon::update(float deltaTime)
 {
+	if(wielder==nullptr)
+	{
+		rect r = getCollisionRect();
+		bool colliding = Collision::checkRectTerrain(&r, terrain, nullptr, nullptr);
+
+		if (!colliding)
+		{
+			position += gravityVel * deltaTime;
+		}
+
+		
+	}
+	else
+	{
+		
+	}
+
+
 }
 
 void Weapon::render()
