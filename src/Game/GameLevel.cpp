@@ -13,9 +13,9 @@
 
 #include "TerrainManager.h"
 #include "Player.h"
-#include "Weapon.h"
+#include "WeaponManager.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player1{input,{ 10,20 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
+GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
@@ -33,14 +33,18 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	weapon = new Weapon({ 10,25 }, Weapon::rocketLauncher,terrainManager);
+	weaponManager = new WeaponManager(terrainManager);
+	weaponManager->addPlayer(&player1);
+	weaponManager->addPlayer(&player2);
+
+	weaponManager->createWeapon(WeaponType::rocketLauncher, { 20,20 });
 }
 
 GameLevel::~GameLevel()
 {
 	delete terrainManager;
 
-	delete weapon;
+	delete weaponManager;
 }
 
 void GameLevel::openLevel()
@@ -79,7 +83,7 @@ void GameLevel::update(Timer* updateTimer)
 	player1.update(updateTimer->getDeltaTime());
 	player2.update(updateTimer->getDeltaTime());
 
-	weapon->update(updateTimer->getDeltaTime());
+	weaponManager->update(updateTimer->getDeltaTime());
 
 	guiManager->update();
 }
@@ -93,7 +97,7 @@ void GameLevel::render(Timer* frameTimer)
 	player1.render();
 	player2.render();
 
-	weapon->render();
+	weaponManager->render();
 
 	guiManager->render();
 	

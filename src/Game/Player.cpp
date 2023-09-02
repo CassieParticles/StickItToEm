@@ -12,6 +12,7 @@
 #include "../EngineAdditions/PlayerCollision.h"
 
 #include "TerrainManager.h"
+#include "Weapon.h"
 
 Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour}
 {
@@ -280,4 +281,9 @@ void Player::changeAnimation(playerAnimations newAnimation)
 		currentAnimation = playerFallAnim;
 		break;
 	}
+}
+
+void Player::setWeapon(Weapon* weapon)
+{
+	this->weapon = weapon;
 }

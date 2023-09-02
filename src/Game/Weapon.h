@@ -9,13 +9,14 @@ class Program;
 
 class TerrainManager;
 
+enum class WeaponType
+{
+	rocketLauncher
+};
+
 class Weapon
 {
 public:
-	enum WeaponType
-	{
-		rocketLauncher
-	};
 
 	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager);
 	~Weapon();
@@ -27,8 +28,6 @@ public:
 
 	void setWielder(Player* wielder) { this->wielder = wielder; }
 	Player* getWielder() { return wielder; }
-
-	friend bool checkPlayerWeapon(Player* player);
 protected:
 	glm::vec2 position;
 	glm::vec2 size;

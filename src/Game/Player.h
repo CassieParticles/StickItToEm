@@ -5,8 +5,7 @@
 #include "../EngineAdditions/PlayerCollision.h"
 
 
-
-
+class Weapon;
 class Program;
 class Input;
 class TerrainManager;
@@ -62,6 +61,8 @@ public:
 
 	void changeAnimation(playerAnimations newAnimation);
 
+	void setWeapon(Weapon* weapon);
+
 protected:
 	Input* input;
 	TerrainManager* terrainManager;
@@ -95,6 +96,8 @@ protected:
 	Animation* playerFallAnim;
 
 	bool flipped{};		//If the player is facing left or right
+
+	Weapon* weapon;
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	

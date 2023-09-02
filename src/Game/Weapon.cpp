@@ -36,7 +36,7 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 	texture tex;
 	switch (type)
 	{
-	case rocketLauncher:
+	case WeaponType::rocketLauncher:
 		tex=TextureManager::getTexturePtr("assets/Weapons/RocketLauncher.png");	//Get the texture for the weapon
 
 		textureID = tex.textureID;	//Extract the textureID and the size
@@ -75,7 +75,8 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 
 Weapon::~Weapon()
 {
-	
+	wielder->setWeapon(nullptr);
+	wielder = nullptr;
 }
 
 rect Weapon::getCollisionRect()
@@ -103,7 +104,7 @@ void Weapon::update(float deltaTime)
 	}
 	else
 	{
-		
+		position = wielder->getPosition();
 	}
 
 

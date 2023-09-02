@@ -13,6 +13,7 @@ list(APPEND ALLSOURCES "src/Game/GameLevel.cpp" "src/Game/GameLevel.h")
 list(APPEND ALLSOURCES "src/Game/TerrainManager.cpp" "src/Game/TerrainManager.h")
 list(APPEND ALLSOURCES "src/Game/Player.cpp" "src/Game/Player.h")
 list(APPEND ALLSOURCES "src/Game/Weapon.cpp" "src/Game/Weapon.h")
+list(APPEND ALLSOURCES "src/Game/WeaponManager.cpp" "src/Game/WeaponManager.h")
 
 #Add all the additions to the engine files
 list(APPEND ALLSOURCES "src/EngineAdditions/PlayerCollision.cpp" "src/EngineAdditions/PlayerCollision.h")
