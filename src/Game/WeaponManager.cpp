@@ -3,12 +3,14 @@
 #include <Engine/Collision.h>
 #include <Engine/Program.h>
 
+#include "BulletManager.h"
 #include "Weapon.h"
 #include "Player.h"
 
 WeaponManager::WeaponManager(TerrainManager* terrainManager):terrain{terrainManager}
 {
 	weaponProgram = new Program{ "src/Shaders/weapon/weapons.vert","src/Shaders/weapon/weapons.frag",Program::filePath };
+	bulletManager = new BulletManager{ &players,terrainManager };
 }
 
 WeaponManager::~WeaponManager()
@@ -18,6 +20,8 @@ WeaponManager::~WeaponManager()
 		delete weapons.at(i);
 	}
 	delete weaponProgram;
+
+	delete bulletManager;
 }
 
 
@@ -28,7 +32,7 @@ void WeaponManager::addPlayer(Player* player)
 
 void WeaponManager::createWeapon(WeaponType type, glm::vec2 position)
 {
-	Weapon* w = new Weapon(position, type, terrain,weaponProgram);
+	Weapon* w = new Weapon(position, type, terrain,weaponProgram,bulletManager);
 	weapons.push_back(w);
 }
 
@@ -49,13 +53,13 @@ bool WeaponManager::checkPlayersWeapon(Weapon* weapon, Player** player)
 		}
 	}
 	*player = nullptr;
+	return false;
 }
 
 void WeaponManager::update(float deltaTime)
 {
 	for(int i=0;i<weapons.size();i++)
 	{
-		
 		Player* collidingPlayer;
 		if(!weapons.at(i)->getWielder())
 		{
@@ -64,6 +68,7 @@ void WeaponManager::update(float deltaTime)
 				if (!collidingPlayer->getWeapon()) 
 				{
 					weapons.at(i)->setWielder(collidingPlayer);
+					collidingPlayer->setWeapon(weapons.at(i));
 				}
 			}
 		}
@@ -71,6 +76,8 @@ void WeaponManager::update(float deltaTime)
 		
 		weapons.at(i)->update(deltaTime);
 	}
+
+	bulletManager->update(deltaTime);
 }
 
 void WeaponManager::render()
@@ -79,4 +86,5 @@ void WeaponManager::render()
 	{
 		weapons.at(i)->render();
 	}
+	bulletManager->render();
 }

@@ -36,6 +36,7 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	weaponManager->addPlayer(&player2);
 
 	weaponManager->createWeapon(WeaponType::rocketLauncher, { 20,20 });
+	//weaponManager->createWeapon(WeaponType::rocketLauncher, { 40,20 });
 }
 
 GameLevel::~GameLevel()

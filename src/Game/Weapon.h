@@ -8,6 +8,7 @@ class Animation;
 class Program;
 
 class TerrainManager;
+class BulletManager;
 
 enum class WeaponType
 {
@@ -18,7 +19,7 @@ class Weapon
 {
 public:
 
-	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager,Program* weaponProgram);
+	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager);
 	~Weapon();
 
 	rect getCollisionRect();
@@ -28,6 +29,8 @@ public:
 
 	void setWielder(Player* wielder) { this->wielder = wielder; }
 	Player* getWielder() { return wielder; }
+
+	void fireWeapon();
 protected:
 	glm::vec2 position;
 	glm::vec2 size;
@@ -42,6 +45,7 @@ protected:
 
 	Player* wielder=nullptr;
 	TerrainManager* terrain;
+	BulletManager* bulletManager;
 
 	unsigned int vaoID;	//Vertex data
 	unsigned int vertexBuffers[3];

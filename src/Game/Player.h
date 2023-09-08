@@ -63,6 +63,7 @@ public:
 	bool getFlipped() { return flipped; }
 
 	void setWeapon(Weapon* weapon);
+	Weapon* getWeapon() { return weapon; }
 	float getAimAngle() { return aimAngle; }
 
 protected:

@@ -14,7 +14,7 @@
 #include "TerrainManager.h"
 #include "Weapon.h"
 
-Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour}
+Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour},weapon{nullptr}
 {
 	constexpr glm::vec2 vertexPos[4]{
 		glm::vec2{0,0},
@@ -143,6 +143,13 @@ void Player::handleInput(float deltaTime)
 	if(input->getKeyDown(con.aimDown))
 	{
 		aimAngle -= playerAimSpeed * deltaTime * (1 - flipped * 2);
+	}
+	if(input->getKeyPressed(con.shoot))
+	{
+		if(weapon!=nullptr)
+		{
+			weapon->fireWeapon();
+		}
 	}
 
 	if (input->getKeyDown(GLFW_KEY_BACKSPACE))

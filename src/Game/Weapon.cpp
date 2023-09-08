@@ -9,8 +9,9 @@
 
 #include "Player.h"
 #include "TerrainManager.h"
+#include "BulletManager.h"
 
-Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager,Program* weaponProgram) :position{ position },type{type},terrain(terrainManager),angle{0.f},weaponProgram{weaponProgram}
+Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager) :position{ position },type{type},terrain(terrainManager),angle{0.f},weaponProgram{weaponProgram},bulletManager{bulletManager}
 {
 	constexpr glm::vec2 vertexPos[4]{
 	glm::vec2{0,0},
@@ -140,4 +141,14 @@ void Weapon::render()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Weapon::fireWeapon()
+{
+	switch(type)
+	{
+	case WeaponType::rocketLauncher:
+		bulletManager->addBullet(position, angle, BulletType::rocket);
+		break;
+	}
 }

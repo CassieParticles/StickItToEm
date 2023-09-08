@@ -7,6 +7,7 @@
 class TerrainManager;
 class Player;
 class Program;
+class BulletManager;
 
 class WeaponManager
 {
@@ -21,6 +22,8 @@ public:
 	void update(float deltaTime);
 	void render();	//Render all the weapons
 private:
+	BulletManager* bulletManager;
+
 	TerrainManager* terrain;
 
 	std::vector<Player*> players;
