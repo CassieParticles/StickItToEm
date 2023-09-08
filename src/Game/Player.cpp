@@ -136,6 +136,14 @@ void Player::handleInput(float deltaTime)
 			changeAnimation(jump);
 		}
 	}
+	if(input->getKeyDown(con.aimUp))
+	{
+		aimAngle += playerAimSpeed * deltaTime * (1-flipped*2);
+	}
+	if(input->getKeyDown(con.aimDown))
+	{
+		aimAngle -= playerAimSpeed * deltaTime * (1 - flipped * 2);
+	}
 
 	if (input->getKeyDown(GLFW_KEY_BACKSPACE))
 	{
@@ -251,7 +259,7 @@ void Player::render()
 rect Player::getCollisionRect()
 {
 	rect r{};
-	r.tlCorner = position;
+	r.blCorner = position;
 	r.size = playerSize;
 	r.angle = 0;
 	return r;

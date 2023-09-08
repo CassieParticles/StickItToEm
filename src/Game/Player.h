@@ -60,8 +60,10 @@ public:
 	friend void Collision::resolvePlayerLine(Player* player, line* l, float deltaTime);
 
 	void changeAnimation(playerAnimations newAnimation);
+	bool getFlipped() { return flipped; }
 
 	void setWeapon(Weapon* weapon);
+	float getAimAngle() { return aimAngle; }
 
 protected:
 	Input* input;
@@ -98,6 +100,7 @@ protected:
 	bool flipped{};		//If the player is facing left or right
 
 	Weapon* weapon;
+	float aimAngle{};
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	
@@ -112,5 +115,7 @@ protected:
 
 	static constexpr float playerAirForce{ 12.f };
 	static constexpr float playerAirMaxSpeed{ 15.f };
+
+	static constexpr float playerAimSpeed{ 30.f * 3.14 * 0.005555f };	//Rotational speed of player aim, converted to radians
 
 };

@@ -7,8 +7,6 @@
 
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
-#include <Engine/Program.h>
-
 #include <Engine/GUI.h>
 
 #include "TerrainManager.h"

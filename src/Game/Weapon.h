@@ -32,6 +32,10 @@ protected:
 	glm::vec2 position;
 	glm::vec2 size;
 
+	float angle;
+
+	glm::vec2 playerHandOffset;	//How much the weapon should be offset from the bottom right corner of the player
+
 	glm::vec2 gravityVel{0,-9.8f};		//I'm lazy so the weapon falls at a fixed rate
 
 	WeaponType type;

@@ -10,7 +10,7 @@
 #include "Player.h"
 #include "TerrainManager.h"
 
-Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager) :position{ position },type{type},terrain(terrainManager)
+Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager) :position{ position },type{type},terrain(terrainManager),angle{0.f}
 {
 	constexpr glm::vec2 vertexPos[4]{
 	glm::vec2{0,0},
@@ -44,6 +44,8 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 
 		idleAnimation = new Animation(tex, 1, weaponProgram, true);
 
+		playerHandOffset = { -0.4f,1.5f };
+
 		break;
 	}
 
@@ -75,14 +77,17 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 
 Weapon::~Weapon()
 {
-	wielder->setWeapon(nullptr);
-	wielder = nullptr;
+	if (wielder != nullptr)
+	{
+		wielder->setWeapon(nullptr);
+		wielder = nullptr;
+	}
 }
 
 rect Weapon::getCollisionRect()
 {
 	rect r{};
-	r.tlCorner = position;
+	r.blCorner = position;
 	r.size = size;
 	r.angle = 0;
 	return r;
@@ -99,15 +104,14 @@ void Weapon::update(float deltaTime)
 		{
 			position += gravityVel * deltaTime;
 		}
-
-		
 	}
 	else
 	{
-		position = wielder->getPosition();
+		position = wielder->getPosition()+playerHandOffset;
+		angle = wielder->getAimAngle();
+		idleAnimation->setFlipped(wielder->getFlipped());
 	}
-
-
+	
 }
 
 void Weapon::render()
@@ -117,6 +121,14 @@ void Weapon::render()
 
 	weaponProgram->setVec2("position", position);
 	weaponProgram->setVec2("size", size);
+
+	float cosAngle = cos(angle);
+	float sinAngle = sin(angle);
+
+	glm::mat2 rotMatrix{cosAngle, -sinAngle, sinAngle, cosAngle};
+
+
+	weaponProgram->setMat2("rotMatrix",rotMatrix);
 
 	weaponProgram->setInt("spriteSheet", 0);
 

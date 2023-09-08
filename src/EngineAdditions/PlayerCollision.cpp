@@ -17,7 +17,7 @@ namespace Collision
 
 		//Get the lines to be checked
 		int lineCount;
-		line* lines = terrainManager->getLines(r->tlCorner, glm::ivec2(ceil(r->size.x + 1), ceil(r->size.y + 1)), &lineCount);
+		line* lines = terrainManager->getLines(r->blCorner, glm::ivec2(ceil(r->size.x + 1), ceil(r->size.y + 1)), &lineCount);
 
 		bool collide{};
 
