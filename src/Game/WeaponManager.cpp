@@ -1,13 +1,14 @@
 #include "WeaponManager.h"
 
-#include "Engine/Collision.h"
+#include <Engine/Collision.h>
+#include <Engine/Program.h>
 
 #include "Weapon.h"
 #include "Player.h"
 
 WeaponManager::WeaponManager(TerrainManager* terrainManager):terrain{terrainManager}
 {
-	
+	weaponProgram = new Program{ "src/Shaders/weapon/weapons.vert","src/Shaders/weapon/weapons.frag",Program::filePath };
 }
 
 WeaponManager::~WeaponManager()
@@ -16,6 +17,7 @@ WeaponManager::~WeaponManager()
 	{
 		delete weapons.at(i);
 	}
+	delete weaponProgram;
 }
 
 
@@ -26,7 +28,7 @@ void WeaponManager::addPlayer(Player* player)
 
 void WeaponManager::createWeapon(WeaponType type, glm::vec2 position)
 {
-	Weapon* w = new Weapon(position, type, terrain);
+	Weapon* w = new Weapon(position, type, terrain,weaponProgram);
 	weapons.push_back(w);
 }
 
@@ -53,11 +55,19 @@ void WeaponManager::update(float deltaTime)
 {
 	for(int i=0;i<weapons.size();i++)
 	{
+		
 		Player* collidingPlayer;
-		if(checkPlayersWeapon(weapons.at(i), &collidingPlayer))
+		if(!weapons.at(i)->getWielder())
 		{
-			weapons.at(i)->setWielder(collidingPlayer);
+			if (checkPlayersWeapon(weapons.at(i), &collidingPlayer))
+			{
+				if (!collidingPlayer->getWeapon()) 
+				{
+					weapons.at(i)->setWielder(collidingPlayer);
+				}
+			}
 		}
+
 		
 		weapons.at(i)->update(deltaTime);
 	}

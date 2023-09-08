@@ -4,13 +4,13 @@
 
 #include <glad/glad.h>
 
-#include "Engine/Program.h"
-#include "Engine/Animation.h"
+#include <Engine/Program.h>
+#include <Engine/Animation.h>
 
 #include "Player.h"
 #include "TerrainManager.h"
 
-Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager) :position{ position },type{type},terrain(terrainManager),angle{0.f}
+Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager,Program* weaponProgram) :position{ position },type{type},terrain(terrainManager),angle{0.f},weaponProgram{weaponProgram}
 {
 	constexpr glm::vec2 vertexPos[4]{
 	glm::vec2{0,0},
@@ -31,7 +31,6 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 		0,
 	};
 
-	weaponProgram = new Program("src/Shaders/weapon/weapons.vert", "src/Shaders/weapon/weapons.frag", Program::filePath);
 
 	texture tex;
 	switch (type)
@@ -82,6 +81,8 @@ Weapon::~Weapon()
 		wielder->setWeapon(nullptr);
 		wielder = nullptr;
 	}
+
+	delete idleAnimation;
 }
 
 rect Weapon::getCollisionRect()

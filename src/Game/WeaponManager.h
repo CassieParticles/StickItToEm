@@ -6,6 +6,7 @@
 
 class TerrainManager;
 class Player;
+class Program;
 
 class WeaponManager
 {
@@ -25,6 +26,8 @@ private:
 	std::vector<Player*> players;
 
 	std::vector<Weapon*> weapons;
+
+	Program* weaponProgram;
 	
 	bool checkPlayersWeapon(Weapon* weapon,Player** player);
 };

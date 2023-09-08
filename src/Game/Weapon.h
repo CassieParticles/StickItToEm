@@ -18,7 +18,7 @@ class Weapon
 {
 public:
 
-	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager);
+	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager,Program* weaponProgram);
 	~Weapon();
 
 	rect getCollisionRect();
