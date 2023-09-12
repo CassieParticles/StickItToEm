@@ -64,8 +64,12 @@ public:
 
 	void setWeapon(Weapon* weapon);
 	Weapon* getWeapon() { return weapon; }
+
 	float getAngle() { return aimAngle; }	//Get the angle without it being flipped by the player direction
 	float getAimAngle();
+
+	void takeDamage(float damage) { this->damage+=damage; }			//To deal with the player taking damage
+	void takeKnockback(glm::vec2 knockback);
 
 protected:
 	Input* input;
@@ -103,6 +107,8 @@ protected:
 
 	Weapon* weapon;
 	float aimAngle{};
+
+	float damage{};
 
 	//Constants involved in player
 	static constexpr glm::vec2 gravForce{0, -19.6f};	

@@ -5,10 +5,11 @@
 #include <Engine/Animation.h>
 #include <Engine/Program.h>
 
+#include "Player.h"
 #include "TerrainManager.h"
 #include "../EngineAdditions/PlayerCollision.h"
 
-Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, terrainDamage{terrainDamage},type { type }, bulletProgram{ bulletProgram }, terrain{ terrain }
+Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players { players }, terrainDamage{ terrainDamage }, type{ type }, bulletProgram{ bulletProgram }, terrain{ terrain }
 {
 	switch(type)
 	{
@@ -87,6 +88,20 @@ void Bullet::update(float deltaTime)
 	{
 		terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
 		setDelete();
+	}
+
+	for(int i=0;i<players->size();i++)
+	{
+
+		if(players->at(i)!=playerFired)
+		{
+			rect pr = players->at(i)->getCollisionRect();
+			if(Collision::checkRectRect(&r,&pr))
+			{
+				terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
+				setDelete();
+			}
+		}
 	}
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <glm.hpp>
+#include <vector>
 
 #include <Engine/Collision.h>
 
@@ -17,7 +18,7 @@ enum class BulletType
 class Bullet
 {
 public:
-	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius,TerrainManager* terrain, BulletType type,Program* bulletProgram);
+	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram);
 	~Bullet();
 
 	void update(float deltaTime);
@@ -39,6 +40,8 @@ protected:
 
 	BulletType type;
 
+	std::vector<Player*>* players;
+	Player* playerFired;
 
 	float playerDamage;
 	float terrainDamage;

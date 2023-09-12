@@ -309,3 +309,9 @@ float Player::getAimAngle()
 	//if flipped is false, returns aimAngle
 	return 3.14159 * flipped + (1 - 2 * flipped) * aimAngle;	
 }
+
+void Player::takeKnockback(glm::vec2 knockback)
+{
+	float damageScalar = 0.6 + damage * 0.01f;
+	addForce(knockback * damageScalar);
+}

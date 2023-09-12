@@ -157,7 +157,7 @@ void Weapon::fireWeapon()
 	switch(type)
 	{
 	case WeaponType::rocketLauncher:
-		bulletManager->addBullet(position, fireAngle, BulletType::rocket);
+		bulletManager->addBullet(position, fireAngle, BulletType::rocket,getWielder());
 		break;
 	}
 }

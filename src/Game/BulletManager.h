@@ -14,7 +14,7 @@ public:
 	BulletManager(std::vector<Player*>* players, TerrainManager* terrain);
 	~BulletManager();
 
-	void addBullet(glm::vec2 position, float angle, BulletType type);
+	void addBullet(glm::vec2 position, float angle, BulletType type, Player* owner);
 	void deleteBullet(int index);
 	void deleteBullet(Bullet* bullet);
 
