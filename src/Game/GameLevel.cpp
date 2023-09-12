@@ -61,9 +61,9 @@ void GameLevel::handleInput(Timer* updateTimer)
 	input->update();
 	glm::vec2 mousePos = input->getMousePositionNormalised();
 	mousePos.y = 1 - mousePos.y;
-	if(input->getKeyDown(GLFW_KEY_T))
+	if(input->getKeyPressed(GLFW_KEY_T))
 	{
-		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, -0.2);
+		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, -4);
 	}
 	if (input->getKeyDown(GLFW_KEY_Y))
 	{

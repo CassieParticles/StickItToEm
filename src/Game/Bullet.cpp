@@ -5,7 +5,10 @@
 #include <Engine/Animation.h>
 #include <Engine/Program.h>
 
-Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius, BulletType type,Program* bulletProgram):position{position},angle{angle},playerDamage{playerDamage},areaRadius{areaRadius},type{type},bulletProgram{bulletProgram}
+#include "TerrainManager.h"
+#include "../EngineAdditions/PlayerCollision.h"
+
+Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, terrainDamage{terrainDamage},type { type }, bulletProgram{ bulletProgram }, terrain{ terrain }
 {
 	switch(type)
 	{
@@ -72,11 +75,26 @@ void Bullet::update(float deltaTime)
 {
 	position += velocity * deltaTime;
 	bulletAnim->update(deltaTime);
+
+	if(position.x<0||position.x>terrain->getArenaSize().x||position.y<0||position.y>terrain->getArenaSize().y)
+	{
+		setDelete();
+	}
+
+	rect r = getCollisionRect();
+
+	if(Collision::checkRectTerrain(&r,terrain,nullptr,nullptr))	//If bullet collides with the terrain
+	{
+		terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
+		setDelete();
+	}
 }
 
 void Bullet::render()
 {
 	glBindVertexArray(vaoID);
+	bulletProgram->use();
+
 	bulletProgram->setVec2("position", position);
 	bulletProgram->setVec2("size", size);
 
@@ -96,4 +114,13 @@ void Bullet::render()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+rect Bullet::getCollisionRect()
+{
+	rect r{};
+	r.blCorner = position;
+	r.size = size;
+	r.angle = 0;
+	return r;
 }

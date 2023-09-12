@@ -15,6 +15,8 @@ public:
 	~BulletManager();
 
 	void addBullet(glm::vec2 position, float angle, BulletType type);
+	void deleteBullet(int index);
+	void deleteBullet(Bullet* bullet);
 
 	void update(float deltaTime);
 	void render();
@@ -29,5 +31,5 @@ protected:
 	//Constants for bullets
 	float rocketPlayerDamage = 60.f;
 	float rocketTerrainDamage = 4.f;
-	float rocketDamageRadius = 3.f;
+	float rocketDamageRadius = 5.f;
 };

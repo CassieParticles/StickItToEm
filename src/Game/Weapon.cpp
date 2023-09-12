@@ -102,6 +102,11 @@ void Weapon::update(float deltaTime)
 		rect r = getCollisionRect();
 		bool colliding = Collision::checkRectTerrain(&r, terrain, nullptr, nullptr);
 
+		if (position.x<0 || position.x>terrain->getArenaSize().x || position.y<0 || position.y>terrain->getArenaSize().y)
+		{
+			setDelete();
+		}
+
 		if (!colliding)
 		{
 			position += gravityVel * deltaTime;
@@ -110,7 +115,7 @@ void Weapon::update(float deltaTime)
 	else
 	{
 		position = wielder->getPosition()+playerHandOffset;
-		angle = wielder->getAimAngle();
+		angle = wielder->getAngle();
 		idleAnimation->setFlipped(wielder->getFlipped());
 	}
 	
@@ -145,10 +150,14 @@ void Weapon::render()
 
 void Weapon::fireWeapon()
 {
+	//If player isn't flipped, angle is normal
+	//If player is flipped, angle is 180 degrees, minus the angle
+	float fireAngle = wielder->getAimAngle();
+
 	switch(type)
 	{
 	case WeaponType::rocketLauncher:
-		bulletManager->addBullet(position, angle, BulletType::rocket);
+		bulletManager->addBullet(position, fireAngle, BulletType::rocket);
 		break;
 	}
 }

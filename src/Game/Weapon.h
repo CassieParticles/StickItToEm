@@ -31,6 +31,9 @@ public:
 	Player* getWielder() { return wielder; }
 
 	void fireWeapon();
+
+	bool getDelete() { return deleteFlag; }
+	void setDelete() { deleteFlag = true; }
 protected:
 	glm::vec2 position;
 	glm::vec2 size;
@@ -46,6 +49,8 @@ protected:
 	Player* wielder=nullptr;
 	TerrainManager* terrain;
 	BulletManager* bulletManager;
+
+	bool deleteFlag{ false };	//Flag for the weapon manager to know to delete this weapon
 
 	unsigned int vaoID;	//Vertex data
 	unsigned int vertexBuffers[3];

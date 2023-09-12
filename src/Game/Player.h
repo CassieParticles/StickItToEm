@@ -64,7 +64,8 @@ public:
 
 	void setWeapon(Weapon* weapon);
 	Weapon* getWeapon() { return weapon; }
-	float getAimAngle() { return aimAngle; }
+	float getAngle() { return aimAngle; }	//Get the angle without it being flipped by the player direction
+	float getAimAngle();
 
 protected:
 	Input* input;

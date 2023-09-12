@@ -138,11 +138,11 @@ void Player::handleInput(float deltaTime)
 	}
 	if(input->getKeyDown(con.aimUp))
 	{
-		aimAngle += playerAimSpeed * deltaTime * (1-flipped*2);
+		aimAngle += playerAimSpeed * deltaTime;
 	}
 	if(input->getKeyDown(con.aimDown))
 	{
-		aimAngle -= playerAimSpeed * deltaTime * (1 - flipped * 2);
+		aimAngle -= playerAimSpeed * deltaTime;
 	}
 	if(input->getKeyPressed(con.shoot))
 	{
@@ -301,4 +301,15 @@ void Player::changeAnimation(playerAnimations newAnimation)
 void Player::setWeapon(Weapon* weapon)
 {
 	this->weapon = weapon;
+}
+
+float Player::getAimAngle()
+{
+	if(flipped)
+	{
+		return 3.14159f - aimAngle;
+	}else
+	{
+		return aimAngle;
+	}
 }

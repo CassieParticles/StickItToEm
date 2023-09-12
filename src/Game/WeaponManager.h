@@ -18,6 +18,8 @@ public:
 	void addPlayer(Player* player);
 
 	void createWeapon(WeaponType type, glm::vec2 position);
+	void deleteWeapon(int index);
+	void deleteWeapon(Weapon* weapon);
 
 	void update(float deltaTime);
 	void render();	//Render all the weapons

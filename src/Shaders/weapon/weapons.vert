@@ -20,17 +20,29 @@ out vec2 textCoord;
 
 void main()
 {
+	//Find the centre, for flipping purposes
+	vec2 centre=vec2(size/2)+position;
+
+
 	vec2 displacedPos=vertexPosition*size-size/2;
 	vec2 rotatedPos=displacedPos*rotMatrix;
 
 	vec2 vertexPos=rotatedPos+size/2+position;
 	vec2 cellSize=2/vec2(gridSize);
 
+
+	if(animationFlipped==1)
+	{
+		float dX=vertexPos.x-centre.x;
+		vertexPos.x+=-2*dX;
+	}
 	vec2 screenPos=vec2(vertexPos.x*cellSize.x,vertexPos.y*cellSize.y)-1;
 
 	gl_Position=vec4(screenPos,0,1);
 
-	int i=cornerIndex^animationFlipped;	//Flips the lowest bit if the animation is flipped, which means left-right side is flipped
+	int i=cornerIndex;	//Flips the lowest bit if the animation is flipped, which means left-right side is flipped
+
+
 
 	textCoord=texCoords[i];
 }

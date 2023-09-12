@@ -1,6 +1,9 @@
 #pragma once
 #include <glm.hpp>
 
+#include <Engine/Collision.h>
+
+class BulletManager;
 class Animation;
 class Player;
 class TerrainManager;
@@ -14,12 +17,16 @@ enum class BulletType
 class Bullet
 {
 public:
-	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius,BulletType type,Program* bulletProgram);
+	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius,TerrainManager* terrain, BulletType type,Program* bulletProgram);
 	~Bullet();
 
 	void update(float deltaTime);
 	void render();
 
+	rect getCollisionRect();
+
+	bool getDelete() { return deleteFlag; }
+	void setDelete() { deleteFlag = true; }
 protected:
 	//Stuff for bullet dynamics
 	glm::vec2 position;
@@ -28,12 +35,16 @@ protected:
 	float angle;
 
 	//Stuff for the bullet's mechanics
+	TerrainManager* terrain;
+
 	BulletType type;
 
 
 	float playerDamage;
 	float terrainDamage;
 	float areaRadius;
+
+	bool deleteFlag{false};	//Flag for the bulletManager to see if it should delete a bullet
 
 	//Constants defined for the bullets
 	static constexpr float rocketBulletSpeed=2.5f;
