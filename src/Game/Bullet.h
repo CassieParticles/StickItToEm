@@ -47,7 +47,7 @@ protected:
 	bool deleteFlag{false};	//Flag for the bulletManager to see if it should delete a bullet
 
 	//Constants defined for the bullets
-	static constexpr float rocketBulletSpeed=2.5f;
+	static constexpr float rocketBulletSpeed=5.f;
 
 
 	//Stuff for the bullet's rendering

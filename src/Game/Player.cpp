@@ -305,11 +305,7 @@ void Player::setWeapon(Weapon* weapon)
 
 float Player::getAimAngle()
 {
-	if(flipped)
-	{
-		return 3.14159f - aimAngle;
-	}else
-	{
-		return aimAngle;
-	}
+	//If flipped is true, returns 3.14 - aimAngle
+	//if flipped is false, returns aimAngle
+	return 3.14159 * flipped + (1 - 2 * flipped) * aimAngle;	
 }

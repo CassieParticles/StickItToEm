@@ -31,11 +31,9 @@ void main()
 	vec2 cellSize=2/vec2(gridSize);
 
 
-	if(animationFlipped==1)
-	{
-		float dX=vertexPos.x-centre.x;
-		vertexPos.x+=-2*dX;
-	}
+	float dX=vertexPos.x-centre.x;
+	vertexPos.x+=-2*dX*animationFlipped;
+
 	vec2 screenPos=vec2(vertexPos.x*cellSize.x,vertexPos.y*cellSize.y)-1;
 
 	gl_Position=vec4(screenPos,0,1);
