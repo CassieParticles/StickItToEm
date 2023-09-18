@@ -54,6 +54,8 @@ public:
 	float getMass() { return mass; }
 	rect getCollisionRect();
 
+	glm::vec2 getSize() { return playerSize; }
+
 	void addForce(glm::vec2 force);
 	void addForce(float x, float y) { addForce(glm::vec2{x, y}); }
 

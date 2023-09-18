@@ -18,7 +18,7 @@ enum class BulletType
 class Bullet
 {
 public:
-	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram);
+	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage,float forceScalar, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram);
 	~Bullet();
 
 	void update(float deltaTime);
@@ -45,6 +45,7 @@ protected:
 
 	float playerDamage;
 	float terrainDamage;
+	float forceScalar;
 	float areaRadius;
 
 	bool deleteFlag{false};	//Flag for the bulletManager to see if it should delete a bullet

@@ -37,6 +37,9 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 	weaponManager->createWeapon(WeaponType::rocketLauncher, { 20,20 });
 	//weaponManager->createWeapon(WeaponType::rocketLauncher, { 40,20 });
+
+	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
+	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
 }
 
 GameLevel::~GameLevel()
@@ -97,6 +100,8 @@ void GameLevel::render(Timer* frameTimer)
 	player2.render();
 
 	weaponManager->render();
+
+	testText->generateNewString("deltaTime: " +std::to_string(frameTimer->getDeltaTime()));
 
 	guiManager->render();
 	

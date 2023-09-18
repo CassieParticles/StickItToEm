@@ -3,6 +3,8 @@
 
 #include "Player.h"
 
+#include <Engine/GUIFD.h>	//Forward declare the classes
+
 class Program;
 class TerrainManager;
 class WeaponManager;
@@ -65,4 +67,7 @@ protected:
 	WeaponManager* weaponManager;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
+
+	Font* testFont;
+	GUIText* testText;
 };

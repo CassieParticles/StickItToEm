@@ -36,7 +36,7 @@ void BulletManager::addBullet(glm::vec2 position, float angle, BulletType type,P
 		break;
 	}
 
-	Bullet* bullet = new Bullet{ position,angle,playerDamage,terrainDamage,areaRadius,owner,players,terrain,type,bulletProgram };
+	Bullet* bullet = new Bullet{ position,angle,playerDamage,terrainDamage,50000.f,areaRadius,owner,players,terrain,type,bulletProgram };
 	bullets.push_back(bullet);
 }
 

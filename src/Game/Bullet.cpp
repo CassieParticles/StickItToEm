@@ -4,12 +4,13 @@
 
 #include <Engine/Animation.h>
 #include <Engine/Program.h>
+#include <Engine/MathsFunctions.h>
 
 #include "Player.h"
 #include "TerrainManager.h"
 #include "../EngineAdditions/PlayerCollision.h"
 
-Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players { players }, terrainDamage{ terrainDamage }, type{ type }, bulletProgram{ bulletProgram }, terrain{ terrain }
+Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float forceScalar, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players{ players }, terrainDamage{ terrainDamage }, forceScalar{ forceScalar }, type { type }, bulletProgram{ bulletProgram }, terrain{ terrain }
 {
 	switch(type)
 	{
@@ -86,6 +87,24 @@ void Bullet::update(float deltaTime)
 
 	if(Collision::checkRectTerrain(&r,terrain,nullptr,nullptr))	//If bullet collides with the terrain
 	{
+		for(int i=0;i<players->size();i++)
+		{
+			Player* currentPlayer = players->at(i);
+			glm::vec2 playerCentre = currentPlayer->getPosition() + currentPlayer->getSize() / 2.f;
+			float radSquare = areaRadius * areaRadius;
+			glm::vec2 dPos = playerCentre - position;
+			float dSqr = glm::dot(dPos, dPos);
+
+			if(dSqr<radSquare)
+			{
+				
+				glm::vec2 dir = dPos / sqrt(glm::dot(dPos, dPos));
+
+				float scalar = 1 - std::sqrt(dSqr) / std::sqrt(radSquare);
+				currentPlayer->takeDamage(playerDamage * scalar);
+				currentPlayer->takeKnockback(dir*forceScalar*scalar);
+			}
+		}
 		terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
 		setDelete();
 	}
@@ -98,6 +117,24 @@ void Bullet::update(float deltaTime)
 			rect pr = players->at(i)->getCollisionRect();
 			if(Collision::checkRectRect(&r,&pr))
 			{
+				for (int i = 0; i < players->size(); i++)
+				{
+					Player* currentPlayer = players->at(i);
+					glm::vec2 playerCentre = currentPlayer->getPosition() + currentPlayer->getSize() / 2.f;
+					float radSquare = areaRadius * areaRadius;
+					glm::vec2 dPos = playerCentre - position;
+					float dSqr = glm::dot(dPos, dPos);
+
+					if (dSqr < radSquare)
+					{
+
+						glm::vec2 dir = dPos / sqrt(glm::dot(dPos, dPos));
+
+						float scalar = 1 - std::sqrt(dSqr) / std::sqrt(radSquare);
+						currentPlayer->takeDamage(playerDamage * scalar);
+						currentPlayer->takeKnockback(dir * forceScalar * scalar);
+					}
+				}
 				terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
 				setDelete();
 			}
