@@ -51,6 +51,8 @@ protected:
 	Program* triangleProgram;
 	Program* lineProgram;
 
+	unsigned int smokeTexture;	//Texture that will be drawn over the terrain, to emulate the smoke and soot from weapon damage
+
 	float getPoint(glm::ivec2 pos);				//Interact with specific points, used internally
 	void setPoint(glm::ivec2 pos, float val);	
 	void addPoint(glm::ivec2 pos, float val);

@@ -40,6 +40,10 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	lineProgram->setUniformBufferBlockBinding("terrainData", 1);
 
 	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
+
+	glGenTextures(1, &smokeTexture);				//Create the gunsmoke texture
+	glBindTexture(GL_TEXTURE_2D, smokeTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_FLOAT, nullptr);
 }
 
 TerrainManager::~TerrainManager()
