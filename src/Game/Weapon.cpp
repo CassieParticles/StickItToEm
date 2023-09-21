@@ -46,6 +46,8 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 
 		playerHandOffset = { -0.4f,1.5f };
 
+		ammoLeft = 5;
+
 		break;
 	}
 
@@ -118,6 +120,11 @@ void Weapon::update(float deltaTime)
 		angle = wielder->getAngle();
 		idleAnimation->setFlipped(wielder->getFlipped());
 	}
+
+	if (ammoLeft < 1)
+	{
+		setDelete();
+	}
 	
 }
 
@@ -150,10 +157,13 @@ void Weapon::render()
 
 void Weapon::fireWeapon()
 {
+	if (ammoLeft < 1) { return; }	//If the weapon is out of ammo, then it cannot fire
+
+
 	//If player isn't flipped, angle is normal
 	//If player is flipped, angle is 180 degrees, minus the angle
 	float fireAngle = wielder->getAimAngle();
-
+	--ammoLeft;
 	switch(type)
 	{
 	case WeaponType::rocketLauncher:

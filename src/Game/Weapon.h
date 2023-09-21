@@ -32,6 +32,8 @@ public:
 
 	void fireWeapon();
 
+	int getAmmoLeft() { return ammoLeft; }
+
 	bool getDelete() { return deleteFlag; }
 	void setDelete() { deleteFlag = true; }
 protected:
@@ -59,4 +61,6 @@ protected:
 
 	unsigned int textureID;
 	Animation* idleAnimation;
+
+	int ammoLeft{};
 };
