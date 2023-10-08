@@ -33,8 +33,8 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	triangleProgram = new Program("src/Shaders/terrain/triangles/vertex.glsl","src/Shaders/terrain/triangles/fragment.glsl",Program::filePath);
-	lineProgram = new Program("src/Shaders/terrain/lines/vertex.glsl", "src/Shaders/terrain/lines/fragment.glsl",Program::filePath);
+	triangleProgram = new Program("src/Shaders/terrain/triangles/terrainTriangles.vert","src/Shaders/terrain/triangles/terrainTriangles.frag",Program::filePath);
+	lineProgram = new Program("src/Shaders/terrain/lines/terrainLines.vert", "src/Shaders/terrain/lines/terrainLines.frag",Program::filePath);
 
 	triangleProgram->setUniformBufferBlockBinding("terrainData", 1);
 	lineProgram->setUniformBufferBlockBinding("terrainData", 1);

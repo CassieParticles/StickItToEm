@@ -7,22 +7,23 @@
 
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
-#include <Engine/Program.h>
-#include <Engine/GUI/GUIManager.h>
-#include <Engine/GUI/Font.h>
-#include <Engine/GUI/GUIText.h>
-#include <Engine/GUI/GUIToggleButton.h>
+#include <Engine/GUI.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
+#include "WeaponManager.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player{input,glm::ivec2{60,35},{ 10,20 },50}
+GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
-	player.setTerrainManager(terrainManager);
+	player1.setTerrainManager(terrainManager);
+	player2.setTerrainManager(terrainManager);
+
+	player1.setInputs({ GLFW_KEY_A,GLFW_KEY_D,GLFW_KEY_W,GLFW_KEY_S,GLFW_KEY_Q,GLFW_KEY_E });
+	player2.setInputs({ GLFW_KEY_J,GLFW_KEY_L,GLFW_KEY_I,GLFW_KEY_K,GLFW_KEY_U,GLFW_KEY_O });
 
 	glGenBuffers(1, &terrainUBO);
 
@@ -30,25 +31,22 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	guiManager->createColourRect({ 0,0 }, { 512,512 }, { 256,256 }, { 1,0,0 });
-	guiManager->createTextureRect({ -128,-128 }, { 1024,1024 }, { 128,128 }, "assets/cat.png", glm::vec3{1, 0, 1});
+	weaponManager = new WeaponManager(terrainManager);
+	weaponManager->addPlayer(&player1);
+	weaponManager->addPlayer(&player2);
 
-	guiManager->createButton({ 64,64 }, { 128,128 }, { 128,128 }, { 1,0,1 }, [&]()->void {std::cout << "Burger\n"; });
+	weaponManager->createWeapon(WeaponType::rocketLauncher, { 20,20 });
+	//weaponManager->createWeapon(WeaponType::rocketLauncher, { 40,20 });
 
-	Font* font= guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ,.;:()!?+-*/=");
-
-	 text = guiManager->createText({ 32,32 }, { 0,0 }, { 0.5,0.5 }, "The quick bronw fox jumped oer the lazy dog", font,{1,0,1});
-
-
-	toggleButton = guiManager->createToggleButton({ 64,-320 }, { 0,1024 }, { 256,256 }, "assets/toggleButton/image0.png", "assets/toggleButton/image1.jpg");
-
-	textBox = guiManager->createTextBox({ 64,-64 }, { 512,512 }, { 256,64 }, font, { 0.2,0.2,0.2 }, { 0.6,0.6,0.6 }, "qwertyuiopasdfghjklzxcvbnm");
+	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
+	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
 }
 
 GameLevel::~GameLevel()
 {
 	delete terrainManager;
 
+	delete weaponManager;
 }
 
 void GameLevel::openLevel()
@@ -64,33 +62,32 @@ void GameLevel::closeLevel()
 void GameLevel::handleInput(Timer* updateTimer)
 {
 	input->update();
-	if(input->getKeyDown(GLFW_KEY_T))
+	glm::vec2 mousePos = input->getMousePositionNormalised();
+	mousePos.y = 1 - mousePos.y;
+	if(input->getKeyPressed(GLFW_KEY_T))
 	{
-		terrainManager->modifyTerrainCircle(input->getMousePositionNormalised() * glm::vec2(terrainManager->getArenaSize()), 5, -0.2);
+		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, -4);
 	}
 	if (input->getKeyDown(GLFW_KEY_Y))
 	{
-		terrainManager->modifyTerrainCircle(input->getMousePositionNormalised() * glm::vec2(terrainManager->getArenaSize()), 5, 0.2);
+		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, 0.2);
 	}
 
-	player.handleInput(updateTimer->getDeltaTime());
+	player1.handleInput(updateTimer->getDeltaTime());
+	player2.handleInput(updateTimer->getDeltaTime());
 }
 
 void GameLevel::update(Timer* updateTimer)
 {
-	player.collisionResolution(updateTimer->getDeltaTime());
-	player.update(updateTimer->getDeltaTime());
+	player1.collisionResolution(updateTimer->getDeltaTime());
+	player2.collisionResolution(updateTimer->getDeltaTime());
+
+	player1.update(updateTimer->getDeltaTime());
+	player2.update(updateTimer->getDeltaTime());
+
+	weaponManager->update(updateTimer->getDeltaTime());
 
 	guiManager->update();
-
-	if(toggleButton->getActive())
-	{
-		text->generateNewString("Active!");
-	}
-	else
-	{
-		text->generateNewString("Inactive!");
-	}
 }
 
 void GameLevel::render(Timer* frameTimer)
@@ -99,7 +96,12 @@ void GameLevel::render(Timer* frameTimer)
 	//Draw stuff
 	terrainManager->render();
 
-	player.render();
+	player1.render();
+	player2.render();
+
+	weaponManager->render();
+
+	testText->generateNewString("deltaTime: " +std::to_string(frameTimer->getDeltaTime()));
 
 	guiManager->render();
 	

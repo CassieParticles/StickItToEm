@@ -1,14 +1,13 @@
 #pragma once
 #include <Engine/BaseLevel.h>
-#include <Engine/GUI/GUITextureRect.h>
+
 #include "Player.h"
 
-class GUIText;
-class GUIToggleButton;
-class GUITextBox;
+#include <Engine/GUIFD.h>	//Forward declare the classes
 
 class Program;
 class TerrainManager;
+class WeaponManager;
 
 class GameLevel :public BaseLevel
 {
@@ -62,11 +61,13 @@ protected:
 	};
 
 	TerrainManager* terrainManager;
-	Player player;
+	Player player1;
+	Player player2;
 
-	GUIText* text;
-	GUIToggleButton* toggleButton;
-	GUITextBox* textBox;
+	WeaponManager* weaponManager;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
+
+	Font* testFont;
+	GUIText* testText;
 };
