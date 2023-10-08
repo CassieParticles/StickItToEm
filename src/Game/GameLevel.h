@@ -12,7 +12,7 @@ class WeaponManager;
 class GameLevel :public BaseLevel
 {
 public:
-	GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager, glm::vec4 bgColour);
+	GameLevel(Input* input,GUIManager* guiManager, glm::vec4 bgColour);
 	~GameLevel();
 
 	void openLevel() override;

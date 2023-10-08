@@ -8,12 +8,13 @@
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
 #include <Engine/GUI.h>
+#include <Engine/Window.h>
 
 #include "TerrainManager.h"
 #include "Player.h"
 #include "WeaponManager.h"
 
-GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(window,input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
+GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
 	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
 
@@ -40,6 +41,8 @@ GameLevel::GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager,  gl
 
 	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
 	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
+
+	
 }
 
 GameLevel::~GameLevel()
@@ -93,6 +96,7 @@ void GameLevel::update(Timer* updateTimer)
 void GameLevel::render(Timer* frameTimer)
 {
 	beginDraw();
+	std::cout << "Running\n";
 	//Draw stuff
 	terrainManager->render();
 
