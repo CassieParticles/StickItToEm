@@ -41,9 +41,7 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 
 	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
 
-	glGenTextures(1, &smokeTexture);				//Create the gunsmoke texture
-	glBindTexture(GL_TEXTURE_2D, smokeTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_FLOAT, nullptr);
+	gunsmokeManager = new Gunsmoke();
 }
 
 TerrainManager::~TerrainManager()
@@ -59,6 +57,7 @@ TerrainManager::~TerrainManager()
 
 	delete triangleProgram;
 	delete lineProgram;
+	delete gunsmokeManager;
 }
 
 void TerrainManager::uploadStage(float* stage)
@@ -367,9 +366,13 @@ void TerrainManager::render()
 
 	triangleProgram->setVec3("colour", glm::vec3{ 0,0,0 });
 	triangleProgram->setInt("bgTexture", 0);
+	triangleProgram->setInt("gunsmokeTexture", 1);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, bgTexture.textureID);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D,gunsmokeManager->getTexture());
 
 	glBindVertexArray(triangleVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * arenaSize.x * arenaSize.y);

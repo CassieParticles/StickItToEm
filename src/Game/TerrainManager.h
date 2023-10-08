@@ -1,6 +1,7 @@
 #include <glm.hpp>
 #include <Engine/TextureManager.h>
 
+#include "Gunsmoke.h"
 
 class Program;
 
@@ -51,7 +52,7 @@ protected:
 	Program* triangleProgram;
 	Program* lineProgram;
 
-	unsigned int smokeTexture;	//Texture that will be drawn over the terrain, to emulate the smoke and soot from weapon damage
+	Gunsmoke* gunsmokeManager;	//Manage the background texture
 
 	float getPoint(glm::ivec2 pos);				//Interact with specific points, used internally
 	void setPoint(glm::ivec2 pos, float val);	
