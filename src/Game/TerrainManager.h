@@ -33,6 +33,7 @@ public:
 	line* getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount);
 
 	void displayLines();
+	Gunsmoke* gunsmokeManager;	//Manage the background texture
 protected:
 	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 
@@ -52,7 +53,6 @@ protected:
 	Program* triangleProgram;
 	Program* lineProgram;
 
-	Gunsmoke* gunsmokeManager;	//Manage the background texture
 
 	float getPoint(glm::ivec2 pos);				//Interact with specific points, used internally
 	void setPoint(glm::ivec2 pos, float val);	

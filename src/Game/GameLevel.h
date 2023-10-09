@@ -70,4 +70,6 @@ protected:
 
 	Font* testFont;
 	GUIText* testText;
+
+	GUITextureRect* testRect;
 };

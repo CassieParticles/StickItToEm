@@ -42,6 +42,8 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
 
 	gunsmokeManager = new Gunsmoke();
+
+	gunsmokeManager->drawSmoke(glm::vec2(10, 10), 4, glm::vec3(1, 0, 0));
 }
 
 TerrainManager::~TerrainManager()
