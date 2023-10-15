@@ -63,7 +63,7 @@ int main()
 
 	GUIManager guiManager{&input};
 
-	GameLevel gameLevel{window,&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
+	GameLevel gameLevel{&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
 
 	gameLevel.openLevel();	//Open the game level
 

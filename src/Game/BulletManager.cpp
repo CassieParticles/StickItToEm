@@ -6,7 +6,7 @@
 #include "Bullet.h"
 #include "TerrainManager.h"
 
-BulletManager::BulletManager(std::vector<Player*>* players,TerrainManager* terrain):players{players}, terrain{ terrain }
+BulletManager::BulletManager(std::vector<Player*>* players,TerrainManager* terrain, Gunsmoke* gunSmokeManager):players{players}, terrain{ terrain },gunSmokeManager{gunSmokeManager}
 {
 	bulletProgram = new Program{ "src/Shaders/bullet/bullet.vert","src/Shaders/bullet/bullet.frag",Program::filePath };
 }
@@ -38,7 +38,7 @@ void BulletManager::addBullet(glm::vec2 position, float angle, BulletType type,P
 		break;
 	}
 
-	Bullet* bullet = new Bullet{ position,angle,playerDamage,terrainDamage,rocketScalarKnockback,areaRadius,owner,players,terrain,type,bulletProgram };
+	Bullet* bullet = new Bullet{ position,angle,playerDamage,terrainDamage,rocketScalarKnockback,areaRadius,owner,players,terrain,type,bulletProgram,gunSmokeManager };
 	bullets.push_back(bullet);
 }
 

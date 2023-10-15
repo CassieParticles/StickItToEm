@@ -8,6 +8,7 @@
 class Program;
 class TerrainManager;
 class WeaponManager;
+class Gunsmoke;
 
 class GameLevel :public BaseLevel
 {
@@ -65,9 +66,13 @@ protected:
 	Player player2;
 
 	WeaponManager* weaponManager;
+	Gunsmoke* gunSmokeManager;
+	
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 
 	Font* testFont;
 	GUIText* testText;
+
+	GUITextureRect* testRect;
 };

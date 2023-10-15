@@ -13,10 +13,14 @@
 #include "TerrainManager.h"
 #include "Player.h"
 #include "WeaponManager.h"
+#include "Gunsmoke.h"
 
 GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
-	terrainManager = new TerrainManager({ 60,35 });	//Create the terrain manager
+
+	gunSmokeManager = new Gunsmoke();
+
+	terrainManager = new TerrainManager({ 60,35 },gunSmokeManager);	//Create the terrain manager
 
 	terrainManager->uploadStage(stageValues);	//59x34, the scalar values used to generate the marchingSquares
 
@@ -32,7 +36,7 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):B
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	weaponManager = new WeaponManager(terrainManager);
+	weaponManager = new WeaponManager(terrainManager,gunSmokeManager);
 	weaponManager->addPlayer(&player1);
 	weaponManager->addPlayer(&player2);
 
@@ -42,7 +46,7 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):B
 	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
 	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
 
-	
+	//testRect = guiManager->createTextureRect(glm::vec2(64, 64), glm::vec2(512, 512), glm::vec2(128, 128), "assets/troll.jpg", glm::vec3(1, 1, 1));
 }
 
 GameLevel::~GameLevel()
@@ -50,6 +54,8 @@ GameLevel::~GameLevel()
 	delete terrainManager;
 
 	delete weaponManager;
+
+	delete gunSmokeManager;
 }
 
 void GameLevel::openLevel()
@@ -96,7 +102,6 @@ void GameLevel::update(Timer* updateTimer)
 void GameLevel::render(Timer* frameTimer)
 {
 	beginDraw();
-	std::cout << "Running\n";
 	//Draw stuff
 	terrainManager->render();
 
