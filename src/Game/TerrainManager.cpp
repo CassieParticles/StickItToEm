@@ -39,7 +39,7 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize, Gunsmoke* gunSmokeManager) 
 	triangleProgram->setUniformBufferBlockBinding("terrainData", 1);
 	lineProgram->setUniformBufferBlockBinding("terrainData", 1);
 
-	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
+	bgTexture = TextureManager::getTexturePtr("assets/Stone.jpeg");
 }
 
 TerrainManager::~TerrainManager()
