@@ -9,6 +9,7 @@ class Animation;
 class Player;
 class TerrainManager;
 class Program;
+class Gunsmoke;
 
 enum class BulletType
 {
@@ -18,7 +19,7 @@ enum class BulletType
 class Bullet
 {
 public:
-	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage,float forceScalar, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram);
+	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage,float forceScalar, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram, Gunsmoke* gunSmokeManager);
 	~Bullet();
 
 	void update(float deltaTime);
@@ -37,6 +38,7 @@ protected:
 
 	//Stuff for the bullet's mechanics
 	TerrainManager* terrain;
+	Gunsmoke* gunSmokeManager;
 
 	BulletType type;
 

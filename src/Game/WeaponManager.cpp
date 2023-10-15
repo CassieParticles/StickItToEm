@@ -7,11 +7,12 @@
 #include "BulletManager.h"
 #include "Weapon.h"
 #include "Player.h"
+#include "Gunsmoke.h"
 
-WeaponManager::WeaponManager(TerrainManager* terrainManager):terrain{terrainManager}
+WeaponManager::WeaponManager(TerrainManager* terrainManager,Gunsmoke* gunSmokeManager ):terrain{terrainManager}
 {
 	weaponProgram = new Program{ "src/Shaders/weapon/weapons.vert","src/Shaders/weapon/weapons.frag",Program::filePath };
-	bulletManager = new BulletManager{ &players,terrainManager };
+	bulletManager = new BulletManager{ &players,terrainManager,gunSmokeManager };
 }
 
 WeaponManager::~WeaponManager()

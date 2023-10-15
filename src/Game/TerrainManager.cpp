@@ -7,7 +7,7 @@
 #include <Engine/Program.h>
 #include <Engine/Collision.h>
 
-TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
+TerrainManager::TerrainManager(glm::ivec2 arenaSize, Gunsmoke* gunSmokeManager) :arenaSize{ arenaSize }, gunSmokeManager{ gunSmokeManager}
 {
 	//Arena size is the amount of squares wide/tall it is, since the scalarData doesn't include the edges that will default to -1, it is 1 unit smaller in both dimensions
 	scalarDataSize = (arenaSize.x - 1) * (arenaSize.y - 1);	
@@ -40,11 +40,6 @@ TerrainManager::TerrainManager(glm::ivec2 arenaSize):arenaSize{arenaSize}
 	lineProgram->setUniformBufferBlockBinding("terrainData", 1);
 
 	bgTexture = TextureManager::getTexturePtr("assets/troll.png");
-
-	gunsmokeManager = new Gunsmoke();
-
-	gunsmokeManager->drawSmoke(glm::vec2(10, 10), 4, glm::vec3(1, 0, 0));
-	gunsmokeManager->drawSmoke(glm::vec2(12, 10), 2, glm::vec3(0, 1, 0));
 }
 
 TerrainManager::~TerrainManager()
@@ -60,7 +55,6 @@ TerrainManager::~TerrainManager()
 
 	delete triangleProgram;
 	delete lineProgram;
-	delete gunsmokeManager;
 }
 
 void TerrainManager::uploadStage(float* stage)
@@ -375,7 +369,7 @@ void TerrainManager::render()
 	glBindTexture(GL_TEXTURE_2D, bgTexture.textureID);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D,gunsmokeManager->getTexture());
+	glBindTexture(GL_TEXTURE_2D, gunSmokeManager->getTexture());
 
 	glBindVertexArray(triangleVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 12 * arenaSize.x * arenaSize.y);
