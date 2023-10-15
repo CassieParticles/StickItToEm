@@ -1,6 +1,7 @@
 #include <glm.hpp>
 #include <Engine/TextureManager.h>
 
+#include "Gunsmoke.h"
 
 class Program;
 
@@ -16,7 +17,7 @@ struct line;
 class TerrainManager
 {
 public:
-	TerrainManager(glm::ivec2 arenaSize);	//Take in the size of the arena
+	TerrainManager(glm::ivec2 arenaSize, Gunsmoke* gunSmokeManager);	//Take in the size of the arena
 	~TerrainManager();
 
 	void uploadStage(float* stage);		//Upload a stage, to overwrite old one
@@ -32,6 +33,7 @@ public:
 	line* getLines(glm::ivec2 tl, glm::ivec2 area, int* lineCount);
 
 	void displayLines();
+	Gunsmoke* gunSmokeManager;	//Manage the background texture
 protected:
 	glm::ivec2 arenaSize;	//Size of the arena (number of squares)
 
@@ -50,6 +52,7 @@ protected:
 
 	Program* triangleProgram;
 	Program* lineProgram;
+
 
 	float getPoint(glm::ivec2 pos);				//Interact with specific points, used internally
 	void setPoint(glm::ivec2 pos, float val);	

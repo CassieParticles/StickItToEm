@@ -10,7 +10,7 @@
 #include "TerrainManager.h"
 #include "../EngineAdditions/PlayerCollision.h"
 
-Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float forceScalar, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players{ players }, terrainDamage{ terrainDamage }, forceScalar{ forceScalar }, type { type }, bulletProgram{ bulletProgram }, terrain{ terrain }
+Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float forceScalar, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram, Gunsmoke* gunSmokeManager) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players{ players }, terrainDamage{ terrainDamage }, forceScalar{ forceScalar }, type { type }, bulletProgram{ bulletProgram }, terrain{ terrain },gunSmokeManager{gunSmokeManager}
 {
 	switch(type)
 	{
@@ -106,6 +106,7 @@ void Bullet::update(float deltaTime)
 			}
 		}
 		terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
+		gunSmokeManager->drawSmoke(position, areaRadius * 2, glm::vec3(0, 0, 0));
 		setDelete();
 	}
 
@@ -136,6 +137,7 @@ void Bullet::update(float deltaTime)
 					}
 				}
 				terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
+				gunSmokeManager->drawSmoke(position, areaRadius * 2, glm::vec3(0, 0, 0));
 				setDelete();
 			}
 		}

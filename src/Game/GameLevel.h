@@ -8,11 +8,12 @@
 class Program;
 class TerrainManager;
 class WeaponManager;
+class Gunsmoke;
 
 class GameLevel :public BaseLevel
 {
 public:
-	GameLevel(GLFWwindow* window,Input* input,GUIManager* guiManager, glm::vec4 bgColour);
+	GameLevel(Input* input,GUIManager* guiManager, glm::vec4 bgColour);
 	~GameLevel();
 
 	void openLevel() override;
@@ -65,9 +66,13 @@ protected:
 	Player player2;
 
 	WeaponManager* weaponManager;
+	Gunsmoke* gunSmokeManager;
+	
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 
 	Font* testFont;
 	GUIText* testText;
+
+	GUITextureRect* testRect;
 };

@@ -5,10 +5,12 @@
 #include <glm.hpp>
 #include <glfw3.h>
 
-#include "Engine/Timer.h"
-#include "Engine/Input.h"
-#include "Engine/TextureManager.h"
-#include "Engine/GUI/GUIManager.h"
+#include <Engine/Timer.h>
+#include <Engine/Input.h>
+#include <Engine/TextureManager.h>
+#include <Engine/GUI/GUIManager.h>
+
+#include <Engine/Window.h>
 
 #include "Game/GameLevel.h"
 
@@ -46,18 +48,22 @@ int initWindow(GLFWwindow** window)
 
 int main()
 {
+	Window::init(1200,700,3,3,"Stick it to 'em");
+
+
+
 	//Create the window
 	GLFWwindow* window{};
-	int err = initWindow(&window);
-	if (err != 0) { return err; }
+	
+	window = Window::getWindow();
 
 	Timer updateTimer{ 60 };
 	Timer renderTimer{ 60 };
-	Input input{ window };
+	Input input{ };
 
-	GUIManager guiManager{window,&input};
+	GUIManager guiManager{&input};
 
-	GameLevel gameLevel{window,&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
+	GameLevel gameLevel{&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
 
 	gameLevel.openLevel();	//Open the game level
 

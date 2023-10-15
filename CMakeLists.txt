@@ -16,6 +16,7 @@ list(APPEND ALLSOURCES "src/Game/Weapon.cpp" "src/Game/Weapon.h")
 list(APPEND ALLSOURCES "src/Game/WeaponManager.cpp" "src/Game/WeaponManager.h")
 list(APPEND ALLSOURCES "src/Game/Bullet.cpp" "src/Game/Bullet.h")
 list(APPEND ALLSOURCES "src/Game/BulletManager.cpp" "src/Game/BulletManager.h")
+list(APPEND ALLSOURCES "src/Game/Gunsmoke.cpp" "src/Game/Gunsmoke.h")
 
 #Add all the additions to the engine files
 list(APPEND ALLSOURCES "src/EngineAdditions/PlayerCollision.cpp" "src/EngineAdditions/PlayerCollision.h")

@@ -8,11 +8,12 @@ class TerrainManager;
 class Player;
 class Program;
 class BulletManager;
+class Gunsmoke;
 
 class WeaponManager
 {
 public:
-	WeaponManager(TerrainManager* terrainManager);
+	WeaponManager(TerrainManager* terrainManager, Gunsmoke* gunSmokeManager);
 	~WeaponManager();
 
 	void addPlayer(Player* player);
