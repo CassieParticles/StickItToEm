@@ -14,5 +14,5 @@ void main()
 {
 //	vec4 gunSmoke= vec4(0.6,0.0,0.8,1.0);
 	vec4 gunSmoke=texture(gunsmokeTexture,texCoord);
-	outColour=vec4(texture(bgTexture,texCoord).xyz * (1-gunSmoke.w) + gunSmoke.xyz,1);
+	outColour=vec4(texture(bgTexture,texCoord).xyz * (1-gunSmoke.w) + gunSmoke.xyz * gunSmoke.w,1);
 }

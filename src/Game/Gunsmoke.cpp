@@ -45,6 +45,9 @@ void Gunsmoke::drawSmoke(glm::vec2 position, float radius, glm::vec3 colour)
 {
 	if (radius == 0) { return; }	//Don't accidentally divide by 0 in a shader
 
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_DST_ALPHA);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX);
+
 	glViewport(0, 0, 1024, 1024);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -67,5 +70,8 @@ void Gunsmoke::drawSmoke(glm::vec2 position, float radius, glm::vec3 colour)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glViewport(0, 0, Window::getWidth(), Window::getHeight());
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
 }
 
