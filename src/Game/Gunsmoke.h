@@ -11,11 +11,11 @@ public:
 	Gunsmoke();
 	~Gunsmoke();
 
-	unsigned int getTexture() { return textures[currentTexture]; }
+	unsigned int getTexture() { return texture; }
 
 	void drawSmoke(glm::vec2 position, float raadius, glm::vec3 colour);
 private:
-	unsigned int* textures;	//To get the texture to add smoke ontop of other smoke, it needs 2 textures and to swap between them
+	unsigned int texture;	//To get the texture to add smoke ontop of other smoke, it needs 2 textures and to swap between them
 
 	unsigned int frameBuffer;
 

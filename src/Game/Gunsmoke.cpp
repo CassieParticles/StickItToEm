@@ -9,26 +9,20 @@
 
 Gunsmoke::Gunsmoke()
 {
-	textures = new unsigned int[2];
-	glGenTextures(2, textures);
+	glGenTextures(2, &texture);
 
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	glBindTexture(GL_TEXTURE_2D, texture);	//Generate background texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024, 0, GL_RGBA, GL_FLOAT, nullptr);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
 
 	glGenFramebuffers(1, &frameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT); 
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); 
 
@@ -42,11 +36,9 @@ Gunsmoke::Gunsmoke()
 
 Gunsmoke::~Gunsmoke()
 {
-	glDeleteTextures(2, textures);
+	glDeleteTextures(1, &texture);
 
 	glDeleteFramebuffers(1, &frameBuffer);
-
-	delete[] textures;
 }
 
 void Gunsmoke::drawSmoke(glm::vec2 position, float radius, glm::vec3 colour)
@@ -55,35 +47,24 @@ void Gunsmoke::drawSmoke(glm::vec2 position, float radius, glm::vec3 colour)
 
 	glViewport(0, 0, 1024, 1024);
 
-	unsigned int writeTexture = textures[1 - currentTexture];
-	unsigned int readTexture = textures[currentTexture];
-
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, writeTexture,0);
 
-	//Draw the read texture
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos[1]);
-	
-	gunSmokeProgram->use();	//Set up program
-	gunSmokeProgram->setInt("tex", 0);
+	gunSmokeProgram->use();
 
-	gunSmokeProgram->setVec2("position",position);	//Set gunsmoke values
+	gunSmokeProgram->setVec2("position",position);	//Set position, radius and colour of the gunSmoke
 	gunSmokeProgram->setFloat("radius", radius);
+
 	gunSmokeProgram->setVec3("colour", colour);
 
-	glActiveTexture(GL_TEXTURE0);	//Bind the read texture
-	glBindTexture(GL_TEXTURE_2D, readTexture);
+	glBindVertexArray(vao);	//Bind the VAO and element array buffer of the square
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos[1]);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);	//Draw to write texture
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);	//Draw the gunsmoke
 
-	glUseProgram(0);	//Unbind current program
+	glBindVertexArray(0); // Unbind the VAO and element array buffer of the square
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);	//Unbind the write texture
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	currentTexture = 1 - currentTexture;	//Swap which texture is the most recent
-
 
 	glViewport(0, 0, Window::getWidth(), Window::getHeight());
 }
