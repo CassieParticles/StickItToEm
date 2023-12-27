@@ -64,10 +64,10 @@ protected:
 	static constexpr float rocketScalarKnockback = 50000.f;
 
 	static constexpr float shotgunBulletSpeed = 30.f;
-	static constexpr float shotgunPlayerDamage = 15.f;
+	static constexpr float shotgunPlayerDamage = 5.f;
 	static constexpr float shotgunTerrainDamage = 0.6f;
-	static constexpr float shotgunDamageRadius = 1.5f;
-	static constexpr float shotgunScalarKnockback = 1500.f;
+	static constexpr float shotgunDamageRadius = 1.f;
+	static constexpr float shotgunScalarKnockback = 5000.f;
 
 	//Stuff for the bullet's rendering
 	Program* bulletProgram;

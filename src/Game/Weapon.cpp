@@ -53,10 +53,10 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 
 		playerHandOffset = {-0.2f,1.5f};
 
-		ammoLeft = 2000;
-		bulletsPerShot = 1;
+		ammoLeft = 2;
+		bulletsPerShot = 10;
 		bulletType = BulletType::shotgunPellet;
-		maxOffset = 0 * 3.14159 / 180;
+		maxOffset = 5 * 3.14159 / 180;
 
 		break;
 	}

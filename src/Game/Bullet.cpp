@@ -123,8 +123,8 @@ void Bullet::update(float deltaTime)
 				currentPlayer->takeKnockback(dir*forceScalar*scalar);
 			}
 		}
-		terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
-		gunSmokeManager->drawSmoke(position, areaRadius * 2, glm::vec3(0, 0, 0));
+		terrain->modifyTerrainCircle(getCentre() - glm::vec2{1, 1}, areaRadius, -terrainDamage);
+		gunSmokeManager->drawSmoke(getCentre(), areaRadius * 2, glm::vec3(0, 0, 0));
 		setDelete();
 	}
 
@@ -138,24 +138,23 @@ void Bullet::update(float deltaTime)
 			{
 				for (int i = 0; i < players->size(); i++)
 				{
+					if (players->at(i) == playerFired) { continue; }
 					Player* currentPlayer = players->at(i);
 					glm::vec2 playerCentre = currentPlayer->getPosition() + currentPlayer->getSize() / 2.f;
 					float radSquare = areaRadius * areaRadius;
 					glm::vec2 dPos = playerCentre - position;
 					float dSqr = glm::dot(dPos, dPos);
 
-					if (dSqr < radSquare)
+					if (true)
 					{
+						glm::vec2 dir = dPos / sqrt(dSqr);
 
-						glm::vec2 dir = dPos / sqrt(glm::dot(dPos, dPos));
-
-						float scalar = 1 - std::sqrt(dSqr) / std::sqrt(radSquare);
-						currentPlayer->takeDamage(playerDamage * scalar);
-						currentPlayer->takeKnockback(dir * forceScalar * scalar);
+						currentPlayer->takeDamage(playerDamage);
+						currentPlayer->takeKnockback(dir * forceScalar);
 					}
 				}
-				terrain->modifyTerrainCircle(position, areaRadius, -terrainDamage);
-				gunSmokeManager->drawSmoke(position, areaRadius * 2, glm::vec3(0, 0, 0));
+				terrain->modifyTerrainCircle(getCentre()-glm::vec2{0,1}, areaRadius, -terrainDamage);
+				gunSmokeManager->drawSmoke(getCentre(), areaRadius * 2, glm::vec3(0, 0, 0));
 				setDelete();
 			}
 		}
@@ -230,7 +229,6 @@ rect Bullet::getBoundingRect()
 		tr.y = std::max(tr.y, offsets[i].y);
 	}
 
-	rect r;
 	r.blCorner = bl;
 	r.size = tr - bl;
 	r.angle = 0;
