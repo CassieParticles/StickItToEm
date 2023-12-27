@@ -27,9 +27,12 @@ public:
 	void render();
 
 	rect getCollisionRect();
+	rect getBoundingRect();
 
 	bool getDelete() { return deleteFlag; }
 	void setDelete() { deleteFlag = true; }
+
+	glm::vec2 getCentre();
 protected:
 	//Stuff for bullet dynamics
 	glm::vec2 position;
@@ -62,8 +65,8 @@ protected:
 
 	static constexpr float shotgunBulletSpeed = 30.f;
 	static constexpr float shotgunPlayerDamage = 15.f;
-	static constexpr float shotgunTerrainDamage = 0.4f;
-	static constexpr float shotgunDamageRadius = 0.5f;
+	static constexpr float shotgunTerrainDamage = 0.6f;
+	static constexpr float shotgunDamageRadius = 1.5f;
 	static constexpr float shotgunScalarKnockback = 1500.f;
 
 	//Stuff for the bullet's rendering

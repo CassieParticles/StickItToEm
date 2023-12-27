@@ -51,12 +51,12 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 	case WeaponType::shotgun:
 		tex = TextureManager::getTexturePtr("assets/Weapons/Shotgun.png");	
 
-		playerHandOffset = {0,0};
+		playerHandOffset = {-0.2f,1.5f};
 
-		ammoLeft = 2;
-		bulletsPerShot = 5;
+		ammoLeft = 2000;
+		bulletsPerShot = 1;
 		bulletType = BulletType::shotgunPellet;
-		maxOffset = 5 * 3.14159 / 180;
+		maxOffset = 0 * 3.14159 / 180;
 
 		break;
 	}

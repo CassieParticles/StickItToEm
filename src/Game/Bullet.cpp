@@ -99,9 +99,11 @@ void Bullet::update(float deltaTime)
 		setDelete();
 	}
 
+	line l{position-(velocity * deltaTime), position};	//Line of the bullets movement
+
 	rect r = getCollisionRect();
 
-	if(Collision::checkRectTerrain(&r,terrain,nullptr,nullptr))	//If bullet collides with the terrain
+	if(Collision::checkRectTerrain(&r,terrain,nullptr,nullptr) || Collision::checkLineTerrain(&l, terrain, nullptr, nullptr))	//If bullet collides with the terrain
 	{
 		for(int i=0;i<players->size();i++)
 		{
@@ -191,6 +193,60 @@ rect Bullet::getCollisionRect()
 	rect r{};
 	r.blCorner = position;
 	r.size = size;
-	r.angle = 0;
+	r.angle = angle;
 	return r;
+}
+
+rect Bullet::getBoundingRect()	
+{
+	rect r{};
+
+	glm::vec2 offsets[4] =	//Offsets for each of the 4 corners
+	{
+		{0,0},				//bl
+		{size.x,0},			//br
+		{0,size.y},			//tl
+		{size.x,size.y},	//tr
+	};
+
+	const float cosAngle = cos(angle);	//Get cosine and sin of angle
+	const float sinAngle = sin(angle);
+
+	glm::mat2x2 rotMatrix{cosAngle, -sinAngle, sinAngle, cosAngle};	//Rotation matrix
+
+	offsets[1] = rotMatrix * offsets[1];	//Rotate offsets around bl corner (0,0 wouldn't move, so no need to rotate it)
+	offsets[2] = rotMatrix * offsets[2];
+	offsets[3] = rotMatrix * offsets[3];
+
+	glm::vec2 bl = {};
+	glm::vec2 tr = {};
+
+	for (int i = 1; i < 4; ++i)
+	{
+		bl.x = std::min(bl.x, offsets[i].x);
+		bl.y = std::min(bl.y, offsets[i].y);
+
+		tr.x = std::max(tr.x, offsets[i].x);
+		tr.y = std::max(tr.y, offsets[i].y);
+	}
+
+	rect r;
+	r.blCorner = bl;
+	r.size = tr - bl;
+	r.angle = 0;
+
+	return r;
+}
+
+glm::vec2 Bullet::getCentre()
+{
+	const float cosAngle = cos(angle);	//Get cosine and sin of angle
+	const float sinAngle = sin(angle);
+
+	glm::mat2x2 rotMatrix{cosAngle, -sinAngle, sinAngle, cosAngle};	//Rotation matrix
+
+	glm::vec2 direction = size / 2.f;	//Get the direction from the bottom left to the centre
+	direction = rotMatrix * direction;	//Pre-multiply to get direction rotated
+
+	return position + direction;
 }

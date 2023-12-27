@@ -49,6 +49,48 @@ namespace Collision
 		return collide;
 	}
 
+	bool checkLineTerrain(line* l, TerrainManager* t, line** linesColliding, int* collision)	//Very similar to above, but line-line collision
+	{
+		std::vector<line> collidingLines{};
+
+
+		glm::vec2 bl{std::min(l->A.x, l->B.x), std::min(l->A.y, l->B.y) };	//Create a rect area around the line to get the lines it could collide with
+		glm::vec2 tr{std::max(l->A.x, l->B.x), std::max(l->A.y, l->B.y) };
+		glm::vec2 size = tr - bl;
+
+		int lineCount;
+		line* lines = t->getLines(bl, glm::ivec2{std::ceil(size.x + 1), std::ceilf(size.y + 1)}, &lineCount);	//Get the lines
+
+		bool collide{};
+
+		for (int i = 0; i < lineCount; ++i)
+		{
+			line currentLine = lines[i];
+
+			if (currentLine.A == glm::vec2{0, 0}&& currentLine.B == glm::vec2{0, 0}) { continue; }//Skip lines that are empty
+
+			glm::vec2 point;
+			if (checkLineLine(l, &currentLine, &point))
+			{
+				if (linesColliding) { collidingLines.push_back(currentLine); }
+				collide = true;
+			}
+		}
+
+		delete[] lines;	//Free up memory
+
+		if (linesColliding)	//The lines collided with may be more helpful (get normals, etc)
+		{
+			line* lineArray = new line[collidingLines.size()];
+			std::copy(collidingLines.begin(), collidingLines.end(), lineArray);
+
+			*linesColliding = lineArray;
+			*collision = collidingLines.size();
+		}
+
+		return collide;
+	}
+
 	void resolvePlayerLine(Player* player, line* l, float deltaTime)
 	{
 		glm::vec2 lineDelta = l->B - l->A;					//Get the line's direction and normal
