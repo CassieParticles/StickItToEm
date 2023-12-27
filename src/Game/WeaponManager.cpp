@@ -63,8 +63,6 @@ void WeaponManager::deleteWeapon(Weapon* weapon)
 
 void WeaponManager::spawnRandomWeapon(glm::vec2 position,std::vector<WeaponType> typesPermitted)
 {
-	constexpr int weaponTypeCount{ 1 };		//Number of types of weapon
-
 	WeaponType type = typesPermitted.at((*rand)() % typesPermitted.size());//Generate a random weapon type
 	createWeapon(type, position);
 }

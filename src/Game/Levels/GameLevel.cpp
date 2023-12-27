@@ -16,7 +16,7 @@
 #include "../WeaponManager.h"
 #include "../Gunsmoke.h"
 
-GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
+GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,10 },50,{1,0,0}},player2{input,{40,10},50,{0,0,1}}
 {
 	rand.seed(time(0));
 
@@ -42,13 +42,12 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):B
 	weaponManager->addPlayer(&player1);
 	weaponManager->addPlayer(&player2);
 
-	weaponManager->createWeapon(WeaponType::shotgun, { 20,20 });
-	//weaponManager->createWeapon(WeaponType::rocketLauncher, { 40,20 });
-
 	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
 	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
 
 	//testRect = guiManager->createTextureRect(glm::vec2(64, 64), glm::vec2(512, 512), glm::vec2(128, 128), "assets/troll.jpg", glm::vec3(1, 1, 1));
+
+	weaponSpawnTimer = new Timer(0.5f);
 }
 
 GameLevel::~GameLevel()
@@ -58,6 +57,8 @@ GameLevel::~GameLevel()
 	delete weaponManager;
 
 	delete gunSmokeManager;
+
+	delete weaponSpawnTimer;
 }
 
 void GameLevel::openLevel()
@@ -97,6 +98,15 @@ void GameLevel::update(Timer* updateTimer)
 	player2.update(updateTimer->getDeltaTime());
 
 	weaponManager->update(updateTimer->getDeltaTime());
+
+	weaponSpawnTimer->Update();
+	if (weaponSpawnTimer->getUpdate())
+	{
+		float spawnX=rand()/static_cast<float>(rand.max()) * (spawnXMax-spawnXMin) + spawnXMin;
+		glm::vec2 spawnLoc = { spawnX,spawnY };
+
+		weaponManager->spawnRandomWeapon(spawnLoc, { WeaponType::rocketLauncher,WeaponType::shotgun });
+	}
 
 	guiManager->update();
 }
