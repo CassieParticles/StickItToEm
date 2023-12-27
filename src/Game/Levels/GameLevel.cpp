@@ -42,8 +42,10 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):B
 	weaponManager->addPlayer(&player1);
 	weaponManager->addPlayer(&player2);
 
-	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");
-	testText = guiManager->createText(glm::vec2(32, 32), glm::vec2(0, 0), glm::vec2(1, 1), "DeltaTime: 3.3", testFont, glm::vec3(1, 1, 1));
+	testFont = guiManager->createFont("assets/fonts/Roboto-Black.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890%");
+
+	player1Health = guiManager->createText({ -300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(1, 0, 0));
+	player2Health = guiManager->createText({ 300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(0, 0, 1));
 
 	//testRect = guiManager->createTextureRect(glm::vec2(64, 64), glm::vec2(512, 512), glm::vec2(128, 128), "assets/troll.jpg", glm::vec3(1, 1, 1));
 
@@ -76,14 +78,6 @@ void GameLevel::handleInput(Timer* updateTimer)
 	input->update();
 	glm::vec2 mousePos = input->getMousePositionNormalised();
 	mousePos.y = 1 - mousePos.y;
-	if(input->getKeyPressed(GLFW_KEY_T))
-	{
-		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, -4);
-	}
-	if (input->getKeyDown(GLFW_KEY_Y))
-	{
-		terrainManager->modifyTerrainCircle(mousePos * glm::vec2(terrainManager->getArenaSize()), 5, 0.2);
-	}
 
 	player1.handleInput(updateTimer->getDeltaTime());
 	player2.handleInput(updateTimer->getDeltaTime());
@@ -98,6 +92,12 @@ void GameLevel::update(Timer* updateTimer)
 	player2.update(updateTimer->getDeltaTime());
 
 	weaponManager->update(updateTimer->getDeltaTime());
+
+	std::string player1Str = std::to_string(static_cast<int>(player1.getDamage())) + "%";
+	std::string player2Str = std::to_string(static_cast<int>(player2.getDamage())) + "%";
+
+	player1Health->generateNewString(player1Str);
+	player2Health->generateNewString(player2Str);
 
 	weaponSpawnTimer->Update();
 	if (weaponSpawnTimer->getUpdate())
@@ -121,8 +121,6 @@ void GameLevel::render(Timer* frameTimer)
 	player2.render();
 
 	weaponManager->render();
-
-	testText->generateNewString("deltaTime: " +std::to_string(frameTimer->getDeltaTime()));
 
 	guiManager->render();
 	

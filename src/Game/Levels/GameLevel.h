@@ -72,12 +72,14 @@ protected:
 	std::mt19937 rand;
 
 	Timer* weaponSpawnTimer;
-	float spawnXMin{ 3 };
-	float spawnXMax{ 57 };
+	float spawnXMin{ 6 };
+	float spawnXMax{ 54 };
 	float spawnY{ 30 };
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 
 	Font* testFont;
-	GUIText* testText;
+	
+	GUIText* player1Health;
+	GUIText* player2Health;
 };

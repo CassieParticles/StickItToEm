@@ -151,13 +151,6 @@ void Player::handleInput(float deltaTime)
 			weapon->fireWeapon();
 		}
 	}
-
-	if (input->getKeyDown(GLFW_KEY_BACKSPACE))
-	{
-		velocity = {};
-		position = {30,20};
-	}
-
 }
 
 void Player::collisionResolution(float deltaTime)

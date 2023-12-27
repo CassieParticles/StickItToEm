@@ -15,6 +15,7 @@
 #include <Engine/Window.h>
 #include <Engine/GUI/GUIManager.h>
 #include <Engine/FileManager.h>
+#include <Engine/LevelManager.h>
 
 #include "Game/Levels/GameLevel.h"
 
@@ -33,9 +34,13 @@ int main()
 
 	GUIManager guiManager{&input};
 
-	GameLevel gameLevel{&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Set up the level for the game
+	LevelManager levelManager{};	//Create the level manager
 
-	gameLevel.openLevel();	//Open the game level
+	GameLevel gameLevel{&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Initialise the levels
+
+	levelManager.addLevel(&gameLevel);	//Add the levels
+
+	levelManager.setLevel(0);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -44,12 +49,14 @@ int main()
 		
 		if (updateTimer.getUpdate())	//Update the game
 		{
-			gameLevel.handleInput(&updateTimer);
-			gameLevel.update(&updateTimer);
+			levelManager.handleInput(&updateTimer);
+			levelManager.update(&updateTimer);
+			//gameLevel.handleInput(&updateTimer);
+			//gameLevel.update(&updateTimer);
 		}
 		if (renderTimer.getUpdate())
 		{
-			gameLevel.render(&renderTimer);
+			levelManager.render(&renderTimer);
 		}
 		if (input.getKeyDown(GLFW_KEY_ESCAPE))
 		{

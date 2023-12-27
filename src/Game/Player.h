@@ -73,6 +73,8 @@ public:
 	void takeDamage(float damage) { this->damage+=damage; }			//To deal with the player taking damage
 	void takeKnockback(glm::vec2 knockback);
 
+	float getDamage() { return damage; }
+
 protected:
 	Input* input;
 	TerrainManager* terrainManager;
