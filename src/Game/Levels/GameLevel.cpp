@@ -4,19 +4,21 @@
 #include <glm.hpp>
 #include <glfw3.h>
 #include <iostream>
+#include <chrono>
 
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
 #include <Engine/GUI.h>
 #include <Engine/Window.h>
 
-#include "TerrainManager.h"
-#include "Player.h"
-#include "WeaponManager.h"
-#include "Gunsmoke.h"
+#include "../TerrainManager.h"
+#include "../Player.h"
+#include "../WeaponManager.h"
+#include "../Gunsmoke.h"
 
 GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,25 },50,{1,0,0}},player2{input,{40,20},50,{0,0,1}}
 {
+	rand.seed(time(0));
 
 	gunSmokeManager = new Gunsmoke();
 
@@ -36,11 +38,11 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):B
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::ivec2), &(terrainManager->getArenaSize()), GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, terrainUBO);
 
-	weaponManager = new WeaponManager(terrainManager,gunSmokeManager);
+	weaponManager = new WeaponManager(terrainManager,gunSmokeManager,&rand);
 	weaponManager->addPlayer(&player1);
 	weaponManager->addPlayer(&player2);
 
-	weaponManager->createWeapon(WeaponType::rocketLauncher, { 20,20 });
+	weaponManager->createWeapon(WeaponType::shotgun, { 20,20 });
 	//weaponManager->createWeapon(WeaponType::rocketLauncher, { 40,20 });
 
 	testFont = guiManager->createFont("assets/fonts/BreeSerif-Regular.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890");

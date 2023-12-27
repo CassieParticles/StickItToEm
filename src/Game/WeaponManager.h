@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <random>
 
 #include "Weapon.h"
 
@@ -13,7 +14,7 @@ class Gunsmoke;
 class WeaponManager
 {
 public:
-	WeaponManager(TerrainManager* terrainManager, Gunsmoke* gunSmokeManager);
+	WeaponManager(TerrainManager* terrainManager, Gunsmoke* gunSmokeManager, std::mt19937* rand);
 	~WeaponManager();
 
 	void addPlayer(Player* player);
@@ -21,6 +22,8 @@ public:
 	void createWeapon(WeaponType type, glm::vec2 position);
 	void deleteWeapon(int index);
 	void deleteWeapon(Weapon* weapon);
+
+	void spawnRandomWeapon(glm::vec2 position, std::vector<WeaponType> typesPermitted);
 
 	void update(float deltaTime);
 	void render();	//Render all the weapons
@@ -32,6 +35,8 @@ private:
 	std::vector<Player*> players;
 
 	std::vector<Weapon*> weapons;
+
+	std::mt19937* rand;
 
 	Program* weaponProgram;
 	

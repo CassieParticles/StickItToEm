@@ -23,22 +23,7 @@ BulletManager::~BulletManager()
 
 void BulletManager::addBullet(glm::vec2 position, float angle, BulletType type,Player* owner)
 {
-	float playerDamage;
-	float terrainDamage;
-	float areaRadius;
-	float scalarKnockback;
-
-	switch(type)
-	{
-	case BulletType::rocket:
-		playerDamage = rocketPlayerDamage;
-		terrainDamage = rocketTerrainDamage;
-		areaRadius = rocketDamageRadius;
-		scalarKnockback = rocketScalarKnockback;
-		break;
-	}
-
-	Bullet* bullet = new Bullet{ position,angle,playerDamage,terrainDamage,rocketScalarKnockback,areaRadius,owner,players,terrain,type,bulletProgram,gunSmokeManager };
+	Bullet* bullet = new Bullet{ position,angle,owner,players,terrain,type,bulletProgram,gunSmokeManager };
 	bullets.push_back(bullet);
 }
 

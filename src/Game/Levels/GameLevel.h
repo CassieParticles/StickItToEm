@@ -1,7 +1,8 @@
 #pragma once
 #include <Engine/BaseLevel.h>
+#include <random>
 
-#include "Player.h"
+#include "../Player.h"
 
 #include <Engine/GUIFD.h>	//Forward declare the classes
 
@@ -68,11 +69,10 @@ protected:
 	WeaponManager* weaponManager;
 	Gunsmoke* gunSmokeManager;
 	
+	std::mt19937 rand;
 
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 
 	Font* testFont;
 	GUIText* testText;
-
-	GUITextureRect* testRect;
 };

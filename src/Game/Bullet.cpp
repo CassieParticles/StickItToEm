@@ -10,14 +10,30 @@
 #include "TerrainManager.h"
 #include "../EngineAdditions/PlayerCollision.h"
 
-Bullet::Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage, float forceScalar, float areaRadius, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram, Gunsmoke* gunSmokeManager) :position{ position }, angle{ angle }, playerDamage{ playerDamage }, areaRadius{ areaRadius }, playerFired{ playerFired }, players{ players }, terrainDamage{ terrainDamage }, forceScalar{ forceScalar }, type { type }, bulletProgram{ bulletProgram }, terrain{ terrain },gunSmokeManager{gunSmokeManager}
+Bullet::Bullet(glm::vec2 position, float angle, Player* playerFired, std::vector<Player*>* players, TerrainManager* terrain, BulletType type, Program* bulletProgram, Gunsmoke* gunSmokeManager) :position{ position }, angle{ angle }, playerFired{ playerFired }, players{ players }, type { type }, bulletProgram{ bulletProgram }, terrain{ terrain },gunSmokeManager{gunSmokeManager}
 {
 	switch(type)
 	{
 	case BulletType::rocket:
-		velocity = glm::vec2{ cos(angle),sin(angle) }*rocketBulletSpeed;
+		velocity = glm::vec2{ cos(angle),sin(angle) } * rocketBulletSpeed;	//Set  bullet details
+		playerDamage = rocketPlayerDamage;
+		terrainDamage = rocketTerrainDamage;
+		forceScalar = rocketScalarKnockback;
+		areaRadius = rocketDamageRadius;
+
 		bulletAnim = new Animation{ "assets/Weapons/Rocket.png",2,bulletProgram,true };
 		size = bulletAnim->getFrameSize()/20.f;
+		break;
+	case BulletType::shotgunPellet:
+		velocity = glm::vec2{ cos(angle),sin(angle) } * shotgunBulletSpeed;	//Set  bullet details
+		playerDamage = shotgunPlayerDamage;
+		terrainDamage = shotgunTerrainDamage;
+		forceScalar = shotgunScalarKnockback;
+		areaRadius = shotgunDamageRadius;
+
+		bulletAnim = new Animation{ "assets/Weapons/Bullet.png",1,bulletProgram,true };
+		size = bulletAnim->getFrameSize() / 20.f;
+
 		break;
 	}
 

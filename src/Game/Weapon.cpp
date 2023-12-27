@@ -11,7 +11,8 @@
 #include "TerrainManager.h"
 #include "BulletManager.h"
 
-Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager) :position{ position },type{type},terrain(terrainManager),angle{0.f},weaponProgram{weaponProgram},bulletManager{bulletManager}
+Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager,std::mt19937* rand) 
+	:position{ position },type{type},terrain(terrainManager),angle{0.f},weaponProgram{weaponProgram},bulletManager{bulletManager},rand{rand}
 {
 	constexpr glm::vec2 vertexPos[4]{
 	glm::vec2{0,0},
@@ -39,17 +40,31 @@ Weapon::Weapon(glm::vec2 position, WeaponType type, TerrainManager* terrainManag
 	case WeaponType::rocketLauncher:
 		tex=TextureManager::getTexturePtr("assets/Weapons/RocketLauncher.png");	//Get the texture for the weapon
 
-		textureID = tex.textureID;	//Extract the textureID and the size
-		size = glm::vec2{ tex.width / 20.f,tex.height / 20.f };
-
-		idleAnimation = new Animation(tex, 1, weaponProgram, true);
-
 		playerHandOffset = { -0.4f,1.5f };
 
-		ammoLeft = 5;
+		ammoLeft = 1;	//Amount of ammo
+		bulletsPerShot = 1;
+		bulletType = BulletType::rocket;
+		maxOffset = 0;
+
+		break;
+	case WeaponType::shotgun:
+		tex = TextureManager::getTexturePtr("assets/Weapons/Shotgun.png");	
+
+		playerHandOffset = {0,0};
+
+		ammoLeft = 2;
+		bulletsPerShot = 5;
+		bulletType = BulletType::shotgunPellet;
+		maxOffset = 5 * 3.14159 / 180;
 
 		break;
 	}
+
+	textureID = tex.textureID;	//Extract the textureID and the size
+	size = glm::vec2{ tex.width / 20.f,tex.height / 20.f };
+
+	idleAnimation = new Animation(tex, 1, weaponProgram, true);
 
 	glGenVertexArrays(1, &vaoID);	//Generate and bind vertex array
 	glBindVertexArray(vaoID);
@@ -163,11 +178,15 @@ void Weapon::fireWeapon()
 	//If player isn't flipped, angle is normal
 	//If player is flipped, angle is 180 degrees, minus the angle
 	float fireAngle = wielder->getAimAngle();
-	--ammoLeft;
-	switch(type)
+
+	for (int i = 0; i < bulletsPerShot; ++i)
 	{
-	case WeaponType::rocketLauncher:
-		bulletManager->addBullet(position, fireAngle, BulletType::rocket,getWielder());
-		break;
+		float offset = (*rand)() / static_cast<float>(rand->max());	//Get the random offset for the bullet
+		offset *= (maxOffset * 2);
+		offset -= maxOffset;
+
+		bulletManager->addBullet(position, fireAngle + offset, bulletType, getWielder());	//Spawn the bullet
 	}
+
+	--ammoLeft;		
 }

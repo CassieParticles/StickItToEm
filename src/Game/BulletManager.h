@@ -29,11 +29,4 @@ protected:
 
 	std::vector<Player*>* players;	//vectors to contain players and bullets
 	std::vector<Bullet*> bullets;
-
-
-	//Constants for bullets
-	float rocketPlayerDamage = 60.f;
-	float rocketTerrainDamage = 4.f;
-	float rocketDamageRadius = 5.f;
-	float rocketScalarKnockback = 50000.f;
 };

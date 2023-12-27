@@ -9,7 +9,7 @@
 #include "Player.h"
 #include "Gunsmoke.h"
 
-WeaponManager::WeaponManager(TerrainManager* terrainManager,Gunsmoke* gunSmokeManager ):terrain{terrainManager}
+WeaponManager::WeaponManager(TerrainManager* terrainManager,Gunsmoke* gunSmokeManager, std::mt19937* rand):terrain{terrainManager},rand{rand}
 {
 	weaponProgram = new Program{ "src/Shaders/weapon/weapons.vert","src/Shaders/weapon/weapons.frag",Program::filePath };
 	bulletManager = new BulletManager{ &players,terrainManager,gunSmokeManager };
@@ -34,7 +34,7 @@ void WeaponManager::addPlayer(Player* player)
 
 void WeaponManager::createWeapon(WeaponType type, glm::vec2 position)
 {
-	Weapon* w = new Weapon(position, type, terrain,weaponProgram,bulletManager);
+	Weapon* w = new Weapon(position, type, terrain,weaponProgram,bulletManager,rand);
 	weapons.push_back(w);
 }
 
@@ -59,6 +59,14 @@ void WeaponManager::deleteWeapon(Weapon* weapon)
 		}
 	}
 	std::cout << "Weapon not found!\n";
+}
+
+void WeaponManager::spawnRandomWeapon(glm::vec2 position,std::vector<WeaponType> typesPermitted)
+{
+	constexpr int weaponTypeCount{ 1 };		//Number of types of weapon
+
+	WeaponType type = typesPermitted.at((*rand)() % typesPermitted.size());//Generate a random weapon type
+	createWeapon(type, position);
 }
 
 

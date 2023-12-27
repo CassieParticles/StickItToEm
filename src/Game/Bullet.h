@@ -13,13 +13,14 @@ class Gunsmoke;
 
 enum class BulletType
 {
-	rocket
+	rocket,
+	shotgunPellet
 };
 
 class Bullet
 {
 public:
-	Bullet(glm::vec2 position, float angle, float playerDamage, float terrainDamage,float forceScalar, float areaRadius,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram, Gunsmoke* gunSmokeManager);
+	Bullet(glm::vec2 position, float angle,Player* playerFired,std::vector<Player*>* players,TerrainManager* terrain, BulletType type,Program* bulletProgram, Gunsmoke* gunSmokeManager);
 	~Bullet();
 
 	void update(float deltaTime);
@@ -53,8 +54,17 @@ protected:
 	bool deleteFlag{false};	//Flag for the bulletManager to see if it should delete a bullet
 
 	//Constants defined for the bullets
-	static constexpr float rocketBulletSpeed=5.f;
+	static constexpr float rocketBulletSpeed=15.f;
+	static constexpr float rocketPlayerDamage = 60.f;
+	static constexpr float rocketTerrainDamage = 4.f;
+	static constexpr float rocketDamageRadius = 5.f;
+	static constexpr float rocketScalarKnockback = 50000.f;
 
+	static constexpr float shotgunBulletSpeed = 30.f;
+	static constexpr float shotgunPlayerDamage = 15.f;
+	static constexpr float shotgunTerrainDamage = 0.4f;
+	static constexpr float shotgunDamageRadius = 0.5f;
+	static constexpr float shotgunScalarKnockback = 1500.f;
 
 	//Stuff for the bullet's rendering
 	Program* bulletProgram;

@@ -1,56 +1,26 @@
 #include <iostream>
 #include <functional>
+#include <fstream>
 
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glfw3.h>
+#include <OpenALSoft/al.h>
+#include <OpenALSoft/alc.h>
+#include <AudioFile.h>
 
 #include <Engine/Timer.h>
 #include <Engine/Input.h>
 #include <Engine/TextureManager.h>
-#include <Engine/GUI/GUIManager.h>
-
 #include <Engine/Window.h>
+#include <Engine/GUI/GUIManager.h>
+#include <Engine/FileManager.h>
 
-#include "Game/GameLevel.h"
-
-int initWindow(GLFWwindow** window)
-{
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	*window = glfwCreateWindow(1200, 700, "Stick it to 'em", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create a window" << std::endl;
-		glfwTerminate();
-		return 1;
-	}
-	glfwMakeContextCurrent(*window);
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD";
-		glfwTerminate();
-		return 2;
-	}
-
-
-	glfwSetFramebufferSizeCallback(*window, [](GLFWwindow* window, int width, int height)->void {glViewport(0, 0, width, height); });
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	std::cout << "Window created!\n";
-	return 0;
-}
+#include "Game/Levels/GameLevel.h"
 
 int main()
 {
 	Window::init(1200,700,3,3,"Stick it to 'em");
-
-
 
 	//Create the window
 	GLFWwindow* window{};

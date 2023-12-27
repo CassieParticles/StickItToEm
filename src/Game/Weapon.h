@@ -2,6 +2,8 @@
 #include <glm.hpp>
 
 #include "Engine/Collision.h"
+#include "Bullet.h"
+#include <random>
 
 class Player;
 class Animation;
@@ -12,14 +14,17 @@ class BulletManager;
 
 enum class WeaponType
 {
-	rocketLauncher
+	rocketLauncher,
+	shotgun
 };
+
+enum class BulletType;
 
 class Weapon
 {
 public:
 
-	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager);
+	Weapon(glm::vec2 position,  WeaponType type, TerrainManager* terrainManager,Program* weaponProgram,BulletManager* bulletManager,std::mt19937* rand);
 	~Weapon();
 
 	rect getCollisionRect();
@@ -48,6 +53,8 @@ protected:
 
 	WeaponType type;
 
+	std::mt19937* rand;
+
 	Player* wielder=nullptr;
 	TerrainManager* terrain;
 	BulletManager* bulletManager;
@@ -63,4 +70,8 @@ protected:
 	Animation* idleAnimation;
 
 	int ammoLeft{};
+	int bulletsPerShot{};
+
+	BulletType bulletType{};
+	float maxOffset{};
 };
