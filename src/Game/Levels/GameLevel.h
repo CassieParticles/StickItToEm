@@ -14,7 +14,7 @@ class Gunsmoke;
 class GameLevel :public BaseLevel
 {
 public:
-	GameLevel(Input* input,GUIManager* guiManager, glm::vec4 bgColour);
+	GameLevel(Input* input,GUIManager* guiManager,LevelManager* levelManager, glm::vec4 bgColour);
 	~GameLevel();
 
 	void openLevel() override;

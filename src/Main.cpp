@@ -36,7 +36,7 @@ int main()
 
 	LevelManager levelManager{};	//Create the level manager
 
-	GameLevel gameLevel{&input,&guiManager,{.196f, .254f, .467f,1.f}};	//Initialise the levels
+	GameLevel gameLevel{&input,&guiManager,&levelManager,{.196f, .254f, .467f,1.f}};	//Initialise the levels
 
 	levelManager.addLevel(&gameLevel);	//Add the levels
 
@@ -51,8 +51,6 @@ int main()
 		{
 			levelManager.handleInput(&updateTimer);
 			levelManager.update(&updateTimer);
-			//gameLevel.handleInput(&updateTimer);
-			//gameLevel.update(&updateTimer);
 		}
 		if (renderTimer.getUpdate())
 		{

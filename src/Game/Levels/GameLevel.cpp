@@ -16,7 +16,7 @@
 #include "../WeaponManager.h"
 #include "../Gunsmoke.h"
 
-GameLevel::GameLevel(Input* input,GUIManager* guiManager,  glm::vec4 bgColour):BaseLevel(input,guiManager,bgColour),player1{input,{ 10,10 },50,{1,0,0}},player2{input,{40,10},50,{0,0,1}}
+GameLevel::GameLevel(Input* input,GUIManager* guiManager, LevelManager* levelManager, glm::vec4 bgColour):BaseLevel(input,guiManager,levelManager,bgColour),player1{input,{ 10,10 },50,{1,0,0}},player2{input,{40,10},50,{0,0,1}}
 {
 	rand.seed(time(0));
 
