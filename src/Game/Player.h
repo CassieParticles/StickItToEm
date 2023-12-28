@@ -48,6 +48,8 @@ public:
 
 	void setInputs(controls c) { con = c; }
 
+	void reset();
+
 	glm::vec2 getPosition() { return position; }
 
 	glm::vec2 getVelocity() { return velocity; }
@@ -85,6 +87,8 @@ protected:
 	glm::vec2 velocity{};	//Variables used in physics calculations
 	float mass{};
 	glm::vec2 sumForce{};
+
+	glm::vec2 initialPosition;
 
 	glm::vec3 colour;
 

@@ -76,10 +76,20 @@ protected:
 	float spawnXMax{ 54 };
 	float spawnY{ 30 };
 
+	//Out Of Bounds timers
+	float player1OOBTimer;
+	float player2OOBTimer;
+
+	float OOBLoseTime = 3.f;	//3 seconds out of bounds means you lose
+
+	float winScreenTimer{};
+
 	unsigned int terrainUBO;	//Buffer to contain info about terrain (grid size)
 
 	Font* testFont;
 	
 	GUIText* player1Health;
 	GUIText* player2Health;
+
+	GUIText* winScreenText;
 };

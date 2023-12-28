@@ -10,6 +10,7 @@
 #include <Engine/Input.h>
 #include <Engine/GUI.h>
 #include <Engine/Window.h>
+#include <Engine/LevelManager.h>
 
 #include "../TerrainManager.h"
 #include "../Player.h"
@@ -47,6 +48,14 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager, LevelManager* levelMan
 	player1Health = guiManager->createText({ -300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(1, 0, 0),-1,-1,this);
 	player2Health = guiManager->createText({ 300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(0, 0, 1),-1,-1,this);
 
+	winScreenText = guiManager->createText({ -150,40 }, { 512,512 }, {2,2},"Winnder",testFont,glm::vec3(1,1,1),-1,-1,this);
+
+	winScreenText->setDraw(false);
+
+	player1OOBTimer = 0;
+	player2OOBTimer = 0;
+
+
 
 	//testRect = guiManager->createTextureRect(glm::vec2(64, 64), glm::vec2(512, 512), glm::vec2(128, 128), "assets/troll.jpg", glm::vec3(1, 1, 1));
 
@@ -66,12 +75,16 @@ GameLevel::~GameLevel()
 
 void GameLevel::openLevel()
 {
+	player1.reset();
+	player2.reset();
 	BaseLevel::openLevel();	//Call the base function used in opening level before doing other fancy stuff
+	winScreenTimer = 0;
 }
 
 void GameLevel::closeLevel()
 {
 	BaseLevel::closeLevel();
+	winScreenText->setDraw(false);
 }
 
 void GameLevel::handleInput(Timer* updateTimer)
@@ -91,6 +104,49 @@ void GameLevel::update(Timer* updateTimer)
 
 	player1.update(updateTimer->getDeltaTime());
 	player2.update(updateTimer->getDeltaTime());
+
+	//Player 1 out of bounds increment timer
+	if (player1.getPosition().x < 0 || player1.getPosition().x>terrainManager->getArenaSize().x ||
+		player1.getPosition().y < 0 || player1.getPosition().y>terrainManager->getArenaSize().y)
+	{
+		player1OOBTimer += updateTimer->getDeltaTime();
+	}
+	else
+	{
+		player1OOBTimer = 0;
+	}
+
+	if (player2.getPosition().x < 0 || player2.getPosition().x>terrainManager->getArenaSize().x ||
+		player2.getPosition().y < 0 || player2.getPosition().y>terrainManager->getArenaSize().y)
+	{
+		std::cout << player2.getPosition().x<< ":" << player2.getPosition().y << '\n';
+		std::cout << terrainManager->getArenaSize().x << ":" << terrainManager->getArenaSize().y << '\n';
+		player2OOBTimer += updateTimer->getDeltaTime();
+	}
+	else
+	{
+		player2OOBTimer = 0;
+	}
+
+	if (player1OOBTimer > OOBLoseTime)
+	{
+		winScreenText->setDraw(true);
+		winScreenText->setColour({ 0,0,1 });
+		winScreenText->generateNewString("Player 2 won");
+		winScreenTimer+= updateTimer->getDeltaTime();
+	}
+	else if (player2OOBTimer > OOBLoseTime)
+	{
+		winScreenText->setDraw(true);
+		winScreenText->setColour({ 1,0,0 });
+		winScreenText->generateNewString("Player 1 won");
+		winScreenTimer+= updateTimer->getDeltaTime();
+	}
+
+	if (winScreenTimer > 3.f)
+	{
+		levelManager->setLevel(0);
+	}
 
 	weaponManager->update(updateTimer->getDeltaTime());
 

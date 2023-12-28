@@ -14,7 +14,7 @@
 #include "TerrainManager.h"
 #include "Weapon.h"
 
-Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour},weapon{nullptr}
+Player::Player(Input* input, glm::vec2 position, float mass,glm::vec3 colour) :input{ input },position { position }, mass{ mass },colour{colour},weapon{nullptr},initialPosition{position}
 {
 	constexpr glm::vec2 vertexPos[4]{
 		glm::vec2{0,0},
@@ -254,6 +254,13 @@ void Player::render()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Player::reset()
+{
+	position = initialPosition;
+	velocity = {};
+	damage = 0;
 }
 
 rect Player::getCollisionRect()

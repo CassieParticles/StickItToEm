@@ -18,9 +18,9 @@ MainMenu::MainMenu(Input* input, GUIManager* guiManager, LevelManager* levelMana
 
 	buttonFont = guiManager->createFont("assets/fonts/Roboto-Black.ttf", 32, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ");
 
-	playButton = guiManager->createButton({ -64,-120 }, { 512,1024 }, { 128,64 }, { 1,1,1 }, [levelManager]() {levelManager->setLevel(1); },this);
+	playButton = guiManager->createButton({ -80,-120 }, { 512,1024 }, { 160,64 }, { 1,1,1 }, [levelManager]() {levelManager->setLevel(1); },this);
 
-	playText = guiManager->createText({ -64,-120 }, { 512,1024 }, { 1,1 }, "Play game", buttonFont, { 0,0,0 },-1,-1,this);
+	playText = guiManager->createText({ -75,-100 }, { 512,1024 }, { 1,1 }, "Play game", buttonFont, { 0,0,0 },-1,-1,this);
 }
 
 MainMenu::~MainMenu()
