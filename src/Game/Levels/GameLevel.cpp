@@ -44,11 +44,9 @@ GameLevel::GameLevel(Input* input,GUIManager* guiManager, LevelManager* levelMan
 
 	testFont = guiManager->createFont("assets/fonts/Roboto-Black.ttf", 48, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM:. 1234567890%");
 
-	player1Health = guiManager->createText({ -300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(1, 0, 0));
-	player2Health = guiManager->createText({ 300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(0, 0, 1));
+	player1Health = guiManager->createText({ -300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(1, 0, 0),-1,-1,this);
+	player2Health = guiManager->createText({ 300,64 }, { 512,0 }, { 1,1 }, "0%", testFont, glm::vec3(0, 0, 1),-1,-1,this);
 
-	player1Health->setDraw(false);
-	player2Health->setDraw(false);
 
 	//testRect = guiManager->createTextureRect(glm::vec2(64, 64), glm::vec2(512, 512), glm::vec2(128, 128), "assets/troll.jpg", glm::vec3(1, 1, 1));
 
@@ -69,14 +67,11 @@ GameLevel::~GameLevel()
 void GameLevel::openLevel()
 {
 	BaseLevel::openLevel();	//Call the base function used in opening level before doing other fancy stuff
-	player1Health->setDraw(true);
-	player2Health->setDraw(true);
 }
 
 void GameLevel::closeLevel()
 {
-	player1Health->setDraw(false);
-	player2Health->setDraw(false);
+	BaseLevel::closeLevel();
 }
 
 void GameLevel::handleInput(Timer* updateTimer)

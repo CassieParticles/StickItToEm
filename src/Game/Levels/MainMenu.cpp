@@ -15,9 +15,12 @@ void func()
 
 MainMenu::MainMenu(Input* input, GUIManager* guiManager, LevelManager* levelManager, glm::vec4 bgColour) :BaseLevel{ input,guiManager,levelManager,bgColour }
 {
-	playButton = guiManager->createButton({ -64,-120 }, { 512,1024 }, { 128,64 }, { 1,1,1 }, [levelManager]() {levelManager->setLevel(1); });
 
+	buttonFont = guiManager->createFont("assets/fonts/Roboto-Black.ttf", 32, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ");
 
+	playButton = guiManager->createButton({ -64,-120 }, { 512,1024 }, { 128,64 }, { 1,1,1 }, [levelManager]() {levelManager->setLevel(1); },this);
+
+	playText = guiManager->createText({ -64,-120 }, { 512,1024 }, { 1,1 }, "Play game", buttonFont, { 0,0,0 },-1,-1,this);
 }
 
 MainMenu::~MainMenu()
@@ -27,12 +30,11 @@ MainMenu::~MainMenu()
 void MainMenu::openLevel()
 {
 	BaseLevel::openLevel();
-	playButton->setDraw(true);
 }
 
 void MainMenu::closeLevel()
 {
-	playButton->setDraw(false);
+	BaseLevel::closeLevel();
 }
 
 void MainMenu::handleInput(Timer* updateTimer)

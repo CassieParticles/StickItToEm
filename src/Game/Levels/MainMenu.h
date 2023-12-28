@@ -17,5 +17,8 @@ public:
 	void render(Timer* frameTimer) override;
 
 protected:
+	Font* buttonFont;
+
 	GUIButton* playButton;
+	GUIText* playText;
 };
