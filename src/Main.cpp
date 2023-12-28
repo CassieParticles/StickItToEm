@@ -18,6 +18,7 @@
 #include <Engine/LevelManager.h>
 
 #include "Game/Levels/GameLevel.h"
+#include "Game/Levels/MainMenu.h"
 
 int main()
 {
@@ -36,8 +37,10 @@ int main()
 
 	LevelManager levelManager{};	//Create the level manager
 
+	MainMenu mainMenu{ &input,&guiManager,&levelManager,{.196f, .254f, .467f,1.f} };
 	GameLevel gameLevel{&input,&guiManager,&levelManager,{.196f, .254f, .467f,1.f}};	//Initialise the levels
 
+	levelManager.addLevel(&mainMenu);
 	levelManager.addLevel(&gameLevel);	//Add the levels
 
 	levelManager.setLevel(0);

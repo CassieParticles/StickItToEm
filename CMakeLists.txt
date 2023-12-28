@@ -19,7 +19,7 @@ list(APPEND ALLSOURCES "src/Game/Gunsmoke.cpp" "src/Game/Gunsmoke.h")
 
 #Add all the different levels
 list(APPEND ALLSOURCES "src/Game/Levels/GameLevel.cpp" "src/Game/Levels/GameLevel.h")
-
+list(APPEND ALLSOURCES "src/Game/Levels/MainMenu.cpp" "src/Game/Levels/MainMenu.h")
 
 #Add all the additions to the engine files
 list(APPEND ALLSOURCES "src/EngineAdditions/PlayerCollision.cpp" "src/EngineAdditions/PlayerCollision.h")
