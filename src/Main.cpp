@@ -46,7 +46,7 @@ int main()
 	levelManager.addLevel(&gameLevel);	
 	levelManager.addLevel(&controls);
 
-	levelManager.setLevel(2);
+	levelManager.setLevel(0);
 
 	while (!glfwWindowShouldClose(window))
 	{
