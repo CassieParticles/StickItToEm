@@ -130,6 +130,7 @@ void GameLevel::update(Timer* updateTimer)
 
 	if (player1OOBTimer > OOBLoseTime)
 	{
+		player2OOBTimer = 0;
 		winScreenText->setDraw(true);
 		winScreenText->setColour({ 0,0,1 });
 		winScreenText->generateNewString("Player 2 won");
@@ -137,6 +138,7 @@ void GameLevel::update(Timer* updateTimer)
 	}
 	else if (player2OOBTimer > OOBLoseTime)
 	{
+		player1OOBTimer = 0;
 		winScreenText->setDraw(true);
 		winScreenText->setColour({ 1,0,0 });
 		winScreenText->generateNewString("Player 1 won");

@@ -21,4 +21,11 @@ protected:
 
 	GUIButton* playButton;
 	GUIText* playText;
+
+	GUIButton* controlsButton;
+	GUIText* controlsText;
+
+	GUIButton* quitButton;
+	GUIText* quitText;
+
 };

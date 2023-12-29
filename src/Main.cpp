@@ -62,10 +62,6 @@ int main()
 		{
 			levelManager.render(&renderTimer);
 		}
-		if (input.getKeyDown(GLFW_KEY_ESCAPE))
-		{
-			glfwSetWindowShouldClose(window, true);
-		}
 	}
 
 	TextureManager::cleanup();
