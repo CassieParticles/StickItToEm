@@ -61,6 +61,19 @@ void WeaponManager::deleteWeapon(Weapon* weapon)
 	std::cout << "Weapon not found!\n";
 }
 
+void WeaponManager::deleteAllWeapons()
+{
+	for (int i = 0; i < weapons.size(); ++i)
+	{
+		if (weapons.at(i)->getWielder())
+		{
+			weapons.at(i)->getWielder()->setWeapon(nullptr);
+		}
+		delete weapons.at(i);
+	}
+	weapons.clear();
+}
+
 void WeaponManager::spawnRandomWeapon(glm::vec2 position,std::vector<WeaponType> typesPermitted)
 {
 	WeaponType type = typesPermitted.at((*rand)() % typesPermitted.size());//Generate a random weapon type

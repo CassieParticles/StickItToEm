@@ -77,6 +77,7 @@ void GameLevel::openLevel()
 {
 	player1.reset();
 	player2.reset();
+	weaponManager->deleteAllWeapons();
 	BaseLevel::openLevel();	//Call the base function used in opening level before doing other fancy stuff
 	winScreenTimer = 0;
 }
